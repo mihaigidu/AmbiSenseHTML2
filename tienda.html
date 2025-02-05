@@ -9,19 +9,27 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        body {
+                body {
             background-color: #dfdce3;
             color: #333;
         }
 
         .header {
             background-color: #007d96;
-            padding: 10px 20px;
+            padding: 1vh 20px; /* Ajuste dinámico del padding */
+            min-height: 8vh; /* Altura mínima del header */
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 6vh; /* Ajuste dinámico del logo */
+            max-height: 50px; /* Máximo tamaño */
         }
 
         .imagen-perfil {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
@@ -31,7 +39,7 @@
         .perfil {
             display: flex;
             align-items: center;
-            margin-left: 20px;
+            margin-left: 10px;
         }
 
         /* Menú hamburguesa */
@@ -41,7 +49,7 @@
             font-size: 1.5rem;
             color: white;
             cursor: pointer;
-            margin-right: 15px;
+            margin-right: 10px;
         }
 
         .menu {
@@ -92,26 +100,25 @@
             }
         }
 
-        /* Responsive */
-        @media (min-width: 769px) {
-            .menu {
-                display: flex !important;
-                position: static;
-                width: auto;
-                padding: 0;
-                background: none;
+        /* Ajustes responsivos */
+        @media (max-width: 768px) {
+            .header {
+                min-height: 6vh; /* Hace el header más compacto en móviles */
+                padding: 0.5vh 15px;
+            }
+
+            .logo img {
+                height: 5vh; /* Reduce más el tamaño del logo */
+                max-height: 40px;
+            }
+
+            .imagen-perfil {
+                width: 35px;
+                height: 35px;
             }
 
             .navbar-toggler {
-                display: none;
-            }
-
-            .menu ul {
-                flex-direction: row;
-            }
-
-            .menu ul li {
-                margin: 0 10px;
+                font-size: 1.3rem; /* Reduce el tamaño del icono hamburguesa */
             }
         }
 
@@ -162,6 +169,7 @@
         .footer-link:hover {
             color: #c300ff;
         }
+
     </style>
 </head>
 
