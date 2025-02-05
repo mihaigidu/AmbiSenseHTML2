@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Completa del Sensor LKC-1000S+</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #dfdce3;
+            color: #333;
+        }
+
+        .header {
+            background-color: #007d96;
+            padding: 10px 20px;
+        }
+
+        .imagen-perfil {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .perfil {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        .container {
+            width: 90%;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 15px;
+        }
+
+        .feature-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .feature-box {
+            width: 45%;
+            padding: 15px;
+            background: #f9f9f9;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: #007d96;
+            color: white;
+            padding: 20px;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #c300ff;
+        }
+
+        .accordion {
+            background-color: #007d96;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 18px;
+            transition: 0.4s;
+        }
+
+        .panel {
+            padding: 0 18px;
+            display: none;
+            background-color: white;
+            overflow: hidden;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        th {
+            background-color: #007d96;
+            color: white;
+            text-align: center;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var acc = document.getElementsByClassName("accordion");
+            for (var i = 0; i < acc.length; i++) {
+                acc[i].addEventListener("click", function () {
+                    this.classList.toggle("active");
+                    var panel = this.nextElementSibling;
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+                    } else {
+                        panel.style.display = "block";
+                        // Verifica si el panel contiene la tabla y la muestra
+                        var tableContainer = panel.querySelector(".table-container");
+                        if (tableContainer) {
+                            tableContainer.style.display = "block";
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <header class="header d-flex justify-content-between align-items-center">
+        <div class="logo">
+            <a href="/home">
+                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
+            </a>
+        </div>
+        <div class="d-flex align-items-center">
+            <nav class="menu">
+                <ul class="nav me-3">
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
+                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
+                </ul>
+            </nav>
+            <div class="perfil dropdown">
+                <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle"
+                    data-bs-toggle="dropdown">
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/perfil">Mi Perfil</a></li>
+                    <li><a class="dropdown-item" href="/configuracion">Configuración</a></li>
+                    <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Guía Completa del Sensor LKC-1000S+</h1>
+        <button class="accordion">¿Cómo funciona?</button>
+        <div class="panel">
+            <p>El sensor captura muestras del aire y utiliza sensores láser y químicos para medir contaminantes como
+                PM2.5, CO2 y TVOC.</p>
+        </div>
+        <button class="accordion">Beneficios del Sensor</button>
+        <div class="panel">
+            <p>Este sensor ayuda a monitorear la calidad del aire en diferentes entornos.</p>
+        </div>
+        <button class="accordion">Especificaciones Técnicas</button>
+        <div class="panel">
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Modelo</th>
+                        <td>LKC-1000S+</td>
+                    </tr>
+                    <tr>
+                        <th>Dimensión</th>
+                        <td>177*65.5*32 mm</td>
+                    </tr>
+                    <tr>
+                        <th>Capacidad de la batería</th>
+                        <td>3000 mAh</td>
+                    </tr>
+                    <tr>
+                        <th>Duración de la batería</th>
+                        <td>6-8 horas</td>
+                    </tr>
+                    <tr>
+                        <th>Pantalla</th>
+                        <td>Pantalla LCD TFT en color</td>
+                    </tr>
+                    <tr>
+                        <th>PM2.5</th>
+                        <td>0-999 ug/m³, Resolución: 0.1ug/m³</td>
+                    </tr>
+                    <tr>
+                        <th>Entorno de operación</th>
+                        <td>Temperatura: 0-50 ºC, Humedad: 0-90%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <footer class="text-center py-4">
+        <p>&copy; 2025 AmbiSense. Todos los derechos reservados.</p>
+        <a href="/aboutUs" class="footer-link">Sobre Nosotros</a>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

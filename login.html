@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Analizador de Salubridad</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Paleta de colores */
+        :root {
+            --primary-color: #007D96;
+            --secondary-color: #7C719C;
+            --background-color: #DFDCE3;
+            --text-color: #333333;
+            --input-bg-color: #FFFFFF;
+            --error-color: #ff3333;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .login-container {
+            position: absolute;
+            left: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--input-bg-color);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-title {
+            color: var(--text-color);
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            background-color: var(--input-bg-color);
+            border: 1px solid var(--secondary-color);
+            color: var(--text-color);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .background-video {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-login {
+            background-color: var(--primary-color);
+            color: var(--input-bg-color);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background-color: #005f70;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        .footer-text a {
+            color: var(--secondary-color);
+            text-decoration: underline;
+            
+cursor: pointer;
+        }
+
+        #footreg{
+            display: none;
+        }
+
+        #footlog{
+            display: block;
+        }
+
+        /* Animaciones */
+        @keyframes moveRight {
+            from {
+                transform: translateY(-50%) translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-50%) translateX(65vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes moveLeft {
+            from {
+                transform: translateY(-50%) translateX(65vw);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-50%) translateX(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .move-right {
+            animation: moveRight 1s ease-in-out forwards;
+        }
+
+        .move-left {
+            animation: moveLeft 1s ease-in-out forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 1s ease-in-out forwards;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <video autoplay loop muted class="background-video">
+        <source src="imagenes/VID-20250129-WA0019.mp4" type="video/mp4">
+        Tu navegador no soporta videos.
+    </video>
+
+    <div class="login-container" id="loginContainer">
+        <form id="loginForm">
+            <h2 class="login-title">Iniciar Sesión</h2>
+            <div class="mb-3">
+                <label for="username" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Ingrese su usuario" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
+            </div>
+            <button type="submit" class="btn btn-login">Ingresar</button>
+            <p id="error-message" class="error-message"></p>
+            
+        </form>
+        <p class="footer-text" id="footlog">¿No tienes una cuenta? <a id="registerLink">Regístrate aquí</a></p>
+        <p class="footer-text" id="footreg">¿Ya tienes una cuenta? <a id="backToLoginLink">Inicia sesion aquí</a></p>
+        <a href="/home" class="btn btn-primary">Home Principal</a>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const loginContainer = document.getElementById("loginContainer");
+        const registerLink = document.getElementById("registerLink");
+        const footlog = document.getElementById("footlog");
+        const footreg = document.getElementById("footreg");
+    
+        // Función para cambiar las propiedades CSS después de la animación
+        function applyFinalPosition(element, positionClass) {
+            if (positionClass === "move-right") {
+                element.style.transform = "translateY(-50%) translateX(65vw)"; // Posición final de "Registro"
+                element.style.opacity = "1"; 
+
+            } else if (positionClass === "move-left") {
+                element.style.transform = "translateY(-50%) translateX(0)"; // Posición inicial de "Login"
+                element.style.opacity = "1"; 
+
+            }
+            element.classList.remove(positionClass); // Quitar clase de animación
+        }
+    
+        registerLink.addEventListener("click", function (event) {
+            event.preventDefault();
+    
+            // Aplicar animaciones
+            loginForm.classList.remove("fade-in");
+            footlog.classList.remove("fade-in");
+            loginForm.classList.remove("fade-out");
+            footlog.classList.remove("fade-out");
+            loginContainer.classList.add("move-right");
+            loginForm.classList.add("fade-out");
+            footlog.classList.add("fade-out");
+    
+            // Cambiar contenido después de la animación
+            setTimeout(() => {
+                applyFinalPosition(loginContainer, "move-right"); // Fija la posición final
+                loginForm.innerHTML = `
+                    <h2 class="login-title">Regístrate</h2>
+                    <div class="mb-3">
+                        <label for="fullname" class="form-label">Nombre Completo</label>
+                        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Ingrese su nombre completo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Ingrese su correo electrónico" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Cree una contraseña" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirm-password" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="confirm-password" name="confirm-password" placeholder="Confirme su contraseña" required>
+                    </div>
+                    <button type="submit" class="btn btn-login">Registrarse</button>
+                    <p id="error-message" class="error-message"></p>
+                `;
+    
+                // Mostrar pie de página correcto
+                footlog.style.display = "none";
+                footreg.style.display = "block";
+                footreg.classList.remove("fade-out");
+                footreg.classList.add("fade-in");
+    
+                loginForm.classList.remove("fade-out");
+                loginForm.classList.add("fade-in");
+            }, 1000); // Tiempo de duración de la animación
+        });
+    
+        const backToLoginLink = document.getElementById("backToLoginLink");
+        backToLoginLink.addEventListener("click", function (event) {
+            event.preventDefault();
+    
+            // Aplicar animaciones
+            loginForm.classList.remove("fade-in");
+            footreg.classList.remove("fade-in");
+            loginContainer.classList.add("move-left");
+            loginForm.classList.add("fade-out");
+            footreg.classList.add("fade-out");
+    
+            setTimeout(() => {
+                applyFinalPosition(loginContainer, "move-left"); // Fija la posición inicial
+                loginForm.innerHTML = `
+                    <h2 class="login-title">Iniciar Sesión</h2>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Ingrese su usuario" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                    </div>
+                    <button type="submit" class="btn btn-login">Ingresar</button>
+                    <p id="error-message" class="error-message"></p>
+                `;
+    
+                // Mostrar pie de página correcto
+                footreg.style.display = "none";
+                footlog.style.display = "block";
+                footlog.classList.remove("fade-out");
+                footlog.classList.add("fade-in");
+    
+                loginForm.classList.remove("fade-out");
+                loginForm.classList.add("fade-in");
+            }, 1000); // Tiempo de duración de la animación
+        });
+    </script>
+    
+
+</body>
+</html>

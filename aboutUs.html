@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nosotros - AmbiSense</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #dfdce3;
+            color: #333;
+        }
+
+        header {
+            background: url('https://via.placeholder.com/1500x500') no-repeat center center/cover;
+            text-shadow: 2px 2px 4px rgba(85, 65, 156, 0.7);
+        }
+
+        h2 {
+            color: #7c719c;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        footer {
+            background-color: #007d96;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #c300ff;
+        }
+
+        .imagen-perfil {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        .perfil {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        /* Ajustar dropdown para que la imagen esté alineada con el texto */
+        .dropdown-menu {
+            min-width: 200px;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Espaciado entre la imagen y el texto */
+        }
+
+        .dropdown-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        /* Estilos Responsive */
+        @media (max-width: 992px) {
+            .navbar-toggler {
+                border: none;
+                background: transparent;
+            }
+
+            .navbar {
+                padding: 10px;
+            }
+
+            .navbar-collapse {
+                background: rgba(0, 0, 0, 0.7); /* Fondo oscuro en móviles */
+                padding: 15px;
+                border-radius: 5px;
+            }
+
+            .nav-item {
+                text-align: center;
+            }
+
+            .perfil {
+                justify-content: center;
+                margin: 10px 0;
+            }
+
+            .dropdown-menu {
+                text-align: left;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px;
+            }
+
+            #menuHeader {
+                text-align: center;
+                background-color: rgba(0, 0, 0, 0.6);
+                padding-bottom: 10px;
+            }
+
+            #menuHeader .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .imagen-perfil {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand img {
+                height: 40px;
+            }
+
+            .imagen-perfil {
+                width: 35px;
+                height: 35px;
+            }
+
+            .dropdown-item img {
+                width: 25px;
+                height: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header navbar navbar-expand-lg" style="background-color: #007d96; padding: 10px 20px;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">
+                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
+            </a>
+
+            <!-- Botón del menú hamburguesa para dispositivos móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuHeader"
+                aria-controls="menuHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse text-center" id="menuHeader">
+                <nav class="menu navbar-nav ms-auto">
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
+                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
+                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Menú de perfil con imagen alineada -->
+                <div class="perfil dropdown ms-3">
+                    <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle"
+                        data-bs-toggle="dropdown">
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="/perfil">
+                                <img src="imagenes/perfil.png" alt="Perfil"> Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/configuracion">
+                                <img src="imagenes/config.png" alt="Configuración"> Configuración
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/logout">
+                                <img src="imagenes/logout.png" alt="Cerrar Sesión"> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <section class="mb-5">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2>¿Quiénes Somos?</h2>
+                    <p>
+                        AmbiSense es una plataforma innovadora que monitoriza y analiza el ambiente en las aulas en
+                        tiempo real. Utilizamos tecnología avanzada para ofrecer información sobre la calidad del aire,
+                        temperatura, humedad y luminosidad, ayudando a crear espacios educativos más saludables y
+                        cómodos.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <img src="imagenes/logo.jpg" class="img-fluid rounded" alt="Misión de AmbiSense">
+                </div>
+            </div>
+        </section>
+        <section>
+            <h2 class="text-center mb-4">Conoce al Equipo</h2>
+            <div class="row text-center">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <img src="imagenes/foto3.jpg" class="img-fluid rounded-circle" alt="CEO">
+                    <h5>Ramon Gual</h5>
+                    <p>CEO</p>
+                    <p class="text-muted">"Transformando espacios con tecnología e innovación."</p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <img src="imagenes/foto1.jpg" class="img-fluid rounded-circle" alt="Programador">
+                    <h5>Mihai Gidu</h5>
+                    <p>Programadora Líder</p>
+                    <p class="text-muted">"Escribiendo el código que da vida a las soluciones."</p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <img src="imagenes/foto2.jpg" class="img-fluid rounded-circle" alt="Ingeniero de Redes">
+                    <h5>Juan Pascual</h5>
+                    <p>Ingeniero de Redes</p>
+                    <p class="text-muted">"Asegurando un flujo de datos seguro y confiable."</p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <img src="imagenes/foto4.jpg" class="img-fluid rounded-circle" alt="Diseñadora de Marketing">
+                    <h5>Sergio Gargallo</h5>
+                    <p>Marketing y Diseño</p>
+                    <p class="text-muted">"Comunicando innovación a través del diseño."</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2025 AmbiSense. Todos los derechos reservados.</p>
+        <div class="social-icons">
+            <a href="https://facebook.com" target="_blank" class="footer-link"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://twitter.com" target="_blank" class="footer-link"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://instagram.com" target="_blank" class="footer-link"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://linkedin.com" target="_blank" class="footer-link"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</body>
+
+</html>

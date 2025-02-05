@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensores - AmbiSense</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background-color: #f5faff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        main {
+            flex: 1;
+        }
+        footer {
+            background-color: #007d96;
+            color: white;
+        }
+        .sensor-box {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .sensor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .page-header h1 {
+            font-size: 1.5rem;
+            color: #4a69bd;
+        }
+        .chart-container {
+            position: relative;
+        }
+        .chart-container div {
+            width: 100%;
+            height: 400px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <header class="header d-flex justify-content-between align-items-center" style="background-color: #007d96; padding: 10px 20px;">
+        <div class="logo">
+            <a href="/inicio">
+                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
+            </a>
+        </div>
+        <nav class="menu">
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container my-4">
+        <div class="page-header">
+            <h1>Gestión de Sensores</h1>
+            <button class="btn btn-success">Añadir Sensor</button>
+        </div>
+
+        <div class="sensor-box">
+            <div class="sensor-header">
+                <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/50" alt="Sensor">
+                    <h5 class="ms-3">Sensor de Temperatura y Humedad</h5>
+                </div>
+                <button class="btn btn-danger btn-sm">Eliminar</button>
+            </div>
+
+            <div class="chart-container">
+                <div id="chart1"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2025 AmbiSense. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        var myChart = echarts.init(document.getElementById('chart1'));
+
+        var optimalTemperature = [25, 30]; 
+        var optimalHumidity = [50, 65];    
+        var optimalAQI = [50, 80];         
+
+        var data = {
+            hours: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+            temperature: [22.0, 23.5, 25.0, 26.5, 27.0, 24.0],
+            humidity: [55, 60, 65, 70, 75, 60],
+            aqi: [60, 62, 65, 70, 80, 75]
+        };
+
+        var option = {
+            legend: {
+                top: 'bottom'
+            },
+            tooltip: {
+                trigger: 'axis',
+                confine: true,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#ccc',
+                borderWidth: 1,
+                padding: [6, 10],
+                textStyle: {
+                    fontSize: 12,
+                    color: '#333'
+                },
+                extraCssText: 'white-space: nowrap; border-radius: 5px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); max-width: 220px;',
+                position: function (point, params, dom, rect, size) {
+                    return [point[0] + 15, point[1] - size.contentSize[1] / 2];
+                },
+                formatter: function (params) {
+                    let content = `<b>${params[0].axisValue}</b><br/>`;
+                    params.forEach(item => {
+                        content += `${item.marker} ${item.seriesName}: <b>${item.value}</b><br/>`;
+                    });
+                    return content;
+                }
+            },
+            xAxis: {
+                type: 'category',
+                name: 'Hora',
+                data: data.hours
+            },
+            yAxis: { 
+                type: 'value',
+                name: 'Valores'
+            },
+            series: [
+                {
+                    name: 'Temperatura (°C) Rango Óptimo',
+                    type: 'bar',
+                    data: new Array(data.hours.length).fill(optimalTemperature[1] - optimalTemperature[0]),
+                    stack: 'temperature',
+                    itemStyle: { color: 'rgba(255, 99, 132, 0.3)' }
+                },
+                {
+                    name: 'Temperatura (°C)',
+                    type: 'line',
+                    smooth: true,
+                    data: data.temperature,
+                    itemStyle: { color: 'red' }
+                },
+                {
+                    name: 'Humedad (%) Rango Óptimo',
+                    type: 'bar',
+                    data: new Array(data.hours.length).fill(optimalHumidity[1] - optimalHumidity[0]),
+                    stack: 'humidity',
+                    itemStyle: { color: 'rgba(54, 162, 235, 0.3)' }
+                },
+                {
+                    name: 'Humedad (%)',
+                    type: 'line',
+                    smooth: true,
+                    data: data.humidity,
+                    itemStyle: { color: 'blue' }
+                },
+                {
+                    name: 'AQI Rango Óptimo',
+                    type: 'bar',
+                    data: new Array(data.hours.length).fill(optimalAQI[1] - optimalAQI[0]),
+                    stack: 'aqi',
+                    itemStyle: { color: 'rgba(255, 206, 86, 0.3)' }
+                },
+                {
+                    name: 'AQI',
+                    type: 'line',
+                    smooth: true,
+                    data: data.aqi,
+                    itemStyle: { color: 'orange' }
+                }
+            ]
+        };
+
+        myChart.setOption(option);
+
+        window.addEventListener('resize', function () {
+            myChart.resize();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
