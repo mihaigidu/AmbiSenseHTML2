@@ -182,15 +182,15 @@
     
                     // 📊 Obtener el último valor de AQI
                     let lastAQI = latestReading
-                        ? latestReading.variables.find(v => v.nombre === "AQI")?.valor || 0
+                        ? latestReading.variables.find(v => v.nombre === "AQI")?.value || 0
                         : 0;
     
                     // 📌 Crear fila de la tabla con datos dinámicos
                     let row = `
                         <tr>
                             <td class="align-middle">${sensor.id}</td>
-                            <td class="align-middle">${sensor.nombre || `Sensor ${sensor.id}`}</td>
-                            <td class="align-middle">${sensor.ubicacion || "Ubicación desconocida"}</td>
+                            <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
+                            <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
                             <td>
                                 <div class="gauge-container">
                                     <div id="gauge-${index + 1}" class="gauge-chart"></div>
