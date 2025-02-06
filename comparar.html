@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,16 +11,65 @@
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        body { background-color: #dfdce3; color: #333; }
-        .header, footer { background-color: #007d96; color: white; padding: 10px 20px; }
-        .menu { display: none; text-align: center; background-color: #007d96; padding: 10px; position: absolute; top: 60px; left: 0; width: 100%; z-index: 999; }
-        .menu.active { display: flex; justify-content: center; animation: fadeIn 0.5s ease-in-out; }
-        .menu ul { display: flex; gap: 20px; list-style: none; padding: 0; }
-        .menu ul li a { color: white; font-weight: bold; text-decoration: none; padding: 10px; }
-        .comparison-container { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
-        .chart-container { width: 100%; height: 400px; margin-top: 20px; }
+        body {
+            background-color: #dfdce3;
+            color: #333;
+        }
+
+        .header,
+        footer {
+            background-color: #007d96;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .menu {
+            display: none;
+            text-align: center;
+            background-color: #007d96;
+            padding: 10px;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+        }
+
+        .menu.active {
+            display: flex;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .menu ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .menu ul li a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        .comparison-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
     <header class="header d-flex justify-content-between align-items-center">
         <div class="logo">
@@ -50,8 +100,26 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6"><div id="chart1" class="chart-container"></div></div>
-            <div class="col-md-6"><div id="chart2" class="chart-container"></div></div>
+            <div class="col-md-6">
+                <div id="chart1" class="chart-container"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="chart2" class="chart-container"></div>
+            </div>
+        </div>
+        <div class="text-center">
+            <label for="variableSelector">Selecciona una variable:</label>
+            <select id="variableSelector" class="form-select">
+                <option value="" disabled selected>Selecciona una variable</option>
+                <option value="PM2.5">PM2.5</option>
+                <option value="PM10">PM10</option>
+                <option value="Partículas">Partículas en suspensión</option>
+                <option value="AQI">AQI</option>
+                <option value="HCHO">HCHO</option>
+                <option value="TVOC">TVOC</option>
+                <option value="Temperatura">Temperatura</option>
+                <option value="Humedad">Humedad</option>
+            </select>
         </div>
     </main>
 
@@ -59,69 +127,118 @@
         <p>&copy; 2025 AmbiSense. Todos los derechos reservados.</p>
         <a href="/aboutUs" class="text-white">Sobre Nosotros</a>
     </footer>
-    
+
     <script>
         function fetchSensors() {
-            $.get("http://localhost:8080/sensores", function(data) {
-                let sensors = [...new Set(data.map(item => item.id))]; // ✅ Obtener ID de los sensores directamente
+            $.get("http://localhost:8080/sensores", function (data) {
+                let sensors = [...new Set(data.map(item => item.id))];
+
+                $("#sensor1, #sensor2").empty().append('<option value="" disabled selected>Selecciona un sensor</option>');
+
                 sensors.forEach(sensorId => {
                     $("#sensor1, #sensor2").append(`<option value="${sensorId}">Sensor ${sensorId}</option>`);
                 });
             });
         }
 
-
         function fetchDates(sensorNumber) {
             let sensorId = $(`#sensor${sensorNumber}`).val();
-            $.get(`http://localhost:8080/sensores`, function(data) {
+            if (!sensorId) return;
+
+            $.get(`http://localhost:8080/sensores`, function (data) {
                 let sensor = data.find(s => s.id == sensorId);
-                console.log(sensor);
                 if (!sensor) return;
 
                 let uniqueDates = [...new Set(sensor.lecturas.map(lectura => lectura.dateLectura.split('T')[0]))];
-                $(`#dayFilter${sensorNumber}`).empty();
+                let dateFilter = $(`#dayFilter${sensorNumber}`);
+
+                dateFilter.empty().append('<option value="" disabled selected>Selecciona una fecha</option>');
+
                 uniqueDates.forEach(date => {
-                    $(`#dayFilter${sensorNumber}`).append(`<option value="${date}">${date}</option>`);
+                    dateFilter.append(`<option value="${date}">${date}</option>`);
                 });
             });
         }
 
+
+
+
+        let allData = { sensor1: {}, sensor2: {} };
+        let timeLabels = { sensor1: [], sensor2: [] };
+
         function fetchData(sensorNumber) {
             let sensorId = $(`#sensor${sensorNumber}`).val();
             let date = $(`#dayFilter${sensorNumber}`).val();
-            $.get(`http://localhost:8080/sensores`, function(data) {
+            $.get(`http://localhost:8080/sensores`, function (data) {
                 let sensor = data.find(s => s.id == sensorId);
                 if (!sensor) return;
 
                 let filteredData = sensor.lecturas.filter(lectura => lectura.dateLectura.startsWith(date));
-                let values = filteredData.flatMap(lectura => lectura.variables.map(v => v.valor));
 
-                renderChart(`chart${sensorNumber}`, `Sensor ${sensorId}`, values);
+                // ✅ Ordenar las lecturas por hora antes de procesarlas
+                filteredData.sort((a, b) => {
+                    let timeA = a.dateLectura.split('T')[1];
+                    let timeB = b.dateLectura.split('T')[1];
+                    return timeA.localeCompare(timeB); // Ordena alfabéticamente, lo que en HH:MM funciona correctamente
+                });
+
+                // Variables a extraer
+                let variables = ["PM2.5", "PM10", "Partículas", "AQI", "HCHO", "TVOC", "Temperatura", "Humedad"];
+                allData[`sensor${sensorNumber}`] = {};
+                timeLabels[`sensor${sensorNumber}`] = [];
+
+                variables.forEach(variable => {
+                    allData[`sensor${sensorNumber}`][variable] = [];
+                });
+
+                filteredData.forEach(lectura => {
+                    let hour = lectura.dateLectura.split('T')[1].substring(0, 5); // Extrae HH:MM
+                    timeLabels[`sensor${sensorNumber}`].push(hour);
+
+                    lectura.variables.forEach(v => {
+                        if (variables.includes(v.nombre)) {
+                            allData[`sensor${sensorNumber}`][v.nombre].push(v.valor);
+                        }
+                    });
+                });
+
+                // Dibujamos el gráfico con la variable seleccionada o PM2.5 por defecto
+                let selectedVariable = $("#variableSelector").val() || "PM2.5";
+                renderChart(`chart${sensorNumber}`, `Sensor ${sensorId}`, timeLabels[`sensor${sensorNumber}`], allData[`sensor${sensorNumber}`][selectedVariable]);
             });
         }
 
-        function renderChart(containerId, sensor, data) {
+        function renderChart(containerId, sensor, labels, data) {
             let chart = echarts.init(document.getElementById(containerId));
             chart.setOption({
                 title: { text: sensor },
-                tooltip: {},
-                xAxis: { data: ["Mañana", "Tarde", "Noche"] },
-                yAxis: {},
+                tooltip: { trigger: 'axis' },
+                xAxis: { type: "category", data: labels },
+                yAxis: { type: "value" },
                 series: [{ type: "line", data: data }]
             });
         }
+
+        // Cambiar variable en ambas gráficas cuando el usuario seleccione una nueva
+        $("#variableSelector").change(function () {
+            let selectedVariable = $(this).val();
+            renderChart("chart1", "Sensor 1", timeLabels.sensor1, allData.sensor1[selectedVariable]);
+            renderChart("chart2", "Sensor 2", timeLabels.sensor2, allData.sensor2[selectedVariable]);
+        });
+
 
         function toggleMenu() {
             document.getElementById('menu').classList.toggle('active');
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             fetchSensors();
-            $("#sensor1").change(function() { fetchDates(1); });
-            $("#sensor2").change(function() { fetchDates(2); });
-            $("#dayFilter1").change(function() { fetchData(1); });
-            $("#dayFilter2").change(function() { fetchData(2); });
+            $("#sensor1").change(function () { fetchDates(1); });
+            $("#sensor2").change(function () { fetchDates(2); });
+            $("#dayFilter1").change(function () { fetchData(1); });
+            $("#dayFilter2").change(function () { fetchData(2); });
         });
     </script>
 </body>
+
 </html>
