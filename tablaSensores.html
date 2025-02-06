@@ -181,10 +181,9 @@
                         .shift(); // Tomar el más reciente
     
                     // 📊 Obtener el último valor de AQI
-                    let lastAQI = latestReading;
-                    console.log(lastAQI);
-                        /*? latestReading.variables.find(v => v.nombre === "AQI")?.value || 0
-                        : 0;*/
+                    let lastAQI = latestReading
+                        ? latestReading.variables.find(v => v.nombre === "AQI")?.value || 0
+                        : 0;
     
                     // 📌 Crear fila de la tabla con datos dinámicos
                     let row = `
