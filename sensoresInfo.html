@@ -73,9 +73,7 @@
             </ul>
             <label for="date-select">Selecciona una fecha:</label>
             <select id="date-select" class="form-select">
-                <option value="2025-02-01">1 Feb 2025</option>
-                <option value="2025-02-02">2 Feb 2025</option>
-                <option value="2025-02-03">3 Feb 2025</option>
+                <option selected disabled >Selecciona una fecha</option>
             </select>
         </div>
     </div>
@@ -92,18 +90,18 @@
         <a href="/aboutUs" class="text-white">Sobre Nosotros</a>
     </footer>
     <script>
-        let sensorId = new URLSearchParams(window.location.search).get("sensorId"); // Obtiene el sensor desde la URL
+        let urlParams = new URLSearchParams(window.location.search);
+        let sensorId = urlParams.get("sensorId"); // Obtiene el ID del sensor desde la URL
         let sensorData = {}; // Almacena los datos del sensor
         let timeLabels = []; // Etiquetas de tiempo reales
     
         function fetchSensorData() {
             if (!sensorId) {
-                alert("No se especificó un sensor.");
+                alert("No se especificó un sensor en la URL.");
                 return;
             }
     
-            $.get(`http://localhost:8080/sensores`, function (data) {
-                let sensor = data.find(s => s.id == sensorId);
+            $.get(`http://localhost:8080/sensores/${sensorId}`, function (sensor) {
                 if (!sensor || !sensor.lecturas || sensor.lecturas.length === 0) {
                     alert("No se encontraron datos para este sensor.");
                     return;
@@ -112,21 +110,25 @@
                 // 📅 Obtener fechas únicas disponibles para el sensor
                 let uniqueDates = [...new Set(sensor.lecturas.map(lectura => lectura.dateLectura.split('T')[0]))];
     
-                // 📌 Llenar el selector de fechas
+                // 📌 Llenar el selector de fechas dinámicamente
                 let dateSelect = $("#date-select");
-                dateSelect.empty();
+                dateSelect.empty().append('<option value="" disabled selected>Selecciona una fecha</option>');
                 uniqueDates.forEach(date => {
                     dateSelect.append(`<option value="${date}">${date}</option>`);
                 });
     
-                // 📊 Cargar datos del sensor para la primera fecha por defecto
-                fetchSensorValues(uniqueDates[0]);
+                // 🔄 Mostrar la última fecha disponible por defecto
+                let latestDate = uniqueDates[uniqueDates.length - 1];
+                dateSelect.val(latestDate);
+                fetchSensorValues(latestDate);
+    
+                // 🏷️ Actualizar información del sensor
+                $("#last-update").text(latestDate);
             });
         }
     
         function fetchSensorValues(selectedDate) {
-            $.get(`http://localhost:8080/sensores`, function (data) {
-                let sensor = data.find(s => s.id == sensorId);
+            $.get(`http://localhost:8080/sensores/${sensorId}`, function (sensor) {
                 if (!sensor) return;
     
                 let filteredData = sensor.lecturas.filter(lectura => lectura.dateLectura.startsWith(selectedDate));
@@ -149,7 +151,7 @@
     
                     lectura.variables.forEach(v => {
                         if (variables.includes(v.nombre)) {
-                            sensorData[v.name].push(v.value);
+                            sensorData[v.nombre].push(v.valor);
                         }
                     });
                 });
@@ -161,9 +163,9 @@
     
         function updateCharts() {
             createChart("chart-aqi", "Evolución del AQI", sensorData["AQI"]);
-            createChart("chart1", "PM2.5 y PM10 (ug/m3)", sensorData["PM2.5"]);
-            createChart("chart2", "Partículas (per/L)", sensorData["Partículas"]);
-            createChart("chart3", "Evolución de PM10", sensorData["PM10"]);
+            createChart("chart1", "PM2.5 (ug/m3)", sensorData["PM2.5"]);
+            createChart("chart2", "PM10 (ug/m3)", sensorData["PM10"]);
+            createChart("chart3", "Partículas (per/L)", sensorData["Partículas"]);
             createChart("chart4", "Evolución de Temperatura", sensorData["Temperatura"]);
         }
     
