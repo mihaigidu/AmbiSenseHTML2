@@ -225,14 +225,17 @@
             }
 
             let sensorData = {
-                name: sensorName,
-                ubication: sensorLocation,
-                type: sensorType,
-                creation_date: creationDate
-            };
+            name: sensorName,
+            ubication: sensorLocation,
+            type: sensorType,
+            creationDate: creationDate, 
+            usuarios: [], 
+            alertas: [],  
+            lecturas: []  
+        };
 
             // Enviar la información a la API
-            fetch("http://localhost:8080/upload", {
+            fetch("http://localhost:8080/sensores/upload", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
