@@ -123,16 +123,52 @@
     <!-- Contenido principal -->
     <main class="container my-5">
         <h2 class="text-center mb-4">Listado de Sensores</h2>
-        <!-- Botón para añadir sensores -->
+        <!-- Botón para abrir el modal -->
         <div class="text-end mb-3">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSensorModal">
-                <i class="fa fa-plus" href="/"></i> Añadir Sensor
+                <i class="fa fa-plus"></i> Añadir Sensor
             </button>
             <button class="btn btn-primary" onclick="compararSensores()">
                 <i class="fa fa-chart-bar" href="/comparar"></i> Comparar
             </button>
         </div>
-        
+
+        <!-- MODAL PARA AÑADIR SENSOR -->
+        <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSensorModalLabel">Añadir Sensor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addSensorForm">
+                            <div class="mb-3">
+                                <label for="sensorName" class="form-label">Nombre del Sensor</label>
+                                <input type="text" class="form-control" id="sensorName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sensorLocation" class="form-label">Ubicación</label>
+                                <input type="text" class="form-control" id="sensorLocation" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sensorType" class="form-label">Tipo de Sensor</label>
+                                <input type="text" class="form-control" id="sensorType" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="creationDate" class="form-label">Fecha de Creación</label>
+                                <input type="datetime-local" class="form-control" id="creationDate" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Crear Sensor</button>
+                        </form>
+                        <div id="addSensorMessage" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <table class="table table-bordered text-center align-middle">
             <thead class="table-dark">
                 <tr>
@@ -144,7 +180,7 @@
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
     </main>
@@ -163,32 +199,83 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Establecer la fecha actual en el campo creation_date por defecto
+        document.addEventListener("DOMContentLoaded", function () {
+            let now = new Date();
+            let formattedDate = now.toISOString().slice(0, 16); // Formato YYYY-MM-DDTHH:mm
+            document.getElementById("creationDate").value = formattedDate;
+        });
+
+        document.getElementById("addSensorForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Evitar recarga de la página
+
+            // Obtener los valores del formulario
+            let sensorName = document.getElementById("sensorName").value.trim();
+            let sensorLocation = document.getElementById("sensorLocation").value.trim();
+            let sensorType = document.getElementById("sensorType").value.trim();
+            let creationDate = document.getElementById("creationDate").value;
+
+            if (!sensorName || !sensorLocation || !sensorType || !creationDate) {
+                document.getElementById("addSensorMessage").innerHTML = `<div class="alert alert-danger">Por favor, completa todos los campos.</div>`;
+                return;
+            }
+
+            let sensorData = {
+                name: sensorName,
+                ubication: sensorLocation,
+                type: sensorType,
+                creation_date: creationDate
+            };
+
+            // Enviar la información a la API
+            fetch("http://localhost:8080/upload", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(sensorData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("addSensorMessage").innerHTML = `<div class="alert alert-success">Sensor creado correctamente.</div>`;
+                    setTimeout(() => {
+                        document.getElementById("addSensorMessage").innerHTML = "";
+                        document.getElementById("addSensorForm").reset();
+                        new bootstrap.Modal(document.getElementById('addSensorModal')).hide(); // Cerrar modal
+                        fetchSensorsAQI(); // Refrescar la tabla
+                    }, 2000);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.getElementById("addSensorMessage").innerHTML = `<div class="alert alert-danger">Error al crear el sensor.</div>`;
+                });
+        });
         function fetchSensorsAQI() {
             let tableBody = $("tbody");
-        
+
             // 🔄 Mostrar mensaje de carga mientras llega la API
             tableBody.html(`
                 <tr>
                     <td colspan="5" class="text-center">Cargando sensores...</td>
                 </tr>
             `);
-        
+
             $.get("http://localhost:8080/sensores", function (data) {
                 tableBody.empty(); // Limpiar la tabla tras recibir los datos
-        
+
                 data.forEach((sensor, index) => {
                     if (!sensor.lecturas || sensor.lecturas.length === 0) return;
-    
+
                     // 🔍 Obtener la última lectura registrada
                     let latestReading = sensor.lecturas
                         .sort((a, b) => new Date(b.dateLectura) - new Date(a.dateLectura)) // Ordenar por fecha descendente
                         .shift(); // Tomar el más reciente
-    
+
                     // 📊 Obtener el último valor de AQI
                     let lastAQI = latestReading
                         ? latestReading.variables.find(v => v.nombre === "AQI")?.value || 0
                         : 0;
-    
+
                     // 📌 Crear fila de la tabla con datos dinámicos
                     let row = `
                         <tr>
@@ -211,7 +298,7 @@
                         </tr>
                     `;
                     tableBody.append(row);
-    
+
                     // 🟢 Crear gauge chart para el sensor
                     createGauge(`gauge-${index + 1}`, lastAQI);
                 });
@@ -224,7 +311,7 @@
                 `);
             });
         }
-    
+
         function createGauge(chartId, value) {
             var chart = echarts.init(document.getElementById(chartId));
             var option = {
@@ -257,13 +344,13 @@
             };
             chart.setOption(option);
         }
-    
+
         $(document).ready(function () {
             fetchSensorsAQI();
         });
     </script>
-    
-    
+
+
 </body>
 
 </html>
