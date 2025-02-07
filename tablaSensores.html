@@ -11,87 +11,164 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        /* General */
         body {
             background-color: #dfdce3;
             color: #333;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
+        /* HEADER */
         .header {
             background-color: #007d96;
-            padding: 10px 20px;
+            padding: 1vh 20px;
+            min-height: 8vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1000;
+        }
+
+        /* Logo */
+        .logo img {
+            height: 6vh;
+            max-height: 50px;
+        }
+
+        /* Menú de navegación en pantallas grandes */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        /* Perfil */
+        .perfil {
+            display: flex;
+            align-items: center;
         }
 
         .imagen-perfil {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
             border: 2px solid white;
         }
 
-        .perfil {
-            display: flex;
-            align-items: center;
-            margin-left: 15px;
+        /* Menú hamburguesa */
+        .navbar-toggler {
+            display: none;
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
         }
 
-        h2 {
-            color: #7c719c;
-        }
-
+        /* Menú hamburguesa desplegable */
         .menu {
-            margin-left: auto;
-        }
-
-        .nav-container {
-            margin-left: auto;
-            margin-right: 20px;
-        }
-
-        footer {
+            display: none;
             position: absolute;
-            bottom: 0;
+            top: 100%;
+            left: 0;
             width: 100%;
+            background-color: #007d96;
+            text-align: center;
+            z-index: 999;
+            padding: 10px;
+        }
+
+        .menu.active {
+            display: flex;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .menu ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .menu ul li {
+            padding: 10px;
+        }
+
+        .menu ul li a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .navbar-toggler {
+                display: block;
+            }
+        }
+
+        /* FORZAR FOOTER AL FINAL */
+        footer {
             background-color: #007d96;
             color: white;
             padding: 20px;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
         }
 
+        /* Footer Links */
         .footer-link {
             color: white;
             text-decoration: none;
             margin: 0 10px;
             font-size: 16px;
-            transition: transform 0.3s ease;
         }
 
-        .footer-link:hover {
-            color: #c300ff;
+        /* Social Icons */
+        .social-icons {
+            margin-top: 10px;
         }
 
-        /* Estilos para la tabla */
-        .table td,
-        .table th {
-            vertical-align: middle;
-            text-align: center;
+        .social-icons a {
+            font-size: 20px;
+            margin: 0 10px;
+            color: white;
         }
 
-        .gauge-container,
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 120px;
-        }
-
-        .gauge-chart {
-            width: 120px;
-            height: 120px;
-        }
-
-        .btn-container {
-            gap: 10px;
+        .social-icons a:hover {
+            transform: scale(1.2);
         }
     </style>
 </head>
@@ -101,19 +178,37 @@
     <header class="header d-flex justify-content-between align-items-center">
         <div class="logo">
             <a href="/inicio">
-                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
+                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa">
             </a>
         </div>
-        <nav class="nav-container">
+
+        <!-- Botón menú hamburguesa -->
+        <button class="navbar-toggler d-block d-md-none" type="button" onclick="toggleMenu()">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <!-- Menú normal en pantallas grandes -->
+        <nav class="nav-container d-none d-md-flex">
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
             </ul>
         </nav>
+
+        <!-- Menú hamburguesa para móviles (en una sola línea) -->
+        <nav class="menu" id="menu">
+            <ul class="nav justify-content-center">
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
+            </ul>
+        </nav>
+
+        <!-- Menú de perfil -->
         <div class="perfil dropdown">
             <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle" data-bs-toggle="dropdown">
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="/perfil">Mi Perfil</a></li>
                 <li><a class="dropdown-item" href="/configuracion">Configuración</a></li>
                 <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
@@ -210,20 +305,20 @@
                     "Content-Type": "application/json"
                 }
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Error en la eliminación del sensor");
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert("Sensor eliminado correctamente");
-                fetchSensorsAQI(); // Refrescar la lista de sensores
-            })
-            .catch(error => {
-                console.error("Error al eliminar el sensor:", error);
-                alert("No se pudo eliminar el sensor.");
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Error en la eliminación del sensor");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert("Sensor eliminado correctamente");
+                    fetchSensorsAQI(); // Refrescar la lista de sensores
+                })
+                .catch(error => {
+                    console.error("Error al eliminar el sensor:", error);
+                    alert("No se pudo eliminar el sensor.");
+                });
         }
         function compararSensores() {
             window.location.href = "/comparacion"; // Redirige a la página de comparación de sensores
@@ -251,14 +346,14 @@
             }
 
             let sensorData = {
-            name: sensorName,
-            ubication: sensorLocation,
-            type: sensorType,
-            creationDate: creationDate, 
-            usuarios: [], 
-            alertas: [],  
-            lecturas: []  
-        };
+                name: sensorName,
+                ubication: sensorLocation,
+                type: sensorType,
+                creationDate: creationDate,
+                usuarios: [],
+                alertas: [],
+                lecturas: []
+            };
 
             // Enviar la información a la API
             fetch("http://localhost:8080/sensores/upload", {
@@ -380,6 +475,18 @@
 
         $(document).ready(function () {
             fetchSensorsAQI();
+        });
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
+        }
+
+        // Cierra el menú automáticamente al agrandar la pantalla
+        window.addEventListener('resize', function () {
+            const menu = document.getElementById('menu');
+            if (window.innerWidth > 768) {
+                menu.classList.remove('active');
+            }
         });
     </script>
 

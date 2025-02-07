@@ -9,22 +9,48 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-                body {
+        /* GENERAL */
+        body {
             background-color: #dfdce3;
             color: #333;
+            font-family: Arial, sans-serif;
         }
 
+        /* HEADER */
         .header {
             background-color: #007d96;
-            padding: 1vh 20px; /* Ajuste dinámico del padding */
-            min-height: 8vh; /* Altura mínima del header */
+            padding: 1vh 20px;
+            min-height: 8vh;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1000;
         }
 
         .logo img {
-            height: 6vh; /* Ajuste dinámico del logo */
-            max-height: 50px; /* Máximo tamaño */
+            height: 6vh;
+            max-height: 50px;
+        }
+
+        /* Menú de navegación */
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            margin-right: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px;
+        }
+
+        /* Perfil */
+        .perfil {
+            display: flex;
+            align-items: center;
         }
 
         .imagen-perfil {
@@ -36,14 +62,9 @@
             border: 2px solid white;
         }
 
-        .perfil {
-            display: flex;
-            align-items: center;
-            margin-left: 10px;
-        }
-
         /* Menú hamburguesa */
         .navbar-toggler {
+            display: none;
             border: none;
             background: transparent;
             font-size: 1.5rem;
@@ -57,9 +78,8 @@
             width: 100%;
             text-align: center;
             background-color: #007d96;
-            padding: 10px;
             position: absolute;
-            top: 60px;
+            top: 100%;
             left: 0;
             z-index: 999;
         }
@@ -67,14 +87,17 @@
         .menu.active {
             display: flex;
             justify-content: center;
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .menu ul {
             display: flex;
+            justify-content: center;
             gap: 20px;
-            padding: 0;
+            padding: 10px 0;
+            margin: 0;
             list-style: none;
+            width: 100%;
         }
 
         .menu ul li {
@@ -85,7 +108,8 @@
             color: white;
             font-weight: bold;
             text-decoration: none;
-            padding: 10px;
+            padding: 10px 20px;
+            display: block;
         }
 
         /* Animación de entrada */
@@ -94,40 +118,27 @@
                 opacity: 0;
                 transform: translateY(-10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* Ajustes responsivos */
+        /* RESPONSIVE */
         @media (max-width: 768px) {
-            .header {
-                min-height: 6vh; /* Hace el header más compacto en móviles */
-                padding: 0.5vh 15px;
-            }
-
-            .logo img {
-                height: 5vh; /* Reduce más el tamaño del logo */
-                max-height: 40px;
-            }
-
-            .imagen-perfil {
-                width: 35px;
-                height: 35px;
+            .nav-links {
+                display: none;
             }
 
             .navbar-toggler {
-                font-size: 1.3rem; /* Reduce el tamaño del icono hamburguesa */
+                display: block;
             }
         }
 
+        /* CONTENEDORES DE PRODUCTOS Y PLANES */
         h2 {
             color: #7c719c;
-        }
-
-        .text-muted {
-            color: #6c757d !important;
         }
 
         .card {
@@ -152,10 +163,13 @@
             color: #007d96;
         }
 
+        /* FOOTER */
         footer {
             background-color: #007d96;
             color: white;
             padding: 20px;
+            text-align: center;
+            width: 100%;
         }
 
         .footer-link {
@@ -170,6 +184,41 @@
             color: #c300ff;
         }
 
+        .social-icons {
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            font-size: 20px;
+            margin: 0 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header {
+                min-height: 6vh;
+                padding: 0.5vh 15px;
+            }
+
+            .logo img {
+                height: 5vh;
+                max-height: 40px;
+            }
+
+            .imagen-perfil {
+                width: 35px;
+                height: 35px;
+            }
+
+            .navbar-toggler {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 
@@ -177,15 +226,24 @@
     <header class="header d-flex justify-content-between align-items-center">
         <div class="logo">
             <a href="/home">
-                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
+                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa">
             </a>
         </div>
-        <div class="d-flex align-items-center">
-            <!-- Botón Menú Hamburguesa -->
+
+        <div class="menu-container d-flex align-items-center">
+            <!-- Menú normal en pantallas grandes -->
+            <nav class="nav-links d-none d-md-flex">
+                <a href="/instalacion">Instalación</a>
+                <a href="/tienda">Tienda</a>
+                <a href="/sensores">Sensores</a>
+            </nav>
+
+            <!-- Botón Menú Hamburguesa (visible en móviles) -->
             <button class="navbar-toggler" type="button" onclick="toggleMenu()">
                 <i class="fa-solid fa-bars"></i>
             </button>
-    
+
+            <!-- Menú hamburguesa (solo aparece en móviles) -->
             <nav class="menu" id="menu">
                 <ul class="nav">
                     <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
@@ -193,8 +251,8 @@
                     <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
                 </ul>
             </nav>
-    
-            <!-- Perfil con menú desplegable corregido -->
+
+            <!-- Menú de perfil -->
             <div class="perfil dropdown">
                 <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -206,7 +264,8 @@
             </div>
         </div>
     </header>
-    
+
+
 
     <main class="container my-5">
         <h2 class="text-center mb-4">Nuestra Tienda</h2>
@@ -280,9 +339,19 @@
 
     <script>
         function toggleMenu() {
-            document.getElementById('menu').classList.toggle('active');
+            const menu = document.getElementById('menu');
+            menu.classList.toggle('active');
         }
+
+        // Cierra el menú automáticamente al agrandar la pantalla
+        window.addEventListener('resize', function () {
+            const menu = document.getElementById('menu');
+            if (window.innerWidth > 768) {
+                menu.classList.remove('active');
+            }
+        });
     </script>
+
 </body>
 
 </html>
