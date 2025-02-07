@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subir Datos JSON a API</title>
+    <title>Subir Datos CSV a API</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,11 +37,23 @@
             background-color: #007bff;
             color: white;
         }
+        select {
+            margin-bottom: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
 
 <h2>Subir Archivo CSV</h2>
+
+<!-- Select para elegir sensor -->
+<label for="sensorSelect">Selecciona un sensor:</label>
+<select id="sensorSelect">
+    <option value="">Cargando sensores...</option>
+</select>
+
 <div id="dropzone">Arrastra y suelta el archivo CSV aquí</div>
 <input type="file" id="fileInput" accept=".csv" style="display:none;">
 
@@ -70,7 +82,27 @@
     const fileInput = document.getElementById('fileInput');
     const dataTable = document.querySelector('#dataTable tbody');
     const uploadBtn = document.getElementById('uploadBtn');
+    const sensorSelect = document.getElementById('sensorSelect');
     let jsonData = [];
+
+    // Obtener sensores y llenar el select
+    function fetchSensores() {
+        fetch("http://localhost:8080/sensores")
+            .then(response => response.json())
+            .then(data => {
+                sensorSelect.innerHTML = "<option value=''>Selecciona un sensor</option>";
+                data.forEach(sensor => {
+                    let option = document.createElement("option");
+                    option.value = sensor.id;
+                    option.textContent = `${sensor.name || 'Sensor ' + sensor.id} - ${sensor.ubication || 'Ubicación desconocida'}`;
+                    sensorSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error("Error al cargar sensores:", error);
+                sensorSelect.innerHTML = "<option value=''>Error al cargar sensores</option>";
+            });
+    }
 
     // Manejo de arrastrar y soltar archivos
     dropzone.addEventListener('dragover', (event) => {
@@ -120,11 +152,11 @@
             rows.slice(1).forEach(row => {
                 const cols = row.split(separator).map(col => col.trim());
                 if (cols.length >= 9) {
-                    let fechaCompleta = cols[0].trim(); // 2025-01-29 09:23:14
-                    let fechaISO = fechaCompleta.replace(" ", "T"); // 2025-01-29T09:23:14
+                    let fechaCompleta = cols[0].trim();
+                    let fechaISO = fechaCompleta.replace(" ", "T");
 
                     const lectura = {
-                        dateLectura: fechaISO,  // 🔹 Ahora la fecha incluye la hora correctamente
+                        dateLectura: fechaISO,
                         variables: [
                             { "nombre": "PM2.5", "valor": parseValue(cols[1]), "unidad": "µg/m³" },
                             { "nombre": "PM10", "valor": parseValue(cols[2]), "unidad": "µg/m³" },
@@ -155,12 +187,19 @@
     }
 
     uploadBtn.addEventListener('click', () => {
+        const sensorId = sensorSelect.value;
+
+        if (!sensorId) {
+            alert("Por favor, selecciona un sensor antes de subir el archivo.");
+            return;
+        }
+
         if (jsonData.length === 0) {
             alert("No hay datos para enviar.");
             return;
         }
 
-        fetch("http://localhost:8080/api/datos/upload", {
+        fetch(`http://localhost:8080/lecturas/upload/${sensorId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -178,6 +217,8 @@
             });
     });
 
+    // Cargar sensores al inicio
+    document.addEventListener("DOMContentLoaded", fetchSensores);
 </script>
 
 </body>
