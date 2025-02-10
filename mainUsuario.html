@@ -430,7 +430,6 @@
             fetch("http://localhost:8080/sensores")
                 .then(response => response.json())
                 .then(data => {
-                    // Obtener los últimos 3 sensores creados
                     let latestSensors = data.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate)).slice(0, 3);
     
                     if (latestSensors.length === 0) {
@@ -438,26 +437,22 @@
                         return;
                     }
     
-                    // Limpiar carrusel
                     let carouselInner = document.querySelector(".carousel-inner");
                     carouselInner.innerHTML = ""; 
     
                     latestSensors.forEach((sensor, index) => {
-                        let lastReading = sensor.lecturas?.sort((a, b) => new Date(b.dateLectura) - new Date(a.dateLectura))[0];
+                        let today = new Date().toISOString().split("T")[0]; // Fecha de hoy en formato YYYY-MM-DD
+                        let todayReadings = sensor.lecturas?.filter(lectura => lectura.dateLectura.startsWith(today));
     
-                        if (!lastReading) {
-                            console.warn(`El sensor ${sensor.name} no tiene lecturas disponibles.`);
+                        if (!todayReadings || todayReadings.length === 0) {
+                            console.warn(`El sensor ${sensor.name} no tiene lecturas hoy.`);
                             return;
                         }
     
-                        // Extraer temperatura y humedad
-                        let temperatura = lastReading.variables.find(v => v.nombre === "Temperatura")?.valor || 0;
-                        let humedad = lastReading.variables.find(v => v.nombre === "Humedad")?.valor || 0;
-                        let timestamp = new Date(lastReading.dateLectura).toLocaleString();
+                        let timestamp = new Date(todayReadings[todayReadings.length - 1].dateLectura).toLocaleString();
     
                         let chartId = `sensorChart${index + 1}`;
     
-                        // Crear nuevo slide en el carrusel
                         let carouselItem = document.createElement("div");
                         carouselItem.classList.add("carousel-item");
                         if (index === 0) carouselItem.classList.add("active");
@@ -472,8 +467,9 @@
     
                         carouselInner.appendChild(carouselItem);
     
-                        // Crear gráfico para el sensor
-                        setTimeout(() => createChart(chartId, temperatura, humedad), 100);
+                        let { timeLabels, tempValues, humidityValues } = processSensorReadings(todayReadings);
+    
+                        setTimeout(() => createChart(chartId, timeLabels, tempValues, humidityValues), 100);
                     });
                 })
                 .catch(error => {
@@ -481,17 +477,37 @@
                 });
         }
     
-        function createChart(chartId, temperatura, humedad) {
+        function processSensorReadings(readings) {
+            let timeLabels = [];
+            let tempValues = [];
+            let humidityValues = [];
+    
+            readings.forEach(lectura => {
+                let date = new Date(lectura.dateLectura);
+                let timeLabel = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+    
+                let temperatura = lectura.variables.find(v => v.nombre === "Temperatura")?.valor || 0;
+                let humedad = lectura.variables.find(v => v.nombre === "Humedad")?.valor || 0;
+    
+                timeLabels.push(timeLabel);
+                tempValues.push(temperatura);
+                humidityValues.push(humedad);
+            });
+    
+            return { timeLabels, tempValues, humidityValues };
+        }
+    
+        function createChart(chartId, timeLabels, tempValues, humidityValues) {
             let chart = echarts.init(document.getElementById(chartId));
     
             let option = {
                 tooltip: { trigger: 'axis' },
                 legend: { data: ['Temperatura', 'Humedad'], top: '10%', left: 'center' },
-                xAxis: { type: 'category', data: ['Ahora'] },
+                xAxis: { type: 'category', data: timeLabels },
                 yAxis: { type: 'value', min: 0, max: 100 },
                 series: [
-                    { name: 'Temperatura', type: 'bar', data: [temperatura], itemStyle: { color: 'red' } },
-                    { name: 'Humedad', type: 'bar', data: [humedad], itemStyle: { color: 'blue' } }
+                    { name: 'Temperatura', type: 'line', data: tempValues, itemStyle: { color: 'red' } },
+                    { name: 'Humedad', type: 'line', data: humidityValues, itemStyle: { color: 'blue' } }
                 ]
             };
     
@@ -502,6 +518,7 @@
         document.addEventListener("DOMContentLoaded", fetchLatestSensors);
         window.addEventListener('resize', () => charts.forEach(chart => chart.resize()));
     </script>
+    
 </body>
 
 </html>
