@@ -6,41 +6,72 @@
     <title>Subir Datos CSV a API</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
+            background-color: #DFDCE3;
+            color: #333333;
+        }
+        h2, h3 {
+            color: #42326D;
         }
         #dropzone {
             width: 80%;
             max-width: 500px;
             padding: 20px;
-            border: 2px dashed #007bff;
+            border: 2px dashed #007D96;
             border-radius: 10px;
             margin: auto;
             text-align: center;
             cursor: pointer;
-            color: #007bff;
+            color: #007D96;
+            background-color: #FFFFFF;
+            transition: background-color 0.3s;
         }
         #dropzone.dragover {
-            background-color: #e0f7ff;
+            background-color: #B8E6ED;
         }
         table {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
             border-collapse: collapse;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid #333333;
+            padding: 10px;
+            text-align: center;
         }
         th {
-            background-color: #007bff;
+            background-color: #42326D;
             color: white;
         }
-        select {
-            margin-bottom: 10px;
-            padding: 8px;
+        select, button {
+            padding: 10px;
             font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin: 10px;
+        }
+        select {
+            background-color: #FFFFFF;
+            color: #333333;
+            border: 2px solid #007D96;
+        }
+        button {
+            background-color: #007D96;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #005F70;
+        }
+        button:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -48,7 +79,6 @@
 
 <h2>Subir Archivo CSV</h2>
 
-<!-- Select para elegir sensor -->
 <label for="sensorSelect">Selecciona un sensor:</label>
 <select id="sensorSelect">
     <option value="">Cargando sensores...</option>
