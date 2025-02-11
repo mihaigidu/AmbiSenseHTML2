@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,12 +12,9 @@
             background-color: #DFDCE3;
             color: #333333;
         }
-
-        h2,
-        h3 {
+        h2, h3 {
             color: #42326D;
         }
-
         #dropzone {
             width: 80%;
             max-width: 500px;
@@ -32,11 +28,9 @@
             background-color: #FFFFFF;
             transition: background-color 0.3s;
         }
-
         #dropzone.dragover {
             background-color: #B8E6ED;
         }
-
         table {
             width: 90%;
             margin: 20px auto;
@@ -45,248 +39,223 @@
             border-radius: 10px;
             overflow: hidden;
         }
-
-        th,
-        td {
+        th, td {
             border: 1px solid #333333;
             padding: 10px;
             text-align: center;
         }
-
         th {
             background-color: #42326D;
             color: white;
         }
-
-        select,
-        button {
+        select, button {
             padding: 10px;
             font-size: 16px;
             border-radius: 5px;
             border: none;
             margin: 10px;
         }
-
         select {
             background-color: #FFFFFF;
             color: #333333;
             border: 2px solid #007D96;
         }
-
         button {
             background-color: #007D96;
             color: white;
             cursor: pointer;
             transition: background-color 0.3s;
         }
-
         button:hover {
             background-color: #005F70;
         }
-
         button:disabled {
             background-color: #CCCCCC;
             cursor: not-allowed;
         }
     </style>
 </head>
-
 <body>
 
-    <h2>Subir Archivo CSV</h2>
+<h2>Subir Archivo CSV</h2>
 
-    <label for="sensorSelect">Selecciona un sensor:</label>
-    <select id="sensorSelect">
-        <option value="">Cargando sensores...</option>
-    </select>
+<label for="sensorSelect">Selecciona un sensor:</label>
+<select id="sensorSelect">
+    <option value="">Cargando sensores...</option>
+</select>
 
-    <div id="dropzone">Arrastra y suelta el archivo CSV aquí</div>
-    <input type="file" id="fileInput" accept=".csv" style="display:none;">
+<div id="dropzone">Arrastra y suelta el archivo CSV aquí</div>
+<input type="file" id="fileInput" accept=".csv" style="display:none;">
 
-    <h3>Vista Previa de Datos</h3>
-    <table id="dataTable">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>PM2.5</th>
-                <th>PM10</th>
-                <th>Partículas</th>
-                <th>AQI</th>
-                <th>HCHO</th>
-                <th>TVOC</th>
-                <th>Temperatura</th>
-                <th>Humedad</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<h3>Vista Previa de Datos</h3>
+<table id="dataTable">
+    <thead>
+    <tr>
+        <th>Fecha</th>
+        <th>PM2.5</th>
+        <th>PM10</th>
+        <th>Partículas</th>
+        <th>AQI</th>
+        <th>HCHO</th>
+        <th>TVOC</th>
+        <th>Temperatura</th>
+        <th>Humedad</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>
 
-    <button id="uploadBtn" disabled>Subir JSON</button>
+<button id="uploadBtn" disabled>Subir JSON</button>
 
-    <script>
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        const dataTable = document.querySelector('#dataTable tbody');
-        const uploadBtn = document.getElementById('uploadBtn');
-        const sensorSelect = document.getElementById('sensorSelect');
-        let jsonData = [];
+<script>
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const dataTable = document.querySelector('#dataTable tbody');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const sensorSelect = document.getElementById('sensorSelect');
+    let jsonData = [];
 
-        // Obtener sensores y llenar el select
-        function fetchSensores() {
-            fetch("http://localhost:8080/sensores")
-                .then(response => response.json())
-                .then(data => {
-                    sensorSelect.innerHTML = "<option value=''>Selecciona un sensor</option>";
-                    data.forEach(sensor => {
-                        let option = document.createElement("option");
-                        option.value = sensor.id;
-                        option.textContent = `${sensor.name || 'Sensor ' + sensor.id} - ${sensor.ubication || 'Ubicación desconocida'}`;
-                        sensorSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error("Error al cargar sensores:", error);
-                    sensorSelect.innerHTML = "<option value=''>Error al cargar sensores</option>";
+    // Obtener sensores y llenar el select
+    function fetchSensores() {
+        fetch("http://localhost:8080/sensores")
+            .then(response => response.json())
+            .then(data => {
+                sensorSelect.innerHTML = "<option value=''>Selecciona un sensor</option>";
+                data.forEach(sensor => {
+                    let option = document.createElement("option");
+                    option.value = sensor.id;
+                    option.textContent = `${sensor.name || 'Sensor ' + sensor.id} - ${sensor.ubication || 'Ubicación desconocida'}`;
+                    sensorSelect.appendChild(option);
                 });
-        }
-
-        // Manejo de arrastrar y soltar archivos
-        dropzone.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropzone.classList.add('dragover');
-        });
-
-        dropzone.addEventListener('dragleave', () => {
-            dropzone.classList.remove('dragover');
-        });
-
-        dropzone.addEventListener('drop', (event) => {
-            event.preventDefault();
-            dropzone.classList.remove('dragover');
-            const file = event.dataTransfer.files[0];
-            processCSV(file);
-        });
-
-        dropzone.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', () => {
-            const file = fileInput.files[0];
-            processCSV(file);
-        });
-
-        const parseValue = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
-
-        function processCSV(file) {
-            if (!file || !file.name.toLowerCase().endsWith('.csv')) {
-                alert("Por favor, selecciona un archivo CSV válido.");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const content = e.target.result;
-                let rows = content.split("\n").map(row => row.trim()).filter(row => row.length > 0);
-                if (rows.length <= 1) {
-                    alert("El archivo CSV está vacío o no tiene datos.");
-                    return;
-                }
-
-                // Detectar separador correcto
-                const separator = rows[0].includes("\t") ? "\t" : (rows[0].includes(";") ? ";" : ",");
-
-                jsonData = [];
-                dataTable.innerHTML = "";
-
-                rows.slice(1).forEach(row => {
-                    const cleanRow = row.replace(/[\r\n]+/g, "").trim(); // Eliminar caracteres ocultos
-                    const cols = cleanRow.split(separator).map(col => col.trim()).filter(col => col !== "");
-
-                    if (cols.length >= 9) { // Asegurar que solo se tomen 9 columnas
-                        let fechaCompleta = cols[0].trim();
-                        let fechaISO = fechaCompleta.replace(" ", "T");
-
-                        const lectura = {
-                            dateLectura: fechaISO,
-                            variables: [
-                                { "nombre": "PM2.5", "valor": parseValue(cols[1]), "unidad": "µg/m³" },
-                                { "nombre": "PM10", "valor": parseValue(cols[2]), "unidad": "µg/m³" },
-                                { "nombre": "Partículas", "valor": parseValue(cols[3]), "unidad": "PM" },
-                                { "nombre": "AQI", "valor": parseValue(cols[4]), "unidad": "AQI" },
-                                { "nombre": "HCHO", "valor": parseValue(cols[5]), "unidad": "HCHO" },
-                                { "nombre": "TVOC", "valor": parseValue(cols[6]), "unidad": "TVOC" },
-                                { "nombre": "Temperatura", "valor": parseValue(cols[7]), "unidad": "°C" },
-                                { "nombre": "Humedad", "valor": parseValue(cols[8]), "unidad": "%" }
-                            ]
-                        };
-
-                        jsonData.push(lectura);
-
-                        // Crear fila en la tabla sin columna extra
-                        const tr = document.createElement("tr");
-                        cols.slice(0, 9).forEach(col => { // Solo 9 columnas
-                            const td = document.createElement("td");
-                            td.textContent = col;
-                            tr.appendChild(td);
-                        });
-                        dataTable.appendChild(tr);
-                    }
-                });
-
-                uploadBtn.disabled = jsonData.length === 0;
-            };
-            reader.readAsText(file);
-        }
-
-
-        uploadBtn.addEventListener('click', () => {
-            const sensorId = sensorSelect.value;
-            if (!sensorId) {
-                alert("Por favor, selecciona un sensor antes de subir el archivo.");
-                return;
-            }
-
-            if (jsonData.length === 0) {
-                alert("No hay datos para enviar.");
-                return;
-            }
-
-            // 🔹 Mostrar pantalla de carga
-            document.getElementById("loadingScreen").style.display = "flex";
-
-            // 🔹 Deshabilitar interacciones mientras se sube
-            uploadBtn.disabled = true;
-            dropzone.style.pointerEvents = "none";
-            sensorSelect.disabled = true;
-
-            fetch(`http://localhost:8080/lecturas/upload/${sensorId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(jsonData)
             })
-                .then(response => response.json())
-                .then(data => {
-                    alert("Respuesta del servidor: " + data.mensaje);
-                })
-                .catch(error => {
-                    console.error("Error en la subida:", error);
-                    alert("Error al subir los datos: " + error.message);
-                })
-                .finally(() => {
-                    // 🔹 Ocultar pantalla de carga y restaurar UI
-                    document.getElementById("loadingScreen").style.display = "none";
-                    uploadBtn.disabled = false;
-                    dropzone.style.pointerEvents = "auto";
-                    sensorSelect.disabled = false;
+            .catch(error => {
+                console.error("Error al cargar sensores:", error);
+                sensorSelect.innerHTML = "<option value=''>Error al cargar sensores</option>";
+            });
+    }
+
+    // Manejo de arrastrar y soltar archivos
+    dropzone.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', (event) => {
+        event.preventDefault();
+        dropzone.classList.remove('dragover');
+        const file = event.dataTransfer.files[0];
+        processCSV(file);
+    });
+
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        processCSV(file);
+    });
+
+    const parseValue = (val) => isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+
+    function processCSV(file) {
+    if (!file || !file.name.toLowerCase().endsWith('.csv')) {
+        alert("Por favor, selecciona un archivo CSV válido.");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const content = e.target.result;
+        let rows = content.split("\n").map(row => row.trim()).filter(row => row.length > 0);
+        if (rows.length <= 1) {
+            alert("El archivo CSV está vacío o no tiene datos.");
+            return;
+        }
+
+        // Detectar separador correcto
+        const separator = rows[0].includes("\t") ? "\t" : (rows[0].includes(";") ? ";" : ",");
+
+        jsonData = [];
+        dataTable.innerHTML = "";
+
+        rows.slice(1).forEach(row => {
+            const cleanRow = row.replace(/[\r\n]+/g, "").trim(); // Eliminar caracteres ocultos
+            const cols = cleanRow.split(separator).map(col => col.trim()).filter(col => col !== "");
+
+            if (cols.length >= 9) { // Asegurar que solo se tomen 9 columnas
+                let fechaCompleta = cols[0].trim();
+                let fechaISO = fechaCompleta.replace(" ", "T");
+
+                const lectura = {
+                    dateLectura: fechaISO,
+                    variables: [
+                        { "nombre": "PM2.5", "valor": parseValue(cols[1]), "unidad": "µg/m³" },
+                        { "nombre": "PM10", "valor": parseValue(cols[2]), "unidad": "µg/m³" },
+                        { "nombre": "Partículas", "valor": parseValue(cols[3]), "unidad": "PM" },
+                        { "nombre": "AQI", "valor": parseValue(cols[4]), "unidad": "AQI" },
+                        { "nombre": "HCHO", "valor": parseValue(cols[5]), "unidad": "HCHO" },
+                        { "nombre": "TVOC", "valor": parseValue(cols[6]), "unidad": "TVOC" },
+                        { "nombre": "Temperatura", "valor": parseValue(cols[7]), "unidad": "°C" },
+                        { "nombre": "Humedad", "valor": parseValue(cols[8]), "unidad": "%" }
+                    ]
+                };
+
+                jsonData.push(lectura);
+
+                // Crear fila en la tabla sin columna extra
+                const tr = document.createElement("tr");
+                cols.slice(0, 9).forEach(col => { // Solo 9 columnas
+                    const td = document.createElement("td");
+                    td.textContent = col;
+                    tr.appendChild(td);
                 });
+                dataTable.appendChild(tr);
+            }
         });
 
+        uploadBtn.disabled = jsonData.length === 0;
+    };
+    reader.readAsText(file);
+}
 
-        // Cargar sensores al inicio
-        document.addEventListener("DOMContentLoaded", fetchSensores);
-    </script>
+
+    uploadBtn.addEventListener('click', () => {
+        const sensorId = sensorSelect.value;
+
+        if (!sensorId) {
+            alert("Por favor, selecciona un sensor antes de subir el archivo.");
+            return;
+        }
+
+        if (jsonData.length === 0) {
+            alert("No hay datos para enviar.");
+            return;
+        }
+
+        fetch(`http://localhost:8080/lecturas/upload/${sensorId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(jsonData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert("Respuesta del servidor: " + data.mensaje);
+                uploadBtn.disabled = true;
+            })
+            .catch(error => {
+                console.error("Error en la subida:", error);
+                alert("Error al subir los datos: " + error.message);
+            });
+    });
+
+    // Cargar sensores al inicio
+    document.addEventListener("DOMContentLoaded", fetchSensores);
+</script>
 
 </body>
-
 </html>
