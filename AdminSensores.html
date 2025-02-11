@@ -73,10 +73,43 @@
             background-color: #CCCCCC;
             cursor: not-allowed;
         }
+
+         /* Estilo del overlay */
+         #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none; /* Oculto por defecto */
+            z-index: 1000;
+        }
+
+        /* Spinner de carga */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
     </style>
 </head>
 <body>
-
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
 <h2>Subir Archivo CSV</h2>
 
 <label for="sensorSelect">Selecciona un sensor:</label>
@@ -224,6 +257,7 @@
 
     uploadBtn.addEventListener('click', () => {
         const sensorId = sensorSelect.value;
+        document.getElementById('loading-overlay').style.display = 'flex';
 
         if (!sensorId) {
             alert("Por favor, selecciona un sensor antes de subir el archivo.");
@@ -244,12 +278,15 @@
         })
             .then(response => response.json())
             .then(data => {
+                document.getElementById('loading-overlay').style.display = 'none';
                 alert("Respuesta del servidor: " + data.mensaje);
                 uploadBtn.disabled = true;
             })
             .catch(error => {
+                document.getElementById('loading-overlay').style.display = 'none';
                 console.error("Error en la subida:", error);
                 alert("Error al subir los datos: " + error.message);
+
             });
     });
 
