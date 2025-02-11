@@ -6,49 +6,112 @@
     <title>Subir Datos CSV a API</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
+            background-color: #DFDCE3;
+            color: #333333;
+        }
+        h2, h3 {
+            color: #42326D;
         }
         #dropzone {
             width: 80%;
             max-width: 500px;
             padding: 20px;
-            border: 2px dashed #007bff;
+            border: 2px dashed #007D96;
             border-radius: 10px;
             margin: auto;
             text-align: center;
             cursor: pointer;
-            color: #007bff;
+            color: #007D96;
+            background-color: #FFFFFF;
+            transition: background-color 0.3s;
         }
         #dropzone.dragover {
-            background-color: #e0f7ff;
+            background-color: #B8E6ED;
         }
         table {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
             border-collapse: collapse;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid #333333;
+            padding: 10px;
+            text-align: center;
         }
         th {
-            background-color: #007bff;
+            background-color: #42326D;
             color: white;
         }
-        select {
-            margin-bottom: 10px;
-            padding: 8px;
+        select, button {
+            padding: 10px;
             font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin: 10px;
         }
+        select {
+            background-color: #FFFFFF;
+            color: #333333;
+            border: 2px solid #007D96;
+        }
+        button {
+            background-color: #007D96;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #005F70;
+        }
+        button:disabled {
+            background-color: #CCCCCC;
+            cursor: not-allowed;
+        }
+
+         /* Estilo del overlay */
+         #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none; /* Oculto por defecto */
+            z-index: 1000;
+        }
+
+        /* Spinner de carga */
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
     </style>
 </head>
 <body>
-
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
 <h2>Subir Archivo CSV</h2>
 
-<!-- Select para elegir sensor -->
 <label for="sensorSelect">Selecciona un sensor:</label>
 <select id="sensorSelect">
     <option value="">Cargando sensores...</option>
@@ -194,6 +257,7 @@
 
     uploadBtn.addEventListener('click', () => {
         const sensorId = sensorSelect.value;
+        document.getElementById('loading-overlay').style.display = 'flex';
 
         if (!sensorId) {
             alert("Por favor, selecciona un sensor antes de subir el archivo.");
@@ -214,12 +278,15 @@
         })
             .then(response => response.json())
             .then(data => {
+                document.getElementById('loading-overlay').style.display = 'none';
                 alert("Respuesta del servidor: " + data.mensaje);
                 uploadBtn.disabled = true;
             })
             .catch(error => {
+                document.getElementById('loading-overlay').style.display = 'none';
                 console.error("Error en la subida:", error);
                 alert("Error al subir los datos: " + error.message);
+
             });
     });
 
