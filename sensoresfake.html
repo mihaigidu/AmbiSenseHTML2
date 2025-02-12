@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,13 +17,16 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
         main {
             flex: 1;
         }
+
         footer {
             background-color: #007d96;
             color: white;
         }
+
         .sensor-box {
             background-color: white;
             border: 1px solid #ddd;
@@ -31,25 +35,30 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .sensor-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
+
         .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .page-header h1 {
             font-size: 1.5rem;
             color: #4a69bd;
         }
+
         .chart-container {
             position: relative;
         }
+
         .chart-container div {
             width: 100%;
             height: 400px;
@@ -57,8 +66,10 @@
         }
     </style>
 </head>
+
 <body>
-    <header class="header d-flex justify-content-between align-items-center" style="background-color: #007d96; padding: 10px 20px;">
+    <header class="header d-flex justify-content-between align-items-center"
+        style="background-color: #007d96; padding: 10px 20px;">
         <div class="logo">
             <a href="/inicio">
                 <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
@@ -77,6 +88,7 @@
         <div class="page-header">
             <h1>Gestión de Sensores</h1>
             <button class="btn btn-success">Añadir Sensor</button>
+            <button class="btn btn-success" id="btnGenerarReporte">Generar Reporte</button>
         </div>
 
         <div class="sensor-box">
@@ -85,7 +97,7 @@
                     <img src="https://via.placeholder.com/50" alt="Sensor">
                     <h5 class="ms-3">Sensor de Temperatura y Humedad</h5>
                 </div>
-                <button class="btn btn-danger btn-sm">Eliminar</button>
+                <button class="btn btn-danger btn-sm" id="descarga">Eliminar</button>
             </div>
 
             <div class="chart-container">
@@ -101,57 +113,70 @@
     <script>
         const { jsPDF } = window.jspdf; // Importar jsPDF desde el objeto global
         // Importar jsPDF si no lo tienes
-// npm install jspdf (Si usas Node.js)
+        // npm install jspdf (Si usas Node.js)
 
-async function generarReporte(sensorId) {
-    try {
-        // Obtener los datos del sensor desde la API
-        const response = await fetch(`http://localhost:8080/sensores/8`);
-        const sensorData = await response.json();
+        // Importar jsPDF si no lo tienes
+        // npm install jspdf (Si usas Node.js)
 
-        // Filtrar lecturas del día actual
-        const hoy = new Date().toISOString().split('T')[0];
-        const lecturasHoy = sensorData.lecturas.filter(lectura => lectura.dateLectura.startsWith(hoy));
+        async function generarReporte(sensorId) {
+            try {
+                // Obtener los datos del sensor desde la API
+                const response = await fetch(`http://localhost:8080/sensores/${sensorId}`);
+                const sensorData = await response.json();
 
-        // Crear un nuevo documento PDF
-        const pdf = new jsPDF();
-        pdf.setFontSize(16);
-        pdf.text(`Reporte del Sensor: ${sensorData.name}`, 10, 10);
-        pdf.text(`Ubicación: ${sensorData.ubication}`, 10, 20);
-        pdf.text(`Fecha: ${hoy}`, 10, 30);
+                // Filtrar lecturas del día actual
+                const hoy = new Date().toISOString().split('T')[0];
+                const lecturasHoy = sensorData.lecturas.filter(lectura => lectura.dateLectura.startsWith(hoy));
 
-        let y = 40; // Posición inicial en Y para las lecturas
-        lecturasHoy.forEach((lectura, index) => {
-            pdf.setFontSize(12);
-            pdf.text(`Hora: ${lectura.dateLectura.split('T')[1]}`, 10, y);
-            y += 5;
-            
-            lectura.variables.forEach(variable => {
-                pdf.setFontSize(10);
-                pdf.text(`${variable.nombre}: ${variable.valor} ${variable.unidad}`, 15, y);
-                y += 5;
-            });
-            
-            y += 5; // Espacio entre lecturas
-            if (y > 270) { // Si se llena la página, agregar una nueva
-                pdf.addPage();
-                y = 10;
+                // Crear un nuevo documento PDF
+                const pdf = new jsPDF();
+                pdf.setFontSize(16);
+                pdf.text(`Reporte del Sensor: ${sensorData.name}`, 10, 10);
+                pdf.text(`Ubicación: ${sensorData.ubication}`, 10, 20);
+                pdf.text(`Fecha: ${hoy}`, 10, 30);
+
+                let y = 40; // Posición inicial en Y para las lecturas
+                lecturasHoy.forEach((lectura, index) => {
+                    pdf.setFontSize(12);
+                    pdf.text(`Hora: ${lectura.dateLectura.split('T')[1]}`, 10, y);
+                    y += 5;
+
+                    lectura.variables.forEach(variable => {
+                        pdf.setFontSize(10);
+                        pdf.text(`${variable.nombre}: ${variable.valor} ${variable.unidad}`, 15, y);
+                        y += 5;
+                    });
+
+                    y += 5; // Espacio entre lecturas
+                    if (y > 270) { // Si se llena la página, agregar una nueva
+                        pdf.addPage();
+                        y = 10;
+                    }
+                });
+
+                // Guardar el PDF
+                pdf.save(`Reporte_Sensor_${sensorData.name}_${hoy}.pdf`);
+            } catch (error) {
+                console.error("Error al generar el reporte:", error);
             }
+        }
+
+        // Agregar evento al botón para generar el PDF
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("btnGenerarReporte").addEventListener("click", function () {
+                const sensorId = 8; // Cambia esto con el ID real del sensor
+                generarReporte(sensorId);
+            });
         });
 
-        // Guardar el PDF
-        pdf.save(`Reporte_Sensor_${sensorData.name}_${hoy}.pdf`);
-    } catch (error) {
-        console.error("Error al generar el reporte:", error);
-    }
-}
+
 
 
         var myChart = echarts.init(document.getElementById('chart1'));
 
-        var optimalTemperature = [25, 30]; 
-        var optimalHumidity = [50, 65];    
-        var optimalAQI = [50, 80];         
+        var optimalTemperature = [25, 30];
+        var optimalHumidity = [50, 65];
+        var optimalAQI = [50, 80];
 
         var data = {
             hours: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
@@ -192,7 +217,7 @@ async function generarReporte(sensorId) {
                 name: 'Hora',
                 data: data.hours
             },
-            yAxis: { 
+            yAxis: {
                 type: 'value',
                 name: 'Valores'
             },
@@ -247,8 +272,12 @@ async function generarReporte(sensorId) {
         window.addEventListener('resize', function () {
             myChart.resize();
         });
+
+
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
