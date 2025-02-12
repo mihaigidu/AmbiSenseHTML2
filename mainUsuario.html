@@ -391,65 +391,127 @@
     </section>
     <section class="section">
         <h2>Últimas novedades</h2>
-        <div id="news-container">
-            <p>Cargando noticias...</p>
+        <div class="news-carousel">
+            <button id="prevNews" class="carousel-btn">&#10094;</button>
+            <div id="news-container" class="news-item">
+                <p>Cargando noticias...</p>
+            </div>
+            <button id="nextNews" class="carousel-btn">&#10095;</button>
         </div>
     </section>
     
-    <script>
-const API_KEY = "pub_68960f707af32a7d77c7bd17e9731aa251c00";
-
-async function fetchNews() {
-    try {
-        // Quitamos `page=1` y dejamos solo los filtros esenciales
-        const API_URL = `https://newsdata.io/api/1/news?apikey=${API_KEY}&q=calentamiento%20global&country=es&language=es`;
-        const response = await fetch(API_URL);
-        const data = await response.json();
-
-        if (!data.results || !Array.isArray(data.results) || data.results.length === 0) {
-            throw new Error("No hay noticias disponibles.");
+    <style>
+        .news-carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            max-width: 600px;
+            margin: auto;
         }
-
-        // Filtrar noticias duplicadas
-        let uniqueArticles = Array.from(new Set(data.results.map(a => a.title)))
-            .map(title => data.results.find(a => a.title === title));
-
-        // Tomar hasta 5 noticias aleatorias
-        const articles = shuffleArray(uniqueArticles).slice(0, 5);
-        let newsContainer = document.getElementById("news-container");
-        newsContainer.innerHTML = "";
-
-        articles.forEach(article => {
-            let newsItem = document.createElement("div");
-            newsItem.innerHTML = `
-                <h3>${article.title}</h3>
-                <p>${article.description || "No hay descripción disponible."}</p>
-                <a href="${article.link}" target="_blank">Leer más</a>
-                <hr>
-            `;
-            newsContainer.appendChild(newsItem);
+    
+        .news-item {
+            text-align: center;
+            padding: 20px;
+            max-width: 500px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 200px;
+        }
+    
+        .carousel-btn {
+            background: #007d96;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 50%;
+            margin: 10px;
+        }
+    
+        .carousel-btn:hover {
+            background: #005f73;
+        }
+    </style>
+    
+    <script>
+       const API_KEY = "pub_69144306a0da375dd43f0c86ac65e851680f8";
+       const API_URL = `https://newsdata.io/api/1/news?apikey=${API_KEY}&q=salud%20en%20las%20aulas&country=es`;
+        let cachedArticles = [];
+        let currentIndex = 0;
+    
+        async function fetchNews() {
+            try {
+                console.log("🔄 Intentando cargar noticias...");
+                const response = await fetch(API_URL);
+                const data = await response.json();
+    
+                if (!data.results || !Array.isArray(data.results) || data.results.length === 0) {
+                    if (cachedArticles.length > 0) {
+                        console.warn("⚠️ La API no devolvió noticias nuevas. Mostrando noticias anteriores.");
+                        displayNews();
+                        return;
+                    } else {
+                        throw new Error("No hay noticias disponibles en este momento.");
+                    }
+                }
+    
+                let uniqueArticles = Array.from(new Set(data.results.map(a => a.title)))
+                    .map(title => data.results.find(a => a.title === title));
+    
+                cachedArticles = shuffleArray(uniqueArticles).slice(0, 5);
+                currentIndex = 0; // Reiniciar índice al recibir nuevas noticias
+                displayNews();
+    
+            } catch (error) {
+                console.error("⚠️ Error al cargar noticias:", error);
+                if (cachedArticles.length > 0) {
+                    console.warn("⚠️ Error en la API, pero mostrando noticias anteriores.");
+                    displayNews();
+                } else {
+                    document.getElementById("news-container").innerHTML = `<p>Error: ${error.message}</p>`;
+                }
+            }
+        }
+    
+        function displayNews() {
+            let newsContainer = document.getElementById("news-container");
+            if (cachedArticles.length > 0) {
+                const article = cachedArticles[currentIndex];
+                newsContainer.innerHTML = `
+                    <h3>${article.title}</h3>
+                    <p>${article.description || "No hay descripción disponible."}</p>
+                    <a href="${article.link}" target="_blank">Leer más</a>
+                `;
+            } else {
+                newsContainer.innerHTML = `<p>No hay noticias disponibles.</p>`;
+            }
+        }
+    
+        document.getElementById("prevNews").addEventListener("click", () => {
+            if (cachedArticles.length > 0) {
+                currentIndex = (currentIndex - 1 + cachedArticles.length) % cachedArticles.length;
+                displayNews();
+            }
         });
-
-    } catch (error) {
-        console.error("Error al cargar noticias:", error);
-        document.getElementById("news-container").innerHTML = `<p>Error: ${error.message}</p>`;
-    }
-}
-
-// Corrección del error `data.results.map is not a function`
-function shuffleArray(array) {
-    if (!Array.isArray(array)) {
-        console.error("shuffleArray recibió un valor inválido:", array);
-        return [];
-    }
-    return array.sort(() => Math.random() - 0.5);
-}
-
-// Cargar noticias al inicio y actualizar cada 5 minutos
-fetchNews();
-setInterval(fetchNews, 300000);
-
+    
+        document.getElementById("nextNews").addEventListener("click", () => {
+            if (cachedArticles.length > 0) {
+                currentIndex = (currentIndex + 1) % cachedArticles.length;
+                displayNews();
+            }
+        });
+    
+        function shuffleArray(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+    
+        fetchNews();
+        setInterval(fetchNews, 300000);
     </script>
+    
     
     
     
