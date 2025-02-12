@@ -6,205 +6,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Nosotros - AmbiSense</title>
     <link rel="icon" href="imagenes/FavIcon.png" type="image/x-icon">
+
+    <!-- Bootstrap CSS y FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- CSS del Header -->
     <link rel="stylesheet" href="css/header.css">
-    <script defer src="js/header.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JS del Header -->
+    <script src="js/header.js"></script>
+
+    <!-- Bootstrap JS (Cargar después del header para evitar errores) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
+        /* Estilos Generales */
         body {
             background-color: #dfdce3;
             color: #333;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
         }
 
-        /* HEADER */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1vh 2vw;
-            background-color: #007d96;
-            height: 8vh;
-            position: relative;
+        /* SECCIONES */
+        main {
+            padding: 50px 20px;
         }
 
-        /* Logo a la izquierda */
-        .logo {
-            display: flex;
-            align-items: center;
+        h2 {
+            color: #42326D;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        /* Menú de navegación en pantallas grandes */
-        .nav-links {
-            display: flex;
-            gap: 2vw;
-            list-style: none;
-            margin: 0;
-            padding: 0;
+        /* SECCIÓN EQUIPO */
+        .text-muted {
+            color: #6c757d !important;
         }
 
-        .nav-links li {
-            display: inline;
-        }
-
-        .nav-links a {
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            padding: 10px;
-        }
-
-        /* Perfil alineado a la derecha */
-        .perfil {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            /* Lo empuja completamente a la derecha */
-        }
-
-        .imagen-perfil {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
+        .rounded-circle {
+            width: 120px;
+            height: 120px;
             object-fit: cover;
-            cursor: pointer;
-            border: 2px solid white;
+            border: 3px solid #007d96;
+            margin-bottom: 10px;
         }
 
-        /* Menú hamburguesa en móviles */
-        .navbar-toggler {
-            display: none;
-            background: transparent;
-            border: none;
-            font-size: 2vh;
+        /* FOOTER */
+        footer {
+            background-color: #007d96;
             color: white;
-            cursor: pointer;
+            padding: 20px;
+            text-align: center;
         }
 
-        /* Menú hamburguesa desplegable */
-        .menu {
+        .footer-link {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #c300ff;
+        }
+
+        .social-icons {
+            margin-top: 10px;
+        }
+
+        .social-icons a {
+            font-size: 20px;
+            margin: 0 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .social-icons a:hover {
+            transform: scale(1.2);
+        }
+
+        /* 🔹 Corrección del Dropdown del perfil */
+        .dropdown-menu {
             display: none;
             position: absolute;
-            top: 8vh;
-            left: 0;
-            width: 100vw;
-            background-color: #007d96;
-            padding: 10px 0;
-            text-align: center;
-            z-index: 999;
+            background-color: white;
+            border: 1px solid #ccc;
+            z-index: 1050 !important;
         }
 
-        .menu.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: auto;
+        .dropdown.show .dropdown-menu {
+            display: block !important;
         }
 
-        .menu ul {
-            display: flex;
-            flex-direction: column;
-            list-style: none;
-            padding: 0;
-            gap: 10px;
-        }
-
-        .menu ul li a {
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            padding: 10px;
-        }
-
-        /* Responsive */
-        @media (min-width: 769px) {
-            .menu {
-                display: flex !important;
-                flex-direction: row;
-                justify-content: center;
-                position: static;
-                background: none;
-                width: auto;
-            }
-
-            .navbar-toggler {
-                display: none;
-            }
-
-            .menu ul {
-                flex-direction: row;
-                gap: 2vw;
+        /* RESPONSIVE */
+        @media (max-width: 992px) {
+            .rounded-circle {
+                width: 100px;
+                height: 100px;
             }
         }
 
-        /* Modo móvil */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .navbar-toggler {
-                display: block;
-            }
-
-            .perfil {
-                margin-left: 0;
-                /* Asegurar que el perfil siga visible fuera del menú */
+            main {
+                padding: 30px 10px;
             }
         }
     </style>
 </head>
 
 <body>
-    <header class="header navbar navbar-expand-lg" style="background-color: #007d96; padding: 10px 20px;">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/home">
-                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
-            </a>
 
-            <!-- Botón del menú hamburguesa para dispositivos móviles -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuHeader"
-                aria-controls="menuHeader" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse text-center" id="menuHeader">
-                <nav class="menu navbar-nav ms-auto">
-                    <ul class="nav">
-                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
-                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
-                    </ul>
-                </nav>
-
-                <!-- Menú de perfil con imagen alineada -->
-                <div class="perfil dropdown ms-3">
-                    <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle"
-                        data-bs-toggle="dropdown">
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="/perfil">
-                                <img src="imagenes/perfil.png" alt="Perfil"> Mi Perfil
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="/configuracion">
-                                <img src="imagenes/config.png" alt="Configuración"> Configuración
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="/logout">
-                                <img src="imagenes/logout.png" alt="Cerrar Sesión"> Cerrar Sesión
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
+    <div id="header"></div>
 
     <main class="container my-5">
         <section class="mb-5">
@@ -259,14 +174,21 @@
         <div class="social-icons">
             <a href="https://facebook.com" target="_blank" class="footer-link"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://twitter.com" target="_blank" class="footer-link"><i class="fa-brands fa-twitter"></i></a>
-            <a href="https://instagram.com" target="_blank" class="footer-link"><i
-                    class="fa-brands fa-instagram"></i></a>
+            <a href="https://instagram.com" target="_blank" class="footer-link"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://linkedin.com" target="_blank" class="footer-link"><i class="fa-brands fa-linkedin"></i></a>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-</body>
+    <!-- Inicializar Dropdown Manualmente -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                document.querySelectorAll('.dropdown-toggle').forEach(dropdown => {
+                    new bootstrap.Dropdown(dropdown);
+                });
+            }, 500);
+        });
+    </script>
 
+</body>
 </html>

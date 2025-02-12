@@ -17,6 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.text())
         .then(data => {
             document.getElementById("header").innerHTML = data;
+
+            // Inicializar Bootstrap Dropdowns después de insertar el header
+            const dropdowns = document.querySelectorAll('.dropdown-toggle');
+            dropdowns.forEach(dropdown => {
+                new bootstrap.Dropdown(dropdown);
+            });
+
         })
         .catch(error => console.error("Error cargando el header:", error));
 });
