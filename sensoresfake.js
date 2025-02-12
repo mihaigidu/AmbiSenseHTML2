@@ -1,6 +1,5 @@
 // Importar jsPDF y autoTable correctamente
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
+const { jsPDF } = window.jspdf;
 
 async function generarReporte(sensorId) {
     try {
