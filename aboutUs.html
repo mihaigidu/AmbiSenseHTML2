@@ -5,44 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sobre Nosotros - AmbiSense</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="imagenes/FavIcon.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/header.css">
+    <script defer src="js/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
             background-color: #dfdce3;
             color: #333;
+            margin: 0;
+            padding: 0;
         }
 
-        header {
-            background: url('https://via.placeholder.com/1500x500') no-repeat center center/cover;
-            text-shadow: 2px 2px 4px rgba(85, 65, 156, 0.7);
-        }
-
-        h2 {
-            color: #7c719c;
-        }
-
-        .text-muted {
-            color: #6c757d !important;
-        }
-
-        footer {
+        /* HEADER */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1vh 2vw;
             background-color: #007d96;
-            color: white;
-            padding: 20px;
-            text-align: center;
+            height: 8vh;
+            position: relative;
         }
 
-        .footer-link {
+        /* Logo a la izquierda */
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        /* Menú de navegación en pantallas grandes */
+        .nav-links {
+            display: flex;
+            gap: 2vw;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links li {
+            display: inline;
+        }
+
+        .nav-links a {
             color: white;
+            font-weight: bold;
             text-decoration: none;
-            margin: 0 10px;
-            font-size: 16px;
-            transition: transform 0.3s ease;
+            padding: 10px;
         }
 
-        .footer-link:hover {
-            color: #c300ff;
+        /* Perfil alineado a la derecha */
+        .perfil {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            /* Lo empuja completamente a la derecha */
         }
 
         .imagen-perfil {
@@ -54,95 +73,85 @@
             border: 2px solid white;
         }
 
-        .perfil {
+        /* Menú hamburguesa en móviles */
+        .navbar-toggler {
+            display: none;
+            background: transparent;
+            border: none;
+            font-size: 2vh;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Menú hamburguesa desplegable */
+        .menu {
+            display: none;
+            position: absolute;
+            top: 8vh;
+            left: 0;
+            width: 100vw;
+            background-color: #007d96;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 999;
+        }
+
+        .menu.active {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            margin-left: 15px;
+            height: auto;
         }
 
-        /* Ajustar dropdown para que la imagen esté alineada con el texto */
-        .dropdown-menu {
-            min-width: 200px;
-        }
-
-        .dropdown-item {
+        .menu ul {
             display: flex;
-            align-items: center;
-            gap: 10px; /* Espaciado entre la imagen y el texto */
+            flex-direction: column;
+            list-style: none;
+            padding: 0;
+            gap: 10px;
         }
 
-        .dropdown-item img {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+        .menu ul li a {
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 10px;
         }
 
-        /* Estilos Responsive */
-        @media (max-width: 992px) {
+        /* Responsive */
+        @media (min-width: 769px) {
+            .menu {
+                display: flex !important;
+                flex-direction: row;
+                justify-content: center;
+                position: static;
+                background: none;
+                width: auto;
+            }
+
             .navbar-toggler {
-                border: none;
-                background: transparent;
+                display: none;
             }
 
-            .navbar {
-                padding: 10px;
+            .menu ul {
+                flex-direction: row;
+                gap: 2vw;
+            }
+        }
+
+        /* Modo móvil */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
             }
 
-            .navbar-collapse {
-                background: rgba(0, 0, 0, 0.7); /* Fondo oscuro en móviles */
-                padding: 15px;
-                border-radius: 5px;
-            }
-
-            .nav-item {
-                text-align: center;
+            .navbar-toggler {
+                display: block;
             }
 
             .perfil {
-                justify-content: center;
-                margin: 10px 0;
-            }
-
-            .dropdown-menu {
-                text-align: left;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 10px;
-            }
-
-            #menuHeader {
-                text-align: center;
-                background-color: rgba(0, 0, 0, 0.6);
-                padding-bottom: 10px;
-            }
-
-            #menuHeader .nav {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .imagen-perfil {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar-brand img {
-                height: 40px;
-            }
-
-            .imagen-perfil {
-                width: 35px;
-                height: 35px;
-            }
-
-            .dropdown-item img {
-                width: 25px;
-                height: 25px;
+                margin-left: 0;
+                /* Asegurar que el perfil siga visible fuera del menú */
             }
         }
     </style>
@@ -164,7 +173,8 @@
             <div class="collapse navbar-collapse text-center" id="menuHeader">
                 <nav class="menu navbar-nav ms-auto">
                     <ul class="nav">
-                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
+                        <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a>
+                        </li>
                         <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
                         <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
                     </ul>
@@ -249,7 +259,8 @@
         <div class="social-icons">
             <a href="https://facebook.com" target="_blank" class="footer-link"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://twitter.com" target="_blank" class="footer-link"><i class="fa-brands fa-twitter"></i></a>
-            <a href="https://instagram.com" target="_blank" class="footer-link"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://instagram.com" target="_blank" class="footer-link"><i
+                    class="fa-brands fa-instagram"></i></a>
             <a href="https://linkedin.com" target="_blank" class="footer-link"><i class="fa-brands fa-linkedin"></i></a>
         </div>
     </footer>
