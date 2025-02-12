@@ -1,17 +1,12 @@
+// Acceder a las librerías globales desde el objeto window
+const { jsPDF } = window.jspdf;
 
-import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
-import Chart from "chart.js/auto";
-
+// Esperar a que el DOM cargue
 document.addEventListener("DOMContentLoaded", function () {
-    const btnReporte = document.getElementById("btnGenerarReporte");
-
-    if (btnReporte) {
-        btnReporte.addEventListener("click", function () {
-            const sensorId = 8; // Cambia esto con el ID real del sensor
-            generarReporte(sensorId);
-        });
-    }
+    document.getElementById("btnGenerarReporte").addEventListener("click", function () {
+        const sensorId = 8; // Cambia esto con el ID real del sensor
+        generarReporte(sensorId);
+    });
 });
 
 async function generarReporte(sensorId) {
@@ -30,33 +25,29 @@ async function generarReporte(sensorId) {
         pdf.text(`Reporte del Sensor: ${sensorData.name}`, 10, 10);
         pdf.text(`Ubicación: ${sensorData.ubication}`, 10, 20);
         pdf.text(`Fecha: ${hoy}`, 10, 30);
-
+        
         // Crear una tabla con datos
-        const tableData = lecturasHoy.flatMap(lectura =>
-            lectura.variables.map(variable => [
-                lectura.dateLectura.split('T')[1],
-                variable.nombre,
-                variable.valor,
-                variable.unidad
-            ])
-        );
+        const tableData = [];
+        lecturasHoy.forEach((lectura) => {
+            lectura.variables.forEach(variable => {
+                tableData.push([lectura.dateLectura.split('T')[1], variable.nombre, variable.valor, variable.unidad]);
+            });
+        });
 
-        autoTable(pdf, {
+        pdf.autoTable({
             head: [['Hora', 'Variable', 'Valor', 'Unidad']],
             body: tableData,
             startY: 40
         });
 
-        // Crear gráfico dinámico
+        // Generar gráfico de datos
         const canvas = document.createElement('canvas');
         canvas.width = 400;
         canvas.height = 200;
         const ctx = canvas.getContext('2d');
 
         const labels = lecturasHoy.map(lectura => lectura.dateLectura.split('T')[1]);
-        const pm25Data = lecturasHoy.map(lectura =>
-            lectura.variables.find(v => v.nombre === "PM2.5")?.valor || 0
-        );
+        const pm25Data = lecturasHoy.map(lectura => lectura.variables.find(v => v.nombre === "PM2.5")?.valor || 0);
 
         new Chart(ctx, {
             type: 'line',
@@ -72,7 +63,7 @@ async function generarReporte(sensorId) {
             options: { animation: false }
         });
 
-        // Esperar a que el gráfico termine de renderizar antes de agregarlo al PDF
+        // Esperar a que el gráfico se renderice completamente antes de convertirlo en imagen
         setTimeout(() => {
             const imgData = canvas.toDataURL('image/png');
             pdf.addPage();
