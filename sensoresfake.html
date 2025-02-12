@@ -8,8 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
     <style>
@@ -114,9 +114,11 @@
     </footer>
 
     <script>
-        const { jsPDF } = window.jspdf; // Importar jsPDF desde el objeto global
+        // Importar jsPDF y autoTable correctamente
+        import { jsPDF } from "jspdf";
+        import autoTable from "jspdf-autotable";
+        import Chart from "chart.js/auto";
 
-        // funcion para generar el reporte
         async function generarReporte(sensorId) {
             try {
                 // Obtener los datos del sensor desde la API
@@ -142,13 +144,13 @@
                     });
                 });
 
-                pdf.autoTable({
+                autoTable(pdf, {
                     head: [['Hora', 'Variable', 'Valor', 'Unidad']],
                     body: tableData,
                     startY: 40
                 });
 
-                // Generar gráfico de datos
+                // Generar gráfico de datos y asegurarse de que se renderiza completamente
                 const canvas = document.createElement('canvas');
                 canvas.width = 400;
                 canvas.height = 200;
@@ -156,7 +158,7 @@
                 const labels = lecturasHoy.map(lectura => lectura.dateLectura.split('T')[1]);
                 const pm25Data = lecturasHoy.map(lectura => lectura.variables.find(v => v.nombre === "PM2.5")?.valor || 0);
 
-                new Chart(ctx, {
+                const chart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: labels,
@@ -166,16 +168,21 @@
                             borderColor: 'blue',
                             borderWidth: 2
                         }]
+                    },
+                    options: {
+                        animation: false
                     }
                 });
 
+                // Esperar a que el gráfico se renderice completamente antes de convertirlo en imagen
                 setTimeout(() => {
                     const imgData = canvas.toDataURL('image/png');
                     pdf.addPage();
                     pdf.text('Gráfico de PM2.5', 10, 10);
                     pdf.addImage(imgData, 'PNG', 10, 20, 180, 100);
                     pdf.save(`Reporte_Sensor_${sensorData.name}_${hoy}.pdf`);
-                }, 500);
+                }, 1000); // Ajustar el tiempo de espera si es necesario
+
             } catch (error) {
                 console.error("Error al generar el reporte:", error);
             }
@@ -188,6 +195,7 @@
                 generarReporte(sensorId);
             });
         });
+
 
 
 
