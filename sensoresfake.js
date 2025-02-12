@@ -10,7 +10,20 @@ async function generarReporte(sensorId) {
         // Encontrar el último día con datos
         const fechasDisponibles = [...new Set(sensorData.lecturas.map(lectura => lectura.dateLectura.split('T')[0]))];
         const ultimoDia = fechasDisponibles.sort().pop();
-        const lecturasUltimoDia = sensorData.lecturas.filter(lectura => lectura.dateLectura.startsWith(ultimoDia));
+        let lecturasUltimoDia = sensorData.lecturas.filter(lectura => lectura.dateLectura.startsWith(ultimoDia));
+        
+        // Ordenar lecturas por hora y eliminar duplicados
+        lecturasUltimoDia = lecturasUltimoDia.sort((a, b) => a.dateLectura.localeCompare(b.dateLectura));
+        const horasRegistradas = new Set();
+        lecturasUltimoDia = lecturasUltimoDia.filter(lectura => {
+            const hora = lectura.dateLectura.split('T')[1];
+            if (horasRegistradas.has(hora)) {
+                return false;
+            } else {
+                horasRegistradas.add(hora);
+                return true;
+            }
+        });
 
         // Crear un nuevo documento PDF
         const pdf = new jsPDF();
