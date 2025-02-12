@@ -1,4 +1,4 @@
-// Importar jsPDF y autoTable correctamente
+// Acceder a las librerías globales desde el objeto window
 const { jsPDF } = window.jspdf;
 
 async function generarReporte(sensorId) {
@@ -26,7 +26,7 @@ async function generarReporte(sensorId) {
             });
         });
         
-        autoTable(pdf, {
+        pdf.autoTable({
             head: [['Hora', 'Variable', 'Valor', 'Unidad']],
             body: tableData,
             startY: 40
