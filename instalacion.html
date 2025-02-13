@@ -12,6 +12,7 @@
     <script defer src="js/header.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
+    
     <style>
         body {
             background-color: #dfdce3;
@@ -133,6 +134,7 @@
             color: white;
             text-align: center;
         }
+        
     </style>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -159,18 +161,16 @@
 
 <body>
     <div id="header">
-        <div class="perfil dropdown">
-            <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle"
-                data-bs-toggle="dropdown">
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="/perfil">Mi Perfil</a></li>
-                <li><a class="dropdown-item" href="/configuracion">Configuración</a></li>
-                <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
-            </ul>
+        <h2 class="text-white">Sensor LKC-1000S+</h2>
+        <div class="perfil">
+            <img src="imagenes/perfil.jpg" alt="Perfil" class="imagen-perfil" id="perfil-img">
+            <div class="menu-perfil" id="menu-perfil">
+                <a href="#">Ver Perfil</a>
+                <a href="#">Configuración</a>
+                <a href="#">Cerrar Sesión</a>
+            </div>
         </div>
     </div>
-
-    
 
     <div class="container">
         <h1>Guía Completa del Sensor LKC-1000S+</h1>
