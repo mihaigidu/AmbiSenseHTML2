@@ -1,5 +1,60 @@
 let charts = [];
+const COOKIE_NAME = "recent_sensors";
+const MAX_SENSORS = 5; // Número máximo de sensores a almacenar
 
+/**
+ * 📌 Función para guardar en cookies los sensores abiertos recientemente
+ * @param {number} sensorId - ID del sensor
+ */
+function saveSensorToCookies(sensorId) {
+    let sensors = getSensorsFromCookies();
+
+    // Evitar duplicados y mantener el orden de apertura
+    sensors = sensors.filter(id => id !== sensorId);
+    sensors.unshift(sensorId);
+
+    // Limitar la cantidad de sensores guardados
+    sensors = sensors.slice(0, MAX_SENSORS);
+
+    // Guardar en cookies (Expira en 7 días)
+    document.cookie = `${COOKIE_NAME}=${JSON.stringify(sensors)};path=/;max-age=${7 * 24 * 60 * 60}`;
+}
+
+/**
+ * 📌 Función para obtener sensores guardados en cookies
+ * @returns {Array} Array con los IDs de sensores
+ */
+function getSensorsFromCookies() {
+    let cookies = document.cookie.split("; ");
+    let sensorCookie = cookies.find(row => row.startsWith(COOKIE_NAME + "="));
+    return sensorCookie ? JSON.parse(sensorCookie.split("=")[1]) : [];
+}
+
+/**
+ * 📌 Función para crear gráficos de sensores guardados en cookies
+ */
+function loadRecentSensors() {
+    let sensors = getSensorsFromCookies();
+    
+    if (sensors.length === 0) {
+        console.warn("⚠️ No hay sensores recientes en cookies.");
+        return;
+    }
+
+    // Limpiar carrusel antes de agregar nuevos
+    document.querySelector(".carousel-inner").innerHTML = "";
+
+    // Crear gráficos para cada sensor almacenado
+    sensors.forEach(sensorId => {
+        createSensorChart(`http://localhost:8080/sensores/${sensorId}`, sensorId);
+    });
+}
+
+/**
+ * 📌 Función para crear un gráfico de un sensor
+ * @param {string} url - API endpoint del sensor
+ * @param {number} sensorId - ID del sensor
+ */
 function createSensorChart(url, sensorId) {
     fetch(url)
         .then(response => response.json())
@@ -9,19 +64,20 @@ function createSensorChart(url, sensorId) {
                 return;
             }
 
-            // Ordenar lecturas por fecha descendente y obtener la más reciente
+            // Guardar en cookies el sensor abierto
+            saveSensorToCookies(sensor.id);
+
             let latestDate = sensor.lecturas
                 .map(lectura => lectura.dateLectura.split("T")[0])
                 .sort()
                 .reverse()[0];
 
-            // Filtrar lecturas del último día con datos
             let latestReadings = sensor.lecturas.filter(lectura => lectura.dateLectura.startsWith(latestDate));
+            latestReadings.sort((a, b) => new Date(a.dateLectura) - new Date(b.dateLectura));
 
             let chartId = `sensorChart${sensorId}`;
             let timestamp = new Date(latestReadings[latestReadings.length - 1].dateLectura).toLocaleString();
 
-            // Insertar el gráfico dentro del carrusel
             let carouselInner = document.querySelector(".carousel-inner");
             let carouselItem = document.createElement("div");
             carouselItem.classList.add("carousel-item");
@@ -45,6 +101,9 @@ function createSensorChart(url, sensorId) {
         });
 }
 
+/**
+ * 📌 Función para procesar los datos de los sensores
+ */
 function processSensorReadings(readings) {
     let timeLabels = [];
     let tempValues = [];
@@ -55,7 +114,7 @@ function processSensorReadings(readings) {
 
     readings.forEach(lectura => {
         let date = new Date(lectura.dateLectura);
-        let timeLabel = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
+        let timeLabel = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
         let temperatura = lectura.variables.find(v => v.nombre === "Temperatura")?.valor || 0;
         let humedad = lectura.variables.find(v => v.nombre === "Humedad")?.valor || 0;
@@ -74,6 +133,9 @@ function processSensorReadings(readings) {
     return { timeLabels, tempValues, humidityValues, aqiValues, pm25Values, pm10Values };
 }
 
+/**
+ * 📌 Función para generar la gráfica con ECharts
+ */
 function generateEChart(chartId, timeLabels, tempValues, humidityValues, aqiValues, pm25Values, pm10Values) {
     let chart = echarts.init(document.getElementById(chartId));
 
@@ -98,9 +160,8 @@ function generateEChart(chartId, timeLabels, tempValues, humidityValues, aqiValu
     charts.push(chart);
 }
 
-// Ejemplo de uso con un sensor
-document.addEventListener("DOMContentLoaded", () => {
-    createSensorChart("http://localhost:8080/sensores/8", 8);
-});
+// 📌 Cargar sensores recientes al iniciar la página
+document.addEventListener("DOMContentLoaded", loadRecentSensors);
 
+// 📌 Redimensionar gráficos al cambiar el tamaño de la ventana
 window.addEventListener('resize', () => charts.forEach(chart => chart.resize()));

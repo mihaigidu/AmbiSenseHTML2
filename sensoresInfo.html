@@ -148,6 +148,7 @@
 
     <!-- Cargar el Header JS después de que el DOM esté listo -->
     <script src="js/header.js"></script>
+    <script src="js/cookiesSensores.js"></script>
 
     <script>
         let urlParams = new URLSearchParams(window.location.search);
@@ -155,6 +156,7 @@
         let sensorData = {}; // Almacena los datos del sensor
         let timeLabels = []; // Etiquetas de tiempo reales
 
+        saveSensorToCookies(sensorId);
         function fetchSensorData() {
             if (!sensorId) {
                 alert("No se especificó un sensor en la URL.");
