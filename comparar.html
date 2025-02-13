@@ -100,7 +100,7 @@
 
     <script>
         function fetchSensors() {
-            $.get("http://localhost:8080/sensores", function (data) {
+            $.get("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores", function (data) {
                 let sensors = [...new Set(data.map(item => item.id))];
 
                 $("#sensor1, #sensor2").empty().append('<option value="" disabled selected>Selecciona un sensor</option>');
@@ -115,7 +115,7 @@
             let sensorId = $(`#sensor${sensorNumber}`).val();
             if (!sensorId) return;
 
-            $.get(`http://localhost:8080/sensores`, function (data) {
+            $.get(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores`, function (data) {
                 let sensor = data.find(s => s.id == sensorId);
                 if (!sensor) return;
 
@@ -139,7 +139,7 @@
         function fetchData(sensorNumber) {
             let sensorId = $(`#sensor${sensorNumber}`).val();
             let date = $(`#dayFilter${sensorNumber}`).val();
-            $.get(`http://localhost:8080/sensores`, function (data) {
+            $.get(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores`, function (data) {
                 let sensor = data.find(s => s.id == sensorId);
                 if (!sensor) return;
 
