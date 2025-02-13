@@ -6,12 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Listado de Sensores - AmbiSense</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap y FontAwesome -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Estilos Globales -->
+    <link rel="stylesheet" href="css/header.css">
+
+    <!-- Scripts de librerías -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <style>
-        /* General */
+        /* GENERAL */
         body {
             background-color: #dfdce3;
             color: #333;
@@ -21,121 +29,9 @@
             min-height: 100vh;
         }
 
-        /* HEADER */
-        .header {
-            background-color: #007d96;
-            padding: 1vh 20px;
-            min-height: 8vh;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            z-index: 1000;
-        }
-
-        /* Logo */
-        .logo img {
-            height: 6vh;
-            max-height: 50px;
-        }
-
-        /* Menú de navegación en pantallas grandes */
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .nav-links a {
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-            padding: 10px;
-        }
-
-        /* Perfil */
-        .perfil {
-            display: flex;
-            align-items: center;
-        }
-
-        .imagen-perfil {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid white;
-        }
-
-        /* Menú hamburguesa */
-        .navbar-toggler {
-            display: none;
-            border: none;
-            background: transparent;
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        /* Menú hamburguesa desplegable */
-        .menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background-color: #007d96;
-            text-align: center;
-            z-index: 999;
-            padding: 10px;
-        }
-
-        .menu.active {
-            display: flex;
-            justify-content: center;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        .menu ul {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .menu ul li {
-            padding: 10px;
-        }
-
-        .menu ul li a {
-            color: white;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .navbar-toggler {
-                display: block;
-            }
+        /* CONTENEDOR PRINCIPAL */
+        main {
+            flex: 1;
         }
 
         /* FORZAR FOOTER AL FINAL */
@@ -148,7 +44,7 @@
             margin-top: auto;
         }
 
-        /* Footer Links */
+        /* FOOTER LINKS */
         .footer-link {
             color: white;
             text-decoration: none;
@@ -156,7 +52,7 @@
             font-size: 16px;
         }
 
-        /* Social Icons */
+        /* SOCIAL ICONS */
         .social-icons {
             margin-top: 10px;
         }
@@ -174,57 +70,21 @@
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header d-flex justify-content-between align-items-center">
-        <div class="logo">
-            <a href="/inicio">
-                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa">
-            </a>
-        </div>
 
-        <!-- Botón menú hamburguesa -->
-        <button class="navbar-toggler d-block d-md-none" type="button" onclick="toggleMenu()">
-            <i class="fa-solid fa-bars"></i>
-        </button>
+    <!-- HEADER DINÁMICO -->
+    <div id="header"></div>
 
-        <!-- Menú normal en pantallas grandes -->
-        <nav class="nav-container d-none d-md-flex">
-            <ul class="nav">
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
-            </ul>
-        </nav>
-
-        <!-- Menú hamburguesa para móviles (en una sola línea) -->
-        <nav class="menu" id="menu">
-            <ul class="nav justify-content-center">
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
-            </ul>
-        </nav>
-
-        <!-- Menú de perfil -->
-        <div class="perfil dropdown">
-            <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle" data-bs-toggle="dropdown">
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="/perfil">Mi Perfil</a></li>
-                <li><a class="dropdown-item" href="/configuracion">Configuración</a></li>
-                <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
-            </ul>
-        </div>
-    </header>
-    <!-- Contenido principal -->
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="container my-5">
         <h2 class="text-center mb-4">Listado de Sensores</h2>
-        <!-- Botón para abrir el modal -->
+
+        <!-- Botones de acción -->
         <div class="text-end mb-3">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSensorModal">
                 <i class="fa fa-plus"></i> Añadir Sensor
             </button>
             <button class="btn btn-primary" onclick="compararSensores()">
-                <i class="fa fa-chart-bar" href="/comparacion"></i> Comparar
+                <i class="fa fa-chart-bar"></i> Comparar
             </button>
         </div>
 
@@ -263,7 +123,7 @@
             </div>
         </div>
 
-
+        <!-- TABLA DE SENSORES -->
         <table class="table table-bordered text-center align-middle">
             <thead class="table-dark">
                 <tr>
@@ -275,22 +135,29 @@
                 </tr>
             </thead>
             <tbody>
-
+                <!-- Aquí se insertarán los sensores dinámicamente -->
             </tbody>
         </table>
     </main>
-    <!-- Footer (Restaurado) -->
+
+    <!-- FOOTER -->
     <footer class="text-center py-4">
         <p>&copy; 2025 AmbiSense. Todos los derechos reservados.</p>
-        <a href="AboutUs.html" class="footer-link">Sobre Nosotros</a>
+        <a href="/aboutUs" class="footer-link">Sobre Nosotros</a>
         <div class="social-icons">
             <a href="https://facebook.com" target="_blank" class="footer-link"><i class="fa-brands fa-facebook"></i></a>
             <a href="https://twitter.com" target="_blank" class="footer-link"><i class="fa-brands fa-twitter"></i></a>
-            <a href="https://instagram.com" target="_blank" class="footer-link"><i
-                    class="fa-brands fa-instagram"></i></a>
+            <a href="https://instagram.com" target="_blank" class="footer-link"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://linkedin.com" target="_blank" class="footer-link"><i class="fa-brands fa-linkedin"></i></a>
         </div>
     </footer>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Cargar el Header JS después de que el DOM esté listo -->
+    <script src="js/header.js"></script>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -476,18 +343,7 @@
         $(document).ready(function () {
             fetchSensorsAQI();
         });
-        function toggleMenu() {
-            const menu = document.getElementById('menu');
-            menu.classList.toggle('active');
-        }
 
-        // Cierra el menú automáticamente al agrandar la pantalla
-        window.addEventListener('resize', function () {
-            const menu = document.getElementById('menu');
-            if (window.innerWidth > 768) {
-                menu.classList.remove('active');
-            }
-        });
     </script>
 
 
