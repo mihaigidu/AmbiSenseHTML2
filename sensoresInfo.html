@@ -17,6 +17,9 @@
     <!-- Scripts de librerías -->
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
 
     <style>
         /* GENERAL */
@@ -115,6 +118,9 @@
             <select id="date-select" class="form-select">
                 <option selected disabled>Selecciona una fecha</option>
             </select>
+            <label for="btnGenerarReporte">Generar Reporte</label>
+            <br>
+            <button class="btn btn-success" id="btnGenerarReporte">Descargar PDF</button>
         </div>
     </div>
 
@@ -244,6 +250,7 @@
         });
 
     </script>
+    <script type="module" src="sensoresfake.js"></script>
 
 </body>
 
