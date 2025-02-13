@@ -489,24 +489,7 @@ footer {
         </div>
     </footer>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script>
-        let charts = [];
-        function initCharts() {
-            let options = {
-                tooltip: { trigger: 'axis' },
-                legend: { data: ['Temperatura', 'Humedad'], top: '10%', left: 'center' },
-                xAxis: { type: 'category', data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'] },
-                yAxis: { type: 'value', min: 0, max: 100 },
-                series: []
-            };
-            charts.push(echarts.init(document.getElementById('sensorChart1')));
-            charts[0].setOption({ ...options, series: [{ name: 'Temperatura', type: 'line', data: [22, 24, 26, 28, 30, 32], itemStyle: { color: 'red' } }, { name: 'Humedad', type: 'line', data: [60, 65, 70, 60, 75, 80], itemStyle: { color: 'blue' } }] });
-            charts.push(echarts.init(document.getElementById('sensorChart2')));
-            charts[1].setOption({ ...options, series: [{ name: 'Temperatura', type: 'line', data: [20, 22, 25, 27, 30, 22], itemStyle: { color: 'red' } }, { name: 'Humedad', type: 'line', data: [55, 60, 67, 65, 70, 75], itemStyle: { color: 'blue' } }] });
-        }
-        document.addEventListener("DOMContentLoaded", initCharts);
-        window.addEventListener('resize', () => charts.forEach(chart => chart.resize()));
-    </script>
+    <script defer src="js/funcionChart.js"></script>
 </body>
 
 </html>
