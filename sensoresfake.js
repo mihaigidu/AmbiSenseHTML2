@@ -74,11 +74,13 @@ async function generarReporte(sensorId) {
         console.error("Error al generar el reporte:", error);
     }
 }
+let urlParams = new URLSearchParams(window.location.search);
+let sensorId = urlParams.get("sensorId"); // Obtiene el ID del sensor desde la URL
 
 // Agregar evento al botón para generar el PDF
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btnGenerarReporte").addEventListener("click", function () {
-        const sensorId = 8; // Cambia esto con el ID real del sensor
+         // Cambia esto con el ID real del sensor
         generarReporte(sensorId);
     });
 });
