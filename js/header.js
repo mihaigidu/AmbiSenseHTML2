@@ -25,5 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         })
+        //añadir warning
         .catch(error => console.error("Error cargando el header:", error));
 });

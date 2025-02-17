@@ -51,6 +51,7 @@ async function generarReporte(sensorId) {
         pdf.setFontSize(14);
         pdf.text('Resumen de Datos', 10, 10);
         
+        //quitar duplicados new map
         const summaryData = {};
         lecturasUltimoDia.forEach(lectura => {
             lectura.variables.forEach(variable => {

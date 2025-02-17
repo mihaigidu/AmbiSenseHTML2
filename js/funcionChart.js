@@ -61,6 +61,7 @@ function createSensorChart(url, sensorId) {
         .then(sensor => {
             if (!sensor.lecturas || sensor.lecturas.length === 0) {
                 console.warn(`⚠️ El sensor ${sensor.name} no tiene lecturas registradas.`);
+                //añadir
                 return;
             }
 
@@ -72,6 +73,7 @@ function createSensorChart(url, sensorId) {
                 .sort()
                 .reverse()[0];
 
+                //modular el ordenar funcion
             let latestReadings = sensor.lecturas.filter(lectura => lectura.dateLectura.startsWith(latestDate));
             latestReadings.sort((a, b) => new Date(a.dateLectura) - new Date(b.dateLectura));
 
