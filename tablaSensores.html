@@ -67,23 +67,16 @@
             transform: scale(1.2);
         }
 
-        .gauge-cell {
+        
+
+        .gauge-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 80px;
+            height: 10vh;
             /* 🔹 Reducimos la altura para que sea más compacto */
-            padding: 5px;
-        }
-
-        .gauge-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 80px;
-            /* 🔹 Reducimos el tamaño del contenedor */
-            height: 80px;
+            padding: 0px;
         }
 
         .gauge-chart {
@@ -372,6 +365,7 @@
             var option = {
                 series: [
                     {
+                        
                         type: "gauge",
                         startAngle: 180,
                         endAngle: 0,
@@ -392,11 +386,14 @@
                             width: 3, /* 🔹 Flecha más delgada */
                             length: "75%",
                             itemStyle: { color: "black" }
+                            
+
                         },
                         axisTick: { show: false },
                         axisLabel: { show: false },
                         splitLine: { show: false },
                         detail: {
+                            
                             formatter: `{value}`,
                             fontSize: 12, /* 🔹 Reducimos el tamaño del número */
                             color: "black",
