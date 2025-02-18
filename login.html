@@ -4,7 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login - Analizador de Salubridad</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Font Awesome (asegúrate de incluir la versión que uses) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    integrity="sha512-..."
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
   <style>
     /* Paleta de colores */
     :root {
@@ -136,19 +150,22 @@
     .btn-google:hover,
     .btn-google:focus,
     .btn-google:active {
-      background-color: #db4437 !important;
-      background-image: none !important;
+        border: red 1px solid;
+        border-radius: 10px;
+        background-image: none !important;
       box-shadow: none !important;
       outline: none !important;
     }
 
     .btn-github {
-      background-color: #a10788;
+      background-color: black;
     }
     .btn-github:hover,
     .btn-github:focus,
     .btn-github:active {
-      background-color: #a10788 !important;
+        border: black 1px solid;
+        border-radius: 10px;
+
       background-image: none !important;
       box-shadow: none !important;
       outline: none !important;
@@ -220,8 +237,18 @@
           </div>
         </div>
         <button type="submit" class="btn btn-login">Ingresar</button>
-        <button type="button" class="btn btn-google" id="googleLogin">Iniciar sesión con Google</button>
-        <button type="button" class="btn btn-github" id="githubLogin">Iniciar sesión con GitHub</button>
+        
+        <!-- Botón de Google con ícono -->
+        <button type="button" class="btn btn-google" id="googleLogin">
+          <i class="fa-brands fa-google me-2"></i>
+          Iniciar sesión con Google
+        </button>
+        
+        <!-- Botón de GitHub con ícono -->
+        <button type="button" class="btn btn-github" id="githubLogin">
+          <i class="fa-brands fa-github me-2"></i>
+          Iniciar sesión con GitHub
+        </button>
       </form>
       <p class="footer-text">
         ¿No tienes una cuenta? <a href="#" id="registerLink">Regístrate aquí</a>
