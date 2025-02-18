@@ -197,40 +197,32 @@
     </div>
 
     <script>
-        async function checkLoginStatus() {
-            try {
-                let response = await fetch("http://localhost:8080/auth/user", { credentials: "include" });
-                if (response.ok) {
-                    let data = await response.json();
-                    if (data.loggedIn) {
-                        alert(data.message);
-                        window.location.href = "/home"; // Redirigir a la página principal
-                    }
-                }
-            } catch (error) {
-                console.error("Error al verificar sesión:", error);
-            }
-        }
-    
-        document.getElementById("googleLogin").addEventListener("click", function () {
-            window.location.href = "http://localhost:8080/oauth2/authorization/google";
-            setTimeout(checkLoginStatus, 3000); // Esperar 3 segundos y verificar si el usuario está autenticado
-        });
-    
-        document.getElementById("githubLogin").addEventListener("click", function () {
-            window.location.href = "http://localhost:8080/oauth2/authorization/github";
-            setTimeout(checkLoginStatus, 3000);
-        });
-    
-        document.getElementById("logoutButton").addEventListener("click", async function () {
-            let response = await fetch("http://localhost:8080/auth/logout", { method: "POST", credentials: "include" });
-            if (response.ok) {
-                alert("Sesión cerrada con éxito.");
-                window.location.href = "/login"; // Redirigir al login
-            }
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginContainer = document.getElementById("loginContainer");
+            const registerLink = document.getElementById("registerLink");
+            const backToLoginLink = document.getElementById("backToLoginLink");
+
+            registerLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                loginContainer.classList.add("rotated");
+                loginContainer.style.minHeight = "550px";
+            });
+
+            backToLoginLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                loginContainer.classList.remove("rotated");
+                loginContainer.style.minHeight = "450px";
+            });
+
+            document.getElementById("googleLogin").addEventListener("click", function () {
+                window.location.href = "http://localhost:8080/oauth2/authorization/google";
+            });
+
+            document.getElementById("githubLogin").addEventListener("click", function () {
+                window.location.href = "http://localhost:8080/oauth2/authorization/github";
+            });
         });
     </script>
-    
 
 </body>
 </html>
