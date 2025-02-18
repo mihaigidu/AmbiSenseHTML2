@@ -17,11 +17,19 @@
     <!-- Scripts de librerías -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- CSS del Footer -->
+    <link rel="stylesheet" href="css/footer.css">
+
+    <!-- JS del Footer -->
+    <script src="js/footer.js" defer></script>
+
+
     <style>
         /* 🌟 Mantiene el diseño original con el header fijo y el footer abajo 🌟 */
-        
+
         /* Estructura principal */
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
             padding: 0;
@@ -32,21 +40,15 @@
             flex-direction: column;
         }
 
-        /* HEADER pegado arriba */
-        #header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background-color: white;
-            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-        }
+        
 
         /* CONTENEDOR PRINCIPAL (Para que el contenido empuje el footer) */
         .content-wrapper {
             flex-grow: 1;
-            padding-top: 90px; /* Evita que el header tape el contenido */
-            padding-bottom: 30px; /* Espacio extra para el footer */
+            padding-top: 90px;
+            /* Evita que el header tape el contenido */
+            padding-bottom: 30px;
+            /* Espacio extra para el footer */
         }
 
         .container {
@@ -106,7 +108,8 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: left;
@@ -117,30 +120,6 @@
             background-color: #007d96;
             color: white;
             text-align: center;
-        }
-
-        /* FOOTER SIEMPRE AL FINAL */
-        footer {
-            background-color: #007d96;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            position: relative;
-            bottom: 0;
-            margin-top: auto; /* Mantiene el footer abajo siempre */
-        }
-
-        .footer-link {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-            font-size: 16px;
-            transition: transform 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: #c300ff;
         }
     </style>
 
@@ -167,7 +146,7 @@
                     setTimeout(() => {
                         const menuToggle = document.querySelector('.navbar-toggler');
                         const menu = document.getElementById('menu');
-                        
+
                         if (menuToggle) {
                             menuToggle.addEventListener("click", function () {
                                 menu.classList.toggle("active");
@@ -213,33 +192,53 @@
 
             <button class="accordion">Beneficios del Sensor</button>
             <div class="panel">
-                <p>Este sensor ayuda a monitorear la calidad del aire en diferentes entornos, proporcionando datos 
-                   precisos para mejorar la salud y seguridad ambiental.</p>
+                <p>Este sensor ayuda a monitorear la calidad del aire en diferentes entornos, proporcionando datos
+                    precisos para mejorar la salud y seguridad ambiental.</p>
             </div>
 
             <button class="accordion">Especificaciones Técnicas</button>
             <div class="panel">
                 <div class="table-container">
                     <table>
-                        <tr><th>Modelo</th> <td>LKC-1000S+</td></tr>
-                        <tr><th>Dimensión</th> <td>177*65.5*32 mm</td></tr>
-                        <tr><th>Capacidad de la batería</th> <td>3000 mAh</td></tr>
-                        <tr><th>Duración de la batería</th> <td>6-8 horas</td></tr>
-                        <tr><th>Pantalla</th> <td>Pantalla LCD TFT en color</td></tr>
-                        <tr><th>PM2.5</th> <td>0-999 ug/m³, Resolución: 0.1ug/m³</td></tr>
-                        <tr><th>CO2</th> <td>400-5000 ppm, Resolución: 1 ppm</td></tr>
-                        <tr><th>Temperatura</th> <td>-10~50°C, Precisión: ±1°C</td></tr>
+                        <tr>
+                            <th>Modelo</th>
+                            <td>LKC-1000S+</td>
+                        </tr>
+                        <tr>
+                            <th>Dimensión</th>
+                            <td>177*65.5*32 mm</td>
+                        </tr>
+                        <tr>
+                            <th>Capacidad de la batería</th>
+                            <td>3000 mAh</td>
+                        </tr>
+                        <tr>
+                            <th>Duración de la batería</th>
+                            <td>6-8 horas</td>
+                        </tr>
+                        <tr>
+                            <th>Pantalla</th>
+                            <td>Pantalla LCD TFT en color</td>
+                        </tr>
+                        <tr>
+                            <th>PM2.5</th>
+                            <td>0-999 ug/m³, Resolución: 0.1ug/m³</td>
+                        </tr>
+                        <tr>
+                            <th>CO2</th>
+                            <td>400-5000 ppm, Resolución: 1 ppm</td>
+                        </tr>
+                        <tr>
+                            <th>Temperatura</th>
+                            <td>-10~50°C, Precisión: ±1°C</td>
+                        </tr>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2025 AmbiSense. Todos los derechos reservados.</p>
-        <a href="/aboutUs" class="footer-link">Sobre Nosotros</a>
-    </footer>
 
 </body>
+
 </html>

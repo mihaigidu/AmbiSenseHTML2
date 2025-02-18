@@ -1,0 +1,50 @@
+/* Asegurar que el Footer esté siempre al final del contenido */
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    flex: 1;
+}
+
+/* Estilo del Footer */
+.text-center {
+    text-align: center;
+}
+
+footer {
+    background-color: #007d96;
+    color: white;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Estilos de los enlaces del footer */
+.footer-link {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #c300ff;
+}
+
+/* Iconos Sociales */
+.social-icons {
+    margin-top: 10px;
+}
+
+.social-icons a {
+    font-size: 20px;
+    margin: 0 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.social-icons a:hover {
+    transform: scale(1.2);
+}
