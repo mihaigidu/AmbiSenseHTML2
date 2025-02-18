@@ -30,7 +30,7 @@
 
         .login-container {
             width: 400px;
-            min-height: 450px; /* Se ajustará dinámicamente */
+            min-height: 480px; /* Se ajustará dinámicamente */
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.8s ease-in-out, min-height 0.3s ease-in-out;
@@ -106,6 +106,33 @@
             background-color: #005f70;
         }
 
+        .btn-google, .btn-github {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            color: #fff;
+        }
+
+        .btn-google {
+            background-color: #db4437;
+        }
+
+        .btn-google:hover {
+            background-color: #c1351d;
+        }
+
+        .btn-github {
+            background-color: #333;
+        }
+
+        .btn-github:hover {
+            background-color: #222;
+        }
+
         .footer-text {
             text-align: center;
             margin-top: 20px;
@@ -141,6 +168,8 @@
                     <input type="password" class="form-control" id="password" name="password" placeholder="Ingrese su contraseña" required>
                 </div>
                 <button type="submit" class="btn btn-login">Ingresar</button>
+                <button type="button" class="btn btn-google" id="googleLogin">Iniciar sesión con Google</button>
+                <button type="button" class="btn btn-github" id="githubLogin">Iniciar sesión con GitHub</button>
             </form>
             <p class="footer-text">¿No tienes una cuenta? <a href="#" id="registerLink">Regístrate aquí</a></p>
         </div>
@@ -168,24 +197,40 @@
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const loginContainer = document.getElementById("loginContainer");
-            const registerLink = document.getElementById("registerLink");
-            const backToLoginLink = document.getElementById("backToLoginLink");
-
-            registerLink.addEventListener("click", function (event) {
-                event.preventDefault();
-                loginContainer.classList.add("rotated");
-                loginContainer.style.minHeight = "550px"; // Ajustar altura para el formulario de registro
-            });
-
-            backToLoginLink.addEventListener("click", function (event) {
-                event.preventDefault();
-                loginContainer.classList.remove("rotated");
-                loginContainer.style.minHeight = "450px"; // Volver al tamaño original del login
-            });
+        async function checkLoginStatus() {
+            try {
+                let response = await fetch("http://localhost:8080/auth/user", { credentials: "include" });
+                if (response.ok) {
+                    let data = await response.json();
+                    if (data.loggedIn) {
+                        alert(data.message);
+                        window.location.href = "/home"; // Redirigir a la página principal
+                    }
+                }
+            } catch (error) {
+                console.error("Error al verificar sesión:", error);
+            }
+        }
+    
+        document.getElementById("googleLogin").addEventListener("click", function () {
+            window.location.href = "http://localhost:8080/oauth2/authorization/google";
+            setTimeout(checkLoginStatus, 3000); // Esperar 3 segundos y verificar si el usuario está autenticado
+        });
+    
+        document.getElementById("githubLogin").addEventListener("click", function () {
+            window.location.href = "http://localhost:8080/oauth2/authorization/github";
+            setTimeout(checkLoginStatus, 3000);
+        });
+    
+        document.getElementById("logoutButton").addEventListener("click", async function () {
+            let response = await fetch("http://localhost:8080/auth/logout", { method: "POST", credentials: "include" });
+            if (response.ok) {
+                alert("Sesión cerrada con éxito.");
+                window.location.href = "/login"; // Redirigir al login
+            }
         });
     </script>
+    
 
 </body>
 </html>
