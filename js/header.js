@@ -25,6 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         })
-        //añadir warning
-        .catch(error => console.error("Error cargando el header:", error));
+        .catch(error => {
+            console.error("Error cargando el header:", error);
+
+            // Crear y mostrar un alert de Bootstrap para advertir al usuario
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'alert alert-warning m-2'; // Clase de Bootstrap
+            warningDiv.role = 'alert';
+            warningDiv.innerText = 'No se pudo cargar el header. Por favor, revisa tu conexión o inténtalo más tarde.';
+
+            // Insertar el alert al principio del body (o donde prefieras)
+            document.body.prepend(warningDiv);
+        });
 });
