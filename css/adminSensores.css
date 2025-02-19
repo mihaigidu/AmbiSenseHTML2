@@ -1,14 +1,45 @@
+:root {
+    --background-color: #DFDCE3;
+    --text-color: #333333;
+    --header-color: #007D96;
+    --footer-color: #007D96;
+    --imagen-perfil-color: white;
+    --border-color: #ccc;
+    --h2-color: #007D96;
+    --border-video-color: #7C719C;
+    --background-carrusel: white;
+    --table-color: white;
+    --border-table: #2c2c2c;
+
+  }
+  
+  /* Estilo para modo oscuro */
+  [data-theme="dark"] {
+    --background-color: #5f5f5f;
+    --text-color: #DFDCE3;
+    --header-color: #2c2c2c;
+    --footer-color: #2c2c2c;
+    --imagen-perfil-color: black;
+    --border-color: #363636;
+    --h2-color: #DFDCE3;
+    --border-video-color: #3b364b;
+    --background-carrusel: #505050;
+    --table-color: #2c2c2c;
+    --border-table: white;
+  }
+
+
 body {
     font-family: 'Arial', sans-serif;
     text-align: center;
     margin: 0;
-    background-color: #DFDCE3;
-    color: #333333;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 h2,
 h3 {
-    color: #42326D;
+    color: var(--text-color);
     margin-top: 20px;
 }
 
@@ -16,13 +47,13 @@ h3 {
     width: 80%;
     max-width: 500px;
     padding: 20px;
-    border: 2px dashed #007D96;
+    border: 2px dashed var(--header-color);
     border-radius: 10px;
     margin: 20px auto;
     text-align: center;
     cursor: pointer;
-    color: #007D96;
-    background-color: #FFFFFF;
+    color: var(--text-color);
+    background-color: var(--background-carrusel);
     transition: background-color 0.3s;
 }
 
@@ -34,21 +65,21 @@ table {
     width: 90%;
     margin: 20px auto;
     border-collapse: collapse;
-    background-color: #FFFFFF;
+    background-color: var(--background-carrusel);
     border-radius: 10px;
     overflow: hidden;
 }
 
 th,
 td {
-    border: 1px solid #333333;
+    border: 1px solid var(--border-table);
     padding: 10px;
     text-align: center;
 }
 
 th {
-    background-color: #42326D;
-    color: white;
+    background-color: var(--table-color);
+    color: var(--text-color);
 }
 
 select,
@@ -61,14 +92,14 @@ button {
 }
 
 select {
-    background-color: #FFFFFF;
-    color: #333333;
-    border: 2px solid #007D96;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 2px solid var(--border-table);
 }
 
 button {
-    background-color: #007D96;
-    color: white;
+    background-color: var(--table-color);
+    color: var(--text-color);
     cursor: pointer;
     transition: background-color 0.3s;
 }
