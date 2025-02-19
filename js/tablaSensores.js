@@ -96,41 +96,44 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
 function fetchSensorsAQI() {
     let tableBody = $("tbody");
 
-    // 🔄 Mostrar mensaje de carga mientras llega la API
+    // 🔄 Mensaje de carga
     tableBody.html(`
         <tr>
             <td colspan="5" class="text-center">Cargando sensores...</td>
         </tr>
     `);
-    console.log("UIUIUI");
-    // 🌐 Hacer la solicitud con autenticación
+
     $.ajax({
         url: "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores",
         method: "GET",
         xhrFields: {
-            withCredentials: true // Permite enviar cookies entre dominios
+            withCredentials: true // Envía cookies entre dominios
         },
+        crossDomain: true,      // Habilita solicitudes CORS
         success: function (data) {
-            tableBody.empty(); // Limpiar la tabla tras recibir los datos
+            if (!Array.isArray(data)) {
+                console.error("Respuesta inesperada:", data);
+                tableBody.html(`<tr><td colspan="5" class="text-center text-danger">Error: Respuesta no válida</td></tr>`);
+                return;
+            }
+
+            tableBody.empty();
             console.log(data);
 
             data.forEach((sensor, index) => {
                 if (!sensor.lecturas || sensor.lecturas.length === 0) return;
 
-                // 🔍 Obtener la última lectura registrada
                 let latestReading = sensor.lecturas
-                    .slice() // Clonamos el array para evitar modificar el original
-                    .sort((a, b) => new Date(b.dateLectura) - new Date(a.dateLectura)) // Ordenar por fecha descendente
-                    .shift(); // Tomar el más reciente
+                    .slice()
+                    .sort((a, b) => new Date(b.dateLectura) - new Date(a.dateLectura))
+                    .shift();
 
-                // 📊 Obtener el último valor de AQI
                 let lastAQI = 0;
                 if (latestReading && latestReading.variables) {
                     let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
                     lastAQI = aqiVariable ? aqiVariable.valor : 0;
                 }
 
-                // 📌 Crear fila de la tabla con datos dinámicos
                 let row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
@@ -154,20 +157,20 @@ function fetchSensorsAQI() {
                 `;
                 tableBody.append(row);
 
-                // 🟢 Crear gauge chart para el sensor
                 createGauge(`gauge-${index + 1}`, lastAQI);
             });
         },
-        error: function () {
-            // ❌ Si hay error en la API, mostrar mensaje
+        error: function (xhr) {
+            console.error("Error en la API:", xhr.responseText);
             tableBody.html(`
                 <tr>
-                    <td colspan="5" class="text-center text-danger">Error al cargar los sensores.</td>
+                    <td colspan="5" class="text-center text-danger">Error al cargar los sensores. Inténtelo de nuevo.</td>
                 </tr>
             `);
         }
     });
 }
+
 
 
 function createGauge(chartId, value) {
