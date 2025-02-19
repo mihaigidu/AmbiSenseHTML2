@@ -38,3 +38,4 @@ document.addEventListener("DOMContentLoaded", () => {
             document.body.prepend(warningDiv);
         });
 });
+
