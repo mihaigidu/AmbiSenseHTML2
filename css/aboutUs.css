@@ -1,6 +1,33 @@
+:root {
+    --background-color: #DFDCE3;
+    --text-color: #333333;
+    --header-color: #007D96;
+    --footer-color: #007D96;
+    --imagen-perfil-color: white;
+    --border-color: #ccc;
+    --h2-color: #007D96;
+    --border-video-color: #7C719C;
+    --background-carrusel: white;
+  }
+  
+  /* Estilo para modo oscuro */
+  [data-theme="dark"] {
+    --background-color: #5f5f5f;
+    --text-color: #DFDCE3;
+    --header-color: #2c2c2c;
+    --footer-color: #2c2c2c;
+    --imagen-perfil-color: black;
+    --border-color: #363636;
+    --h2-color: #DFDCE3;
+    --border-video-color: #3b364b;
+    --background-carrusel: #505050;
+
+  }
+
+
 /* Estilos Generales */
 body {
-    background-color: #dfdce3;
+    background-color: var(--background-color);
     color: #333;
     margin: 0;
     padding: 0;
@@ -13,7 +40,7 @@ main {
 }
 
 h2 {
-    color: #42326D;
+    color: var(--h2-color);
     text-align: center;
     margin-bottom: 20px;
 }
@@ -27,7 +54,7 @@ h2 {
     width: 120px;
     height: 120px;
     object-fit: cover;
-    border: 3px solid #007d96;
+    border: 3px solid var(--h2-color);
     margin-bottom: 10px;
 }
 
