@@ -112,7 +112,7 @@ function fetchSensorsAQI() {
         },
         success: function (data) {
             tableBody.empty(); // Limpiar la tabla tras recibir los datos
-            console.log("UIUIUI2222");
+            console.log(data);
 
             data.forEach((sensor, index) => {
                 if (!sensor.lecturas || sensor.lecturas.length === 0) return;
