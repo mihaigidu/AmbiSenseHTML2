@@ -10,11 +10,10 @@
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
-  <!-- Font Awesome (asegúrate de incluir la versión que uses) -->
+  <!-- Font Awesome -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-    integrity="sha512-..."
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
@@ -84,6 +83,7 @@
     .form-label {
       font-weight: bold;
       color: var(--text-color);
+      cursor: pointer; /* Para indicar que se puede clicar */
     }
 
     .form-control {
@@ -150,9 +150,9 @@
     .btn-google:hover,
     .btn-google:focus,
     .btn-google:active {
-        border: red 1px solid;
-        border-radius: 10px;
-        background-image: none !important;
+      border: red 1px solid;
+      border-radius: 10px;
+      background-image: none !important;
       box-shadow: none !important;
       outline: none !important;
     }
@@ -163,9 +163,8 @@
     .btn-github:hover,
     .btn-github:focus,
     .btn-github:active {
-        border: black 1px solid;
-        border-radius: 10px;
-
+      border: black 1px solid;
+      border-radius: 10px;
       background-image: none !important;
       box-shadow: none !important;
       outline: none !important;
@@ -184,15 +183,19 @@
       cursor: pointer;
     }
 
-    /* Reglas de contraseña: estilos iniciales */
-    .password-rules {
+    /* Reglas de contraseña y correo: se ocultan por defecto */
+    .password-rules,
+    .email-rules {
       margin-top: 5px;
       font-size: 0.9rem;
       line-height: 1.3;
+      display: none; /* hidden hasta que se haga focus en el input */
     }
-    .password-rules p {
+    .password-rules p,
+    .email-rules p {
       margin: 0;
-      color: red; /* Inicio en rojo */
+      color: red; 
+      display: block; 
     }
   </style>
 </head>
@@ -208,17 +211,25 @@
     <div class="card card-front">
       <form id="loginForm">
         <h2 class="login-title">Iniciar Sesión</h2>
+
+        <!-- Correo Electrónico (Login) -->
         <div class="mb-3">
-          <label for="username" class="form-label">Usuario</label>
+          <label for="correoElectronico" class="form-label">Correo Electrónico</label>
           <input
             type="text"
             class="form-control"
-            id="username"
-            name="username"
-            placeholder="Ingrese su usuario"
+            id="correoElectronico"
+            name="correoElectronico"
+            placeholder="Ingrese su Correo Electrónico"
             required
           />
+          <!-- Reglas de email para el LOGIN -->
+          <div class="email-rules" id="emailRulesLogin">
+            <p id="login-emailformat">Debe tener un formato de email válido (usuario@dominio.com)</p>
+          </div>
         </div>
+
+        <!-- Contraseña (Login) -->
         <div class="mb-3">
           <label for="password" class="form-label">Contraseña</label>
           <input
@@ -236,6 +247,7 @@
             <p id="login-digit">Al menos 1 dígito</p>
           </div>
         </div>
+
         <button type="submit" class="btn btn-login">Ingresar</button>
         
         <!-- Botón de Google con ícono -->
@@ -259,6 +271,8 @@
     <div class="card card-back">
       <form id="registerForm">
         <h2 class="login-title">Regístrate</h2>
+
+        <!-- Nombre Completo -->
         <div class="mb-3">
           <label for="fullname" class="form-label">Nombre Completo</label>
           <input
@@ -270,6 +284,8 @@
             required
           />
         </div>
+
+        <!-- Correo Electrónico (Registro) -->
         <div class="mb-3">
           <label for="email" class="form-label">Correo Electrónico</label>
           <input
@@ -281,6 +297,8 @@
             required
           />
         </div>
+
+        <!-- Contraseña (Registro) -->
         <div class="mb-3">
           <label for="passwordReg" class="form-label">Contraseña</label>
           <input
@@ -298,6 +316,7 @@
             <p id="reg-digit">Al menos 1 dígito</p>
           </div>
         </div>
+
         <button type="submit" class="btn btn-login">Registrarse</button>
       </form>
       <p class="footer-text">
@@ -312,61 +331,99 @@
       const registerLink = document.getElementById("registerLink");
       const backToLoginLink = document.getElementById("backToLoginLink");
 
-      // ---- Navegación entre Login y Registro ----
+      // Navegación entre Login y Registro
       registerLink.addEventListener("click", function (event) {
         event.preventDefault();
         loginContainer.classList.add("rotated");
         loginContainer.style.minHeight = "550px";
       });
-
       backToLoginLink.addEventListener("click", function (event) {
         event.preventDefault();
         loginContainer.classList.remove("rotated");
         loginContainer.style.minHeight = "450px";
       });
 
-      // ---- Referencias a inputs y formularios ----
+      // ---- LOGIN ----
       const loginForm = document.getElementById("loginForm");
+      const emailLogin = document.getElementById("correoElectronico");
       const passwordLogin = document.getElementById("password");
 
+      // Muestra/oculta las "reglas" del email
+      emailLogin.addEventListener("focus", () => {
+        document.getElementById("emailRulesLogin").style.display = "block";
+      });
+      emailLogin.addEventListener("blur", () => {
+        document.getElementById("emailRulesLogin").style.display = "none";
+      });
+      emailLogin.addEventListener("input", () => {
+        checkEmailRulesLogin(emailLogin.value);
+      });
+
+      // Muestra/oculta las "reglas" de la contraseña
+      passwordLogin.addEventListener("focus", () => {
+        document.getElementById("passwordRulesLogin").style.display = "block";
+      });
+      passwordLogin.addEventListener("blur", () => {
+        document.getElementById("passwordRulesLogin").style.display = "none";
+      });
+      passwordLogin.addEventListener("input", () => {
+        checkPasswordRules(passwordLogin.value, "login-");
+      });
+
+      // Validación al enviar el formulario de LOGIN
+      loginForm.addEventListener("submit", function (event) {
+        if (!isEmailValid(emailLogin.value)) {
+          event.preventDefault();
+          alert("El correo electrónico no cumple el formato válido (usuario@dominio.com).");
+          return;
+        }
+        if (!isPasswordValid(passwordLogin.value)) {
+          event.preventDefault();
+          alert("La contraseña no cumple los requisitos indicados.");
+        }
+      });
+
+      // ---- REGISTRO ----
       const registerForm = document.getElementById("registerForm");
       const passwordReg = document.getElementById("passwordReg");
 
-      // ---- Expresiones y funciones de validación ----
-      // Requisitos:
-      // 1. Mínimo 8 caracteres
-      // 2. Al menos 1 mayúscula
-      // 3. Al menos 1 dígito
+      passwordReg.addEventListener("focus", () => {
+        document.getElementById("passwordRulesReg").style.display = "block";
+      });
+      passwordReg.addEventListener("blur", () => {
+        document.getElementById("passwordRulesReg").style.display = "none";
+      });
+      passwordReg.addEventListener("input", () => {
+        checkPasswordRules(passwordReg.value, "reg-");
+      });
 
-      function checkPasswordRules(password, prefix) {
-        // Elementos donde se muestran los requisitos
-        const lengthEl = document.getElementById(prefix + "length");
-        const uppercaseEl = document.getElementById(prefix + "uppercase");
-        const digitEl = document.getElementById(prefix + "digit");
-
-        // Regla 1: longitud >= 8
-        if (password.length >= 8) {
-          lengthEl.style.color = "green";
-        } else {
-          lengthEl.style.color = "red";
+      registerForm.addEventListener("submit", function (event) {
+        if (!isPasswordValid(passwordReg.value)) {
+          event.preventDefault();
+          alert("La contraseña no cumple los requisitos indicados.");
         }
+      });
 
-        // Regla 2: al menos 1 mayúscula
-        if (/[A-Z]/.test(password)) {
-          uppercaseEl.style.color = "green";
-        } else {
-          uppercaseEl.style.color = "red";
-        }
+      // ---- Funciones de validación ----
 
-        // Regla 3: al menos 1 dígito
-        if (/\d/.test(password)) {
-          digitEl.style.color = "green";
+      // Email: simple verificación de formato
+      function isEmailValid(email) {
+        // Regex sencilla: algo@algo.algo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      }
+
+      function checkEmailRulesLogin(email) {
+        const ruleEl = document.getElementById("login-emailformat");
+        // Si cumple, oculta el texto; si no, muéstralo
+        if (isEmailValid(email)) {
+          ruleEl.style.display = "none";
         } else {
-          digitEl.style.color = "red";
+          ruleEl.style.display = "block";
         }
       }
 
-      // Comprueba si la contraseña cumple TODAS las reglas
+      // Contraseña
       function isPasswordValid(password) {
         return (
           password.length >= 8 &&
@@ -375,41 +432,39 @@
         );
       }
 
-      // ---- Escuchamos el evento input para LOGIN ----
-      passwordLogin.addEventListener("input", function () {
-        checkPasswordRules(passwordLogin.value, "login-");
-      });
+      function checkPasswordRules(password, prefix) {
+        const lengthEl = document.getElementById(prefix + "length");
+        const uppercaseEl = document.getElementById(prefix + "uppercase");
+        const digitEl = document.getElementById(prefix + "digit");
 
-      // ---- Escuchamos el evento input para REGISTRO ----
-      passwordReg.addEventListener("input", function () {
-        checkPasswordRules(passwordReg.value, "reg-");
-      });
-
-      // ---- Validación final en el submit ----
-      // LOGIN
-      loginForm.addEventListener("submit", function (event) {
-        if (!isPasswordValid(passwordLogin.value)) {
-          event.preventDefault(); // Detiene el envío
-          alert("La contraseña no cumple los requisitos indicados.");
+        // Regla 1: longitud >= 8
+        if (password.length >= 8) {
+          lengthEl.style.display = "none";
+        } else {
+          lengthEl.style.display = "block";
         }
-      });
 
-      // REGISTRO
-      registerForm.addEventListener("submit", function (event) {
-        if (!isPasswordValid(passwordReg.value)) {
-          event.preventDefault(); // Detiene el envío
-          alert("La contraseña no cumple los requisitos indicados.");
+        // Regla 2: al menos 1 mayúscula
+        if (/[A-Z]/.test(password)) {
+          uppercaseEl.style.display = "none";
+        } else {
+          uppercaseEl.style.display = "block";
         }
-      });
 
-      // ---- Botones de Login con Google y GitHub ----
+        // Regla 3: al menos 1 dígito
+        if (/\d/.test(password)) {
+          digitEl.style.display = "none";
+        } else {
+          digitEl.style.display = "block";
+        }
+      }
+
+      // Botones de Login con Google y GitHub
       document.getElementById("googleLogin").addEventListener("click", function () {
-        // Redirige a la ruta de tu backend para OAuth con Google
         window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/google";
       });
 
       document.getElementById("githubLogin").addEventListener("click", function () {
-        // Redirige a la ruta de tu backend para OAuth con GitHub
         window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/github";
       });
     });
