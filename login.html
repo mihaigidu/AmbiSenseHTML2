@@ -296,6 +296,10 @@
             placeholder="Ingrese su correo electrónico"
             required
           />
+          <!-- Reglas de email para REGISTRO -->
+          <div class="email-rules" id="emailRulesRegister">
+            <p id="register-emailformat">Debe tener un formato de email válido (usuario@dominio.com)</p>
+          </div>
         </div>
 
         <!-- Contraseña (Registro) -->
@@ -348,7 +352,7 @@
       const emailLogin = document.getElementById("correoElectronico");
       const passwordLogin = document.getElementById("password");
 
-      // Muestra/oculta las "reglas" del email
+      // Mostrar/ocultar reglas de email (Login)
       emailLogin.addEventListener("focus", () => {
         document.getElementById("emailRulesLogin").style.display = "block";
       });
@@ -356,10 +360,10 @@
         document.getElementById("emailRulesLogin").style.display = "none";
       });
       emailLogin.addEventListener("input", () => {
-        checkEmailRulesLogin(emailLogin.value);
+        checkEmailRules(emailLogin.value, "login-emailformat");
       });
 
-      // Muestra/oculta las "reglas" de la contraseña
+      // Mostrar/ocultar reglas de contraseña (Login)
       passwordLogin.addEventListener("focus", () => {
         document.getElementById("passwordRulesLogin").style.display = "block";
       });
@@ -370,7 +374,7 @@
         checkPasswordRules(passwordLogin.value, "login-");
       });
 
-      // Validación al enviar el formulario de LOGIN
+      // Validación final al enviar el formulario de LOGIN
       loginForm.addEventListener("submit", function (event) {
         if (!isEmailValid(emailLogin.value)) {
           event.preventDefault();
@@ -385,8 +389,21 @@
 
       // ---- REGISTRO ----
       const registerForm = document.getElementById("registerForm");
+      const emailRegister = document.getElementById("email");
       const passwordReg = document.getElementById("passwordReg");
 
+      // Mostrar/ocultar reglas de email (Registro)
+      emailRegister.addEventListener("focus", () => {
+        document.getElementById("emailRulesRegister").style.display = "block";
+      });
+      emailRegister.addEventListener("blur", () => {
+        document.getElementById("emailRulesRegister").style.display = "none";
+      });
+      emailRegister.addEventListener("input", () => {
+        checkEmailRules(emailRegister.value, "register-emailformat");
+      });
+
+      // Mostrar/ocultar reglas de contraseña (Registro)
       passwordReg.addEventListener("focus", () => {
         document.getElementById("passwordRulesReg").style.display = "block";
       });
@@ -397,7 +414,15 @@
         checkPasswordRules(passwordReg.value, "reg-");
       });
 
+      // Validación final al enviar el formulario de REGISTRO
       registerForm.addEventListener("submit", function (event) {
+        // Validar email
+        if (!isEmailValid(emailRegister.value)) {
+          event.preventDefault();
+          alert("El correo electrónico no cumple el formato válido (usuario@dominio.com).");
+          return;
+        }
+        // Validar password
         if (!isPasswordValid(passwordReg.value)) {
           event.preventDefault();
           alert("La contraseña no cumple los requisitos indicados.");
@@ -406,16 +431,15 @@
 
       // ---- Funciones de validación ----
 
-      // Email: simple verificación de formato
+      // Verifica formato de email (muy básico)
       function isEmailValid(email) {
-        // Regex sencilla: algo@algo.algo
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
       }
 
-      function checkEmailRulesLogin(email) {
-        const ruleEl = document.getElementById("login-emailformat");
-        // Si cumple, oculta el texto; si no, muéstralo
+      // Muestra/oculta la regla de email (si se cumple o no)
+      function checkEmailRules(email, ruleId) {
+        const ruleEl = document.getElementById(ruleId);
         if (isEmailValid(email)) {
           ruleEl.style.display = "none";
         } else {
@@ -423,7 +447,7 @@
         }
       }
 
-      // Contraseña
+      // Verifica si la contraseña cumple 3 reglas
       function isPasswordValid(password) {
         return (
           password.length >= 8 &&
@@ -432,26 +456,22 @@
         );
       }
 
+      // Muestra/oculta reglas de contraseña
       function checkPasswordRules(password, prefix) {
         const lengthEl = document.getElementById(prefix + "length");
         const uppercaseEl = document.getElementById(prefix + "uppercase");
         const digitEl = document.getElementById(prefix + "digit");
 
-        // Regla 1: longitud >= 8
         if (password.length >= 8) {
           lengthEl.style.display = "none";
         } else {
           lengthEl.style.display = "block";
         }
-
-        // Regla 2: al menos 1 mayúscula
         if (/[A-Z]/.test(password)) {
           uppercaseEl.style.display = "none";
         } else {
           uppercaseEl.style.display = "block";
         }
-
-        // Regla 3: al menos 1 dígito
         if (/\d/.test(password)) {
           digitEl.style.display = "none";
         } else {
@@ -463,7 +483,6 @@
       document.getElementById("googleLogin").addEventListener("click", function () {
         window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/google";
       });
-
       document.getElementById("githubLogin").addEventListener("click", function () {
         window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/github";
       });
