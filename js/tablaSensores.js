@@ -102,7 +102,7 @@ function fetchSensorsAQI() {
             <td colspan="5" class="text-center">Cargando sensores...</td>
         </tr>
     `);
-
+    console.log("UIUIUI");
     // 🌐 Hacer la solicitud con autenticación
     $.ajax({
         url: "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores",
@@ -112,6 +112,7 @@ function fetchSensorsAQI() {
         },
         success: function (data) {
             tableBody.empty(); // Limpiar la tabla tras recibir los datos
+            console.log("UIUIUI2222");
 
             data.forEach((sensor, index) => {
                 if (!sensor.lecturas || sensor.lecturas.length === 0) return;
