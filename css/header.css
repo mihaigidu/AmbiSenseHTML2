@@ -1,3 +1,24 @@
+:root {
+    --background-color: #DFDCE3;
+    --text-color: #333333;
+    --header-color: #007D96;
+    --imagen-perfil-color: white;
+    --border-color: #ccc;
+    --h2-color: #007D96;
+    --border-video-color: #7C719C;
+  }
+  
+  /* Estilo para modo oscuro */
+  [data-theme="dark"] {
+    --background-color: #333333;
+    --text-color: #DFDCE3;
+    --header-color: #00333d;
+    --imagen-perfil-color: black;
+    --border-color: #363636;
+    --h2-color: #DFDCE3;
+    --border-video-color: #3b364b;
+  }
+
 body, html {
     height: 100vh;
     display: flex;
@@ -17,7 +38,7 @@ body, html {
 
 .header {
     height: 8vh;
-    background-color: #007d96;
+    background-color: var(--header-color);
     padding: 1vh 2vw;
     display: flex;
     align-items: center;

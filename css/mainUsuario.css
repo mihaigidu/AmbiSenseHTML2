@@ -1,4 +1,26 @@
         /* Global Styles */
+        :root {
+            --background-color: #DFDCE3;
+            --text-color: #333333;
+            --header-color: #007D96;
+            --imagen-perfil-color: white;
+            --border-color: #ccc;
+            --h2-color: #007D96;
+            --border-video-color: #7C719C;
+          }
+          
+          /* Estilo para modo oscuro */
+          [data-theme="dark"] {
+            --background-color: #333333;
+            --text-color: #DFDCE3;
+            --header-color: #00333d;
+            --imagen-perfil-color: black;
+            --border-color: #363636;
+            --h2-color: #DFDCE3;
+            --border-video-color: #3b364b;
+          }
+          
+          
         body,
         html {
             height: 100vh;
@@ -6,8 +28,8 @@
             flex-direction: column;
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #DFDCE3;
-            color: #333333;
+            background-color: var(--background-color);
+            color: var(--text-color);
         }
 
         .content-wrapper {
@@ -23,7 +45,7 @@
         /* HEADER */
         .header {
             height: 8vh;
-            background-color: #007d96;
+            background-color: var(--header-color);
             padding: 1vh 2vw;
             display: flex;
             align-items: center;
@@ -38,7 +60,7 @@
             border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
-            border: 0.2vh solid white;
+            border: 0.2vh solid var(--imagen-perfil-color);
         }
 
         .perfil {
@@ -52,7 +74,7 @@
             border: none;
             background: transparent;
             font-size: 2vh;
-            color: white;
+            color: var(--imagen-perfil-color);
             cursor: pointer;
             margin-right: 2vw;
         }
@@ -61,7 +83,7 @@
             display: none;
             width: 100%;
             text-align: center;
-            background-color: #007d96;
+            background-color: var(--header-color);
             padding: 1vh;
             position: absolute;
             top: 8vh;
@@ -92,7 +114,7 @@
         }
 
         .menu ul li a {
-            color: white;
+            color: var(--imagen-perfil-color);
             font-weight: bold;
             text-decoration: none;
             padding: 1vh;
@@ -152,11 +174,11 @@
         }
 
         .section:nth-child(odd) {
-            background-color: #FFFFFF;
+            background-color: var(--background-color);
         }
 
         .section h2 {
-            color: #007D96;
+            color: var();
             font-size: 2.5rem;
             margin-bottom: 30px;
             text-align: center;
@@ -175,8 +197,8 @@
         }
 
         .sensor-box {
-            background-color: white;
-            border: 1px solid #ddd;
+            background-color: var(--imagen-perfil-color);
+            border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -224,7 +246,7 @@
         .video-container video {
             width: 100%;
             max-width: 900px;
-            border: 5px solid #7C719C;
+            border: 5px solid var(--border-video-color);
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
@@ -275,15 +297,15 @@
             text-align: center;
             padding: 20px;
             max-width: 500px;
-            background: white;
+            background: var(--imagen-perfil-color);
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             min-height: 200px;
         }
 
         .carousel-btn {
-            background: #007d96;
-            color: white;
+            background: var(--header-color);
+            color: var(--imagen-perfil-color);
             border: none;
             padding: 10px 15px;
             cursor: pointer;
@@ -293,5 +315,5 @@
         }
 
         .carousel-btn:hover {
-            background: #005f73;
+            background: var(--header-color);
         }
