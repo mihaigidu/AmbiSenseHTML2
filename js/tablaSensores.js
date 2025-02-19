@@ -11,7 +11,7 @@ function deleteSensor(sensorId) {
         return;
     }
 
-    fetch(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores/delete/${sensorId}`, {
+    fetch(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/private/sensores/delete/${sensorId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json"
@@ -70,7 +70,7 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
     };
 
     // Enviar la información a la API
-    fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores/upload", {
+    fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/private/sensores/upload", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -103,7 +103,7 @@ function fetchSensorsAQI() {
         </tr>
     `);
 
-    $.get("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores", function (data) {
+    $.get("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores", function (data) {
         tableBody.empty(); // Limpiar la tabla tras recibir los datos
 
         data.forEach((sensor, index) => {

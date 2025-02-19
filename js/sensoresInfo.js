@@ -10,7 +10,7 @@ let urlParams = new URLSearchParams(window.location.search);
                 return;
             }
 
-            $.get(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores/${sensorId}`, function (sensor) {
+            $.get(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores/${sensorId}`, function (sensor) {
                 if (!sensor || !sensor.lecturas || sensor.lecturas.length === 0) {
                     alert("No se encontraron datos para este sensor.");
                     return;
@@ -37,7 +37,7 @@ let urlParams = new URLSearchParams(window.location.search);
         }
 
         function fetchSensorValues(selectedDate) {
-            $.get(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores/${sensorId}`, function (sensor) {
+            $.get(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores/${sensorId}`, function (sensor) {
                 if (!sensor) return;
 
                 let filteredData = sensor.lecturas.filter(lectura => lectura.dateLectura.startsWith(selectedDate));
