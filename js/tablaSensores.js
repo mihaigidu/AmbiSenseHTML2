@@ -103,63 +103,71 @@ function fetchSensorsAQI() {
         </tr>
     `);
 
-    $.get("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores", function (data) {
-        tableBody.empty(); // Limpiar la tabla tras recibir los datos
+    // 🌐 Hacer la solicitud con autenticación
+    $.ajax({
+        url: "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores",
+        method: "GET",
+        xhrFields: {
+            withCredentials: true // Permite enviar cookies entre dominios
+        },
+        success: function (data) {
+            tableBody.empty(); // Limpiar la tabla tras recibir los datos
 
-        data.forEach((sensor, index) => {
-            if (!sensor.lecturas || sensor.lecturas.length === 0) return;
+            data.forEach((sensor, index) => {
+                if (!sensor.lecturas || sensor.lecturas.length === 0) return;
 
+                // 🔍 Obtener la última lectura registrada
+                let latestReading = sensor.lecturas
+                    .slice() // Clonamos el array para evitar modificar el original
+                    .sort((a, b) => new Date(b.dateLectura) - new Date(a.dateLectura)) // Ordenar por fecha descendente
+                    .shift(); // Tomar el más reciente
 
-            // 🔍 Obtener la última lectura registrada
-            let latestReading = sensor.lecturas
-                .slice() // Clonamos el array para evitar modificar el original
-                .sort((a, b) => new Date(b.dateLectura) - new Date(a.dateLectura)) // Ordenar por fecha descendente
-                .shift(); // Tomar el más reciente
+                // 📊 Obtener el último valor de AQI
+                let lastAQI = 0;
+                if (latestReading && latestReading.variables) {
+                    let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
+                    lastAQI = aqiVariable ? aqiVariable.valor : 0;
+                }
 
-            // 📊 Obtener el último valor de AQI
-            let lastAQI = 0;
-            if (latestReading && latestReading.variables) {
-                let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
-                lastAQI = aqiVariable ? aqiVariable.valor : 0; // Usa "valor" en lugar de "value" si ese es el nombre correcto en el JSON
-            }
+                // 📌 Crear fila de la tabla con datos dinámicos
+                let row = `
+                    <tr>
+                        <td class="align-middle">${sensor.id}</td>
+                        <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
+                        <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
+                        <td>
+                            <div class="gauge-container">
+                                <div id="gauge-${index + 1}" class="gauge-chart"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-container">
+                                <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
+                                    Ver Detalles 
+                                </button>
+                                
+                                <button class="btn btn-danger btn-sm" onclick="deleteSensor(${sensor.id})">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                tableBody.append(row);
 
-
-            // 📌 Crear fila de la tabla con datos dinámicos
-            let row = `
+                // 🟢 Crear gauge chart para el sensor
+                createGauge(`gauge-${index + 1}`, lastAQI);
+            });
+        },
+        error: function () {
+            // ❌ Si hay error en la API, mostrar mensaje
+            tableBody.html(`
                 <tr>
-                    <td class="align-middle">${sensor.id}</td>
-                    <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
-                    <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
-                    <td>
-                        <div class="gauge-container">
-                            <div id="gauge-${index + 1}" class="gauge-chart" ></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="btn-container">
-                            <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
-                                Ver Detalles 
-                            </button>
-                            
-                            <button class="btn btn-danger btn-sm" onclick="deleteSensor(${sensor.id})">Eliminar</button>
-                        </div>
-                    </td>
+                    <td colspan="5" class="text-center text-danger">Error al cargar los sensores.</td>
                 </tr>
-            `;
-            tableBody.append(row);
-
-            // 🟢 Crear gauge chart para el sensor
-            createGauge(`gauge-${index + 1}`, lastAQI);
-        });
-    }).fail(function () {
-        // ❌ Si hay error en la API, mostrar mensaje
-        tableBody.html(`
-            <tr>
-                <td colspan="5" class="text-center text-danger">Error al cargar los sensores.</td>
-            </tr>
-        `);
+            `);
+        }
     });
 }
+
 
 function createGauge(chartId, value) {
     console.log(`⏳ Creando gauge para ID: ${chartId} con valor: ${value}`);
