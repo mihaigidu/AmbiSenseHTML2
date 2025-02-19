@@ -1,0 +1,59 @@
+/* Estilos Generales */
+body {
+    background-color: #dfdce3;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* SECCIONES */
+main {
+    padding: 50px 20px;
+}
+
+h2 {
+    color: #42326D;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* SECCIÓN EQUIPO */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.rounded-circle {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 3px solid #007d96;
+    margin-bottom: 10px;
+}
+
+/* 🔹 Corrección del Dropdown del perfil */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1050 !important;
+}
+
+.dropdown.show .dropdown-menu {
+    display: block !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 992px) {
+    .rounded-circle {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        padding: 30px 10px;
+    }
+}

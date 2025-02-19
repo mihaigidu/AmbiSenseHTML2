@@ -1,0 +1,94 @@
+/* Estructura principal */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #dfdce3;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+/* CONTENEDOR PRINCIPAL (Para que el contenido empuje el footer) */
+.content-wrapper {
+    flex-grow: 1;
+    padding-top: 90px;
+    /* Evita que el header tape el contenido */
+    padding-bottom: 30px;
+    /* Espacio extra para el footer */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+/* Estilos de los desplegables */
+.accordion {
+    background-color: #007d96;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 18px;
+    transition: 0.4s;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.accordion:hover {
+    background-color: #005f73;
+}
+
+.panel {
+    padding: 10px;
+    display: none;
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* TABLA */
+.table-container {
+    margin-top: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    display: block;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 15px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font-size: 16px;
+}
+
+th {
+    background-color: #007d96;
+    color: white;
+    text-align: center;
+}
