@@ -1,12 +1,14 @@
-/* Asegurar que el Footer esté siempre al final del contenido */
+/* Estilos generales para html y body */
 html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
+/* Contenedor del contenido principal */
+/* Agrega un padding-bottom para evitar que el contenido quede tapado por el footer */
 .content-wrapper {
-    flex: 1;
+    padding-bottom: 80px; /* Ajusta este valor según la altura de tu footer */
 }
 
 /* Estilo del Footer */
@@ -15,10 +17,14 @@ html, body {
 }
 
 footer {
+    position: fixed; /* Fija el footer en la ventana */
+    bottom: 0;
+    left: 0;
     background-color: #007d96;
     color: white;
     padding: 20px;
     width: 100%;
+    z-index: 1000; /* Asegura que se superponga sobre otros elementos */
 }
 
 /* Estilos de los enlaces del footer */
