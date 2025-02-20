@@ -58,28 +58,72 @@ h3 {
 #dropzone.dragover {
     background-color: #B8E6ED;
 }
-  
-table {
-    width: 90%;
+
+/* 
+   TABLE LAYOUT FIJO Y SCROLL EN TBODY
+   ------------------------------------
+   1) 'table-layout: fixed' obliga a que las columnas se repartan equitativamente.
+   2) El <thead> y <tbody> se convierten en 'display: block' para poder hacer scroll 
+      solo en el cuerpo. Así evitamos el espacio en blanco a la derecha.
+*/
+#dataTable {
     margin: 20px auto;
     border-collapse: collapse;
     background-color: var(--background-carrusel);
     border-radius: 10px;
-    overflow: hidden;
+    width: 90vw;           /* Ocupa el 90% del ancho del viewport */
+    table-layout: fixed;   /* Distribuye las columnas de forma fija */
 }
-  
+
+/* 
+   Separamos el thead y tbody en bloques distintos.
+   - thead ocupa la anchura total.
+   - tbody ocupa la misma anchura y tiene un alto máximo.
+*/
+#dataTable thead,
+#dataTable tbody {
+    display: block;
+}
+
+#dataTable thead {
+    width: 90vw;
+}
+
+/* Scroll vertical en el cuerpo */
+#dataTable tbody {
+    width: 90vw;
+    max-height: 50vh;      /* Ajusta la altura máxima que desees */
+    overflow-y: auto;      /* Aparece scroll vertical si excede 50vh */
+    overflow-x: hidden;    /* Evita scroll horizontal extra */
+}
+
+/* 
+   Cada fila se trata como 'table' para que las columnas se alineen 
+   con el ancho fijo.
+*/
+#dataTable tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Celdas */
 th,
 td {
     border: 1px solid var(--border-table);
     padding: 10px;
     text-align: center;
+    word-wrap: break-word; /* Ajusta palabras largas en varias líneas */
 }
-  
+
+/* Encabezados */
 th {
     background-color: var(--table-color);
     color: var(--text-color);
+    font-size: 1.2rem;
+    padding: 15px 5px;
 }
-  
+
 select,
 button {
     padding: 10px;
@@ -144,9 +188,8 @@ button:disabled {
         transform: rotate(360deg);
     }
 }
-  
-/* Ajuste del margen superior del contenido */
-/* Se ha reducido el margen superior para subir el contenido del body */
+
+/* Ajuste para subir el contenido del body */
 .content-wrapper {
-    margin-top: 2vh;
+    margin-top: -150px !important;
 }
