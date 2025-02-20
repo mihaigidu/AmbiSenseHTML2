@@ -43,27 +43,26 @@ body {
 main {
     flex: 1;
 }
+
 table {
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 15px;
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: var(--background-carrusel);
+    border-radius: 10px;
     overflow: hidden;
-    background: var(--background-color);
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 th,
 td {
     border: 1px solid var(--border-table);
-    padding: 12px;
-    text-align: left;
-    font-size: 16px;
+    padding: 10px;
+    text-align: center;
 }
 
 th {
-    background-color: var(--background-color);
+    background-color: var(--table-color);
     color: var(--text-color);
-    text-align: center;
 }
 
 .gauge-container {
