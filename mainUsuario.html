@@ -89,7 +89,42 @@
         }
     }
     
-    window.onload = verificarSesion;</script>
+    window.onload = verificarSesion;
+    
+    </script>
+
+<script>
+    async function obtenerDatosProtegidos() {
+    try {
+        const response = await fetch("http://localhost:8080/api/datos", {
+            method: "GET",
+            credentials: "include",  // Permite enviar cookies en la solicitud
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.text();  // O response.json() si devuelve JSON
+            console.log("✅ Datos protegidos recibidos:", data);
+            document.getElementById("resultado").innerText = data;
+        } else {
+            console.error("❌ Error al obtener datos: ", response.status);
+            document.getElementById("resultado").innerText = "Acceso no autorizado.";
+        }
+    } catch (error) {
+        console.error("⚠️ Error en la solicitud:", error);
+        document.getElementById("resultado").innerText = "Error en la solicitud.";
+    }
+}
+
+// Llamada automática al cargar la página
+window.onload = () => {
+    document.getElementById("btnDatos").addEventListener("click", obtenerDatosProtegidos);
+};
+
+</script>
+
 </body>
 
 </html>
