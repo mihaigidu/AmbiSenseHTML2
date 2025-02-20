@@ -10,47 +10,38 @@
     --background-carrusel: white;
     --table-color: white;
     --border-table: #2c2c2c;
-}
 
-/* Modo oscuro */
-[data-theme="dark"] {
-    --background-color: #2c2c2c;
+  }
+  
+  /* Estilo para modo oscuro */
+  [data-theme="dark"] {
+    --background-color: #5f5f5f;
     --text-color: #DFDCE3;
-    --header-color: #1a1a1a;
-    --footer-color: #1a1a1a;
+    --header-color: #2c2c2c;
+    --footer-color: #2c2c2c;
     --imagen-perfil-color: black;
-    --border-color: #444444;
+    --border-color: #363636;
     --h2-color: #DFDCE3;
     --border-video-color: #3b364b;
-    --background-carrusel: #333333;
-    --table-color: #1a1a1a;
-    --border-table: #DFDCE3;
-}
+    --background-carrusel: #505050;
+    --table-color: #2c2c2c;
+    --border-table: white;
+  }
 
-/* Aplicar los estilos de las variables */
+
+/* GENERAL */
 body {
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-h2, h3 {
-    color: var(--h2-color);
-}
-
-button, input, select {
-    background-color: var(--background-carrusel);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-    padding: 10px;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: var(--header-color);
-    color: white;
+/* CONTENEDOR PRINCIPAL */
+main {
+    flex: 1;
 }
 
 table {
@@ -62,7 +53,8 @@ table {
     overflow: hidden;
 }
 
-th, td {
+th,
+td {
     border: 1px solid var(--border-table);
     padding: 10px;
     text-align: center;
@@ -73,27 +65,17 @@ th {
     color: var(--text-color);
 }
 
-.modal-content {
-    background-color: var(--background-carrusel);
-    color: var(--text-color);
+.gauge-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    /* 🔹 Reducimos la altura para que sea más compacto */
+    padding: 0px;
 }
 
-input[type="datetime-local"] {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    border: 1px solid var(--border-color);
-}
-
-/* Botón para el modo oscuro */
-.dark-mode-toggle {
-    background-color: var(--header-color);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.dark-mode-toggle:hover {
-    background-color: var(--footer-color);
+.gauge-chart {
+    width: 100%;
+    height: 100%;
 }
