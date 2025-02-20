@@ -46,7 +46,7 @@ function loadRecentSensors() {
 
     // Crear gráficos para cada sensor almacenado
     sensors.forEach(sensorId => {
-        createSensorChart(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/sensores/${sensorId}`, sensorId);
+        createSensorChart(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores/${sensorId}`, sensorId);
     });
 }
 
