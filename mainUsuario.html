@@ -73,6 +73,23 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="js/funcionChart.js"></script>
+
+    <script>
+        async function verificarSesion() {
+        const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/validate", {
+            method: "GET",
+            credentials: "include"  // Permite enviar cookies
+        });
+    
+        if (response.ok) {
+            const data = await response.text();
+            console.log("Sesión activa:", data);
+        } else {
+            console.log("No hay sesión activa.");
+        }
+    }
+    
+    window.onload = verificarSesion;</script>
 </body>
 
 </html>
