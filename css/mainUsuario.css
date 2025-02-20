@@ -21,9 +21,9 @@
     --h2-color: #DFDCE3;
     --border-video-color: #3b364b;
     --background-carrusel: #505050;
-
 }
 
+/* Estilos generales */
 body,
 html {
     height: 100vh;
@@ -34,6 +34,31 @@ html {
     background-color: var(--background-color);
     color: var(--text-color);
 }
+
+/* ... Otros estilos ... */
+
+/* Estilos de los botones del carrusel (news-carousel) */
+.carousel-btn {
+    background: var(--header-color);
+    color: var(--imagen-perfil-color);
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+.carousel-btn:hover {
+    background: var(--header-color);
+}
+
+/* Overrride para que en modo oscuro los botones se vean con fondo azul y texto blanco */
+[data-theme="dark"] .carousel-btn {
+    background: #007D96;
+    color: #ffffff;
+}
+
 
 .content-wrapper {
     flex: 1;
