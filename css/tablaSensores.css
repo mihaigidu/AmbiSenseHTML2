@@ -43,6 +43,10 @@ body {
 main {
     flex: 1;
 }
+table{
+    background-color: var(--table-color);
+    color: var(--text-color);
+}
 
 .gauge-container {
     display: flex;
