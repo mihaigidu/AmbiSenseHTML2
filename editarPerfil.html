@@ -1,86 +1,94 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Perfil - AmbiSense</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- CSS del Footer -->
-    <link rel="stylesheet" href="css/footer.css">
-
-    <link rel="stylesheet" href="css/editarPerfil.css">
-
-    <!-- JS del Footer -->
-    <script src="js/footer.js" defer></script>
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Perfil</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  
+  <!-- Custom CSS para Header y Footer -->
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <script src="js/modoOscuro.js"></script>
+  
+  <!-- Estilos adicionales para el contenedor de edición -->
+  <style>
+    .content-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .edit-container {
+      max-width: 600px;
+      width: 100%;
+      background-color: var(--background-carrusel);
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      padding: 2rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .edit-container h2 {
+      color: var(--h2-color);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--imagen-perfil-color);
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
 </head>
-
 <body>
-    <header class="header navbar navbar-expand-lg">
-        <div class="container-fluid d-flex justify-content-between align-items-center">
-            <a href="/home" class="navbar-brand">
-                <img src="imagenes/LogoHorizontal.png" alt="Logo de la Empresa" style="height: 50px;">
-            </a>
+  <!-- Contenedor para el Header (se carga dinámicamente) -->
+  <div id="header"></div>
 
-            <!-- Botón menú hamburguesa -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuHeader"
-                aria-controls="menuHeader" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="menuHeader">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="/instalacion">Instalación</a></li>
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="/tienda">Tienda</a></li>
-                    <li class="nav-item"><a class="nav-link text-white fw-bold" href="/sensores">Sensores</a></li>
-                </ul>
-
-                <div class="perfil dropdown ms-3">
-                    <img src="imagenes/perfil.png" alt="Perfil" class="imagen-perfil dropdown-toggle"
-                        data-bs-toggle="dropdown">
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/perfil">Mi Perfil</a></li>
-                        <li><a class="dropdown-item" href="/configuracion">Configuración</a></li>
-                        <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </header>
-
+  <!-- Contenido principal -->
+  <div class="content-wrapper">
     <main class="edit-container">
-        <h2>Editar Perfil</h2>
-        <form>
-            <div class="mb-3">
-                <img src="imagenes/FotonUsuario.jpg" alt="Foto de Perfil" class="profile-pic">
-                <input type="file" class="form-control mt-2" id="profile-pic" accept="image/*">
-            </div>
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="name" value="Youssef Youssef">
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" value="youssefElPro@example.com">
-            </div>
-            <div class="mb-3">
-                <label for="subscription" class="form-label">Suscripción</label>
-                <select class="form-control" id="subscription">
-                    <option value="basic">Básico</option>
-                    <option value="premium" selected>Premium</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-success w-100">Guardar Cambios</button>
-            <a href="perfil.html" class="btn btn-secondary w-100 mt-2">Cancelar</a>
-        </form>
+      <h2>Editar Perfil</h2>
+      <form>
+        <div class="mb-3 text-center">
+          <img src="imagenes/FotonUsuario.jpg" alt="Foto de Perfil" class="profile-pic">
+          <input type="file" class="form-control mt-2" id="profile-pic" accept="image/*">
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="name" value="Youssef Youssef">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" value="youssefElPro@example.com">
+        </div>
+        <div class="mb-3">
+          <label for="subscription" class="form-label">Suscripción</label>
+          <select class="form-control" id="subscription">
+            <option value="basic">Básico</option>
+            <option value="premium" selected>Premium</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Guardar Cambios</button>
+        <a href="perfil.html" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+      </form>
     </main>
+  </div>
 
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Script del Header (carga header.html) -->
+  <script src="js/header.js"></script>
+  <!-- Script del Footer (inserta footer.html) -->
+  <script src="js/footer.js"></script>
 </body>
-
 </html>
