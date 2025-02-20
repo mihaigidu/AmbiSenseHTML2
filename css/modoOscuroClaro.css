@@ -8,6 +8,12 @@
     --h2-color: #007D96;
     --border-video-color: #7C719C;
     --background-carrusel: white;
+    --primary-color: #007D96;
+    --secondary-color: #7C719C;
+    --background-color: #DFDCE3;
+    --text-color: #333333;
+    --input-bg-color: #FFFFFF;
+    --error-color: #ff3333;
   }
   
   /* Estilo para modo oscuro */
