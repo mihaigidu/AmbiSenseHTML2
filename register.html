@@ -3,13 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Analizador de Salubridad</title>
+  <title>Registro - Analizador de Salubridad</title>
 
   <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Font Awesome -->
   <link
     rel="stylesheet"
@@ -17,84 +14,21 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
   />
-  <link rel="stylesheet" href="css/login.css">
-
-  <script defer src="js/login.js"></script>
-  
+  <link rel="stylesheet" href="css/register.css">
+  <script defer src="js/register.js"></script>
 </head>
 <body>
-
   <video autoplay loop muted class="background-video">
     <source src="imagenes/VID-20250129-WA0019.mp4" type="video/mp4">
     Tu navegador no soporta videos.
   </video>
 
+  <!-- Contenedor con efecto flip -->
   <div class="login-container" id="loginContainer">
-    <!-- Cara frontal: Login -->
+    <!-- Cara frontal: REGISTRO (visible por defecto) -->
     <div class="card card-front">
-      <form id="loginForm">
-        <h2 class="login-title">Iniciar Sesión</h2>
-
-        <!-- Correo Electrónico (Login) -->
-        <div class="mb-3">
-          <label for="correoElectronico" class="form-label">Correo Electrónico</label>
-          <input
-            type="text"
-            class="form-control"
-            id="correoElectronico"
-            name="correoElectronico"
-            placeholder="Ingrese su Correo Electrónico"
-            required
-          />
-          <!-- Reglas de email para el LOGIN -->
-          <div class="email-rules" id="emailRulesLogin">
-            <p id="login-emailformat">Debe tener un formato de email válido (usuario@dominio.com)</p>
-          </div>
-        </div>
-
-        <!-- Contraseña (Login) -->
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            placeholder="Ingrese su contraseña"
-            required
-          />
-          <!-- Reglas de contraseña para el LOGIN -->
-          <div class="password-rules" id="passwordRulesLogin">
-            <p id="login-length">Mínimo 8 caracteres</p>
-            <p id="login-uppercase">Al menos 1 mayúscula</p>
-            <p id="login-digit">Al menos 1 dígito</p>
-          </div>
-        </div>
-
-        <button type="submit" class="btn btn-login">Ingresar</button>
-        
-        <!-- Botón de Google con ícono -->
-        <button type="button" class="btn btn-google" id="googleLogin">
-          <i class="fa-brands fa-google me-2"></i>
-          Iniciar sesión con Google
-        </button>
-        
-        <!-- Botón de GitHub con ícono -->
-        <button type="button" class="btn btn-github" id="githubLogin">
-          <i class="fa-brands fa-github me-2"></i>
-          Iniciar sesión con GitHub
-        </button>
-      </form>
-      <p class="footer-text">
-        ¿No tienes una cuenta? <a href="#" id="registerLink">Regístrate aquí</a>
-      </p>
-    </div>
-
-    <!-- Cara trasera: Registro -->
-    <div class="card card-back">
       <form id="registerForm">
         <h2 class="login-title">Regístrate</h2>
-
         <!-- Nombre Completo -->
         <div class="mb-3">
           <label for="fullname" class="form-label">Nombre Completo</label>
@@ -107,7 +41,6 @@
             required
           />
         </div>
-
         <!-- Correo Electrónico (Registro) -->
         <div class="mb-3">
           <label for="email" class="form-label">Correo Electrónico</label>
@@ -119,12 +52,10 @@
             placeholder="Ingrese su correo electrónico"
             required
           />
-          <!-- Reglas de email para REGISTRO -->
           <div class="email-rules" id="emailRulesRegister">
             <p id="register-emailformat">Debe tener un formato de email válido (usuario@dominio.com)</p>
           </div>
         </div>
-
         <!-- Contraseña (Registro) -->
         <div class="mb-3">
           <label for="passwordReg" class="form-label">Contraseña</label>
@@ -136,21 +67,70 @@
             placeholder="Cree una contraseña"
             required
           />
-          <!-- Reglas de contraseña para el REGISTRO -->
           <div class="password-rules" id="passwordRulesReg">
             <p id="reg-length">Mínimo 8 caracteres</p>
             <p id="reg-uppercase">Al menos 1 mayúscula</p>
             <p id="reg-digit">Al menos 1 dígito</p>
           </div>
         </div>
-
         <button type="submit" class="btn btn-login">Registrarse</button>
       </form>
       <p class="footer-text">
-        ¿Ya tienes una cuenta? <a href="#" id="backToLoginLink">Inicia sesión aquí</a>
+        ¿Ya tienes una cuenta? <a href="#" id="loginLink">Inicia sesión aquí</a>
+      </p>
+    </div>
+
+    <!-- Cara trasera: LOGIN -->
+    <div class="card card-back">
+      <form id="loginForm">
+        <h2 class="login-title">Iniciar Sesión</h2>
+        <!-- Correo Electrónico (Login) -->
+        <div class="mb-3">
+          <label for="correoElectronico" class="form-label">Correo Electrónico</label>
+          <input
+            type="text"
+            class="form-control"
+            id="correoElectronico"
+            name="correoElectronico"
+            placeholder="Ingrese su correo electrónico"
+            required
+          />
+          <div class="email-rules" id="emailRulesLogin">
+            <p id="login-emailformat">Debe tener un formato de email válido (usuario@dominio.com)</p>
+          </div>
+        </div>
+        <!-- Contraseña (Login) -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Ingrese su contraseña"
+            required
+          />
+          <div class="password-rules" id="passwordRulesLogin">
+            <p id="login-length">Mínimo 8 caracteres</p>
+            <p id="login-uppercase">Al menos 1 mayúscula</p>
+            <p id="login-digit">Al menos 1 dígito</p>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-login">Ingresar</button>
+        <!-- Botones de login con Google y GitHub -->
+        <button type="button" class="btn btn-google" id="googleLogin">
+          <i class="fa-brands fa-google me-2"></i>
+          Iniciar sesión con Google
+        </button>
+        <button type="button" class="btn btn-github" id="githubLogin">
+          <i class="fa-brands fa-github me-2"></i>
+          Iniciar sesión con GitHub
+        </button>
+      </form>
+      <p class="footer-text">
+        ¿No tienes una cuenta? <a href="#" id="backToRegisterLink">Regístrate aquí</a>
       </p>
     </div>
   </div>
-
 </body>
 </html>
