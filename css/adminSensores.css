@@ -111,7 +111,7 @@ select {
 }
   
 button {
-    background-color: var(--table-color);
+    background-color: var(--background-carrusel);
     color: var(--text-color);
     cursor: pointer;
     transition: background-color 0.3s;
