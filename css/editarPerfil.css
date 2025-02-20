@@ -6,8 +6,6 @@ body {
   min-height: 100vh;
 }
 
-
-
 .edit-container {
   max-width: 600px;
   margin: 40px auto;
@@ -56,8 +54,6 @@ body {
   align-items: center;
   padding: 2rem;
 }
-
-
 
 .profile-pic {
   width: 100px;
