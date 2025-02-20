@@ -158,21 +158,22 @@ document.addEventListener("DOMContentLoaded", function () {
   async function checkLoginStatus() {
     try {
         const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/user", {
-            credentials: "include"  // Permite enviar cookies
+            method: "GET",
+            credentials: "include"  // Incluye la cookie en la solicitud
         });
 
         if (response.ok) {
             const user = await response.json();
             console.log("Usuario autenticado:", user);
-            document.getElementById("loginForm").style.display = "none";
-            document.getElementById("logoutButton").style.display = "block";
         } else {
-            console.log("Usuario no autenticado.");
+            console.warn("Usuario no autenticado.");
+            window.location.href = "/login";
         }
     } catch (error) {
         console.error("Error al verificar la sesión:", error);
     }
 }
+
 
 window.onload = checkLoginStatus;
 
