@@ -72,6 +72,7 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
     // Enviar la información a la API
     fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/private/sensores/upload", {
         method: "POST",
+        credentials:"include",
         headers: {
             "Content-Type": "application/json"
         },
