@@ -96,7 +96,7 @@
 <script>
     async function obtenerDatosProtegidos() {
     try {
-        const response = await fetch("http://localhost:8080/api/datos", {
+        const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/datos", {
             method: "GET",
             credentials: "include",  // Permite enviar cookies en la solicitud
             headers: {
