@@ -8,6 +8,10 @@
     <h1>Bienvenido a AmbiSense</h1>
     <button onclick="githubLogin()">Iniciar sesión con GitHub</button>
 
-    <script src="js/auth.js"></script>
+    <script>
+        function githubLogin() {
+            window.location.href = 'http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/github';
+        }
+    </script>
 </body>
 </html>
