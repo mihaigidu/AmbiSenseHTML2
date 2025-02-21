@@ -110,35 +110,7 @@
 
     <!-- Cargar el Header JS después de que el DOM esté listo -->
     <script src="js/header.js"></script>
-    <script>
-        // checkSession.js: Verifica si el usuario está autenticado
-        async function checkLoginStatus() {
-            try {
-                const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/user", {
-                    method: "GET",
-                    credentials: "include"  // Incluye la cookie en la solicitud
-                });
-
-                if (response.ok) {
-                    const user = await response.json();
-                    console.log("Usuario autenticado:", user);
-                    document.getElementById("userMenu").style.display = "block";
-                    document.getElementById("loginButton").style.display = "none";
-                } else {
-                    console.warn("Usuario no autenticado.");
-                    window.location.href = "/login.html";
-                }
-            } catch (error) {
-                console.error("Error al verificar la sesión:", error);
-                window.location.href = "/login.html";
-            }
-        }
-
-        // Ejecutar la verificación al cargar la página
-        document.addEventListener("DOMContentLoaded", checkLoginStatus);
-
-    </script>
-
+    
 </body>
 
 </html>
