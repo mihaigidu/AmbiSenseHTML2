@@ -3,31 +3,42 @@
 // URL del backend (ajústala según tu entorno)
 const BASE_URL = 'http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com';
 
-// Función para iniciar sesión
-async function login() {
-    try {
-        const response = await fetch(`${BASE_URL}/auth/user`, {
-            method: 'GET',
-            credentials: 'include' // Incluye cookies si es necesario
-        });
 
-        if (!response.ok) {
-            throw new Error('Error en el inicio de sesión.');
+// Iniciar sesión con GitHub
+function githubLogin() {
+    // Redirige al flujo de autenticación de GitHub
+    window.location.href = `${BASE_URL}/oauth2/authorization/github`;
+}
+
+// Almacenar el token después de la redirección
+async function handleGitHubCallback() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+        try {
+            const response = await fetch(`${BASE_URL}/auth/github`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al autenticar con GitHub.');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('jwtToken', data.token); // Guardar token JWT
+            alert(`Bienvenido, ${data.name}`);
+            window.location.href = '/home2'; // Redirigir al dashboard
+        } catch (error) {
+            console.error('Error en la autenticación:', error);
         }
-
-        const data = await response.json();
-        localStorage.setItem('jwtToken', data.token); // Guardar token en almacenamiento local
-        alert(`Bienvenido, ${data.name}`);
-        window.location.href = '/home2'; // Redirige a la página protegida
-    } catch (error) {
-        console.error('Error al iniciar sesión:', error);
-        alert('No se pudo iniciar sesión.');
     }
 }
 
-// Cierre de sesión
+// Cerrar sesión
 function logout() {
-    localStorage.removeItem('jwtToken'); // Eliminar el token
-    alert('Sesión cerrada con éxito.');
-    window.location.href = '/login'; // Redirige al inicio
+    localStorage.removeItem('jwtToken');
+    alert('Sesión cerrada.');
+    window.location.href = 'index.html';
 }

@@ -2,18 +2,19 @@
 
 const BASE_URL = 'http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com';
 
-// Verificar si el token existe y es válido
+
+// Verificar token
 function checkAuth() {
     const token = localStorage.getItem('jwtToken');
     if (!token) {
         alert('No estás autenticado. Redirigiendo...');
         window.location.href = '/login';
-        return;
+        return null;
     }
     return token;
 }
 
-// Obtener la lista de usuarios (endpoint protegido)
+// Cargar usuarios
 async function loadUsers() {
     const token = checkAuth();
     if (!token) return;
@@ -22,7 +23,7 @@ async function loadUsers() {
         const response = await fetch(`${BASE_URL}/public/users`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}` // Envía el token en la cabecera
+                'Authorization': `Bearer ${token}`
             }
         });
 
@@ -35,13 +36,12 @@ async function loadUsers() {
         userList.innerHTML = '';
 
         users.forEach(user => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${user.name} - ${user.email}`;
-            userList.appendChild(listItem);
+            const item = document.createElement('li');
+            item.textContent = `${user.name} - ${user.email}`;
+            userList.appendChild(item);
         });
     } catch (error) {
         console.error('Error al cargar usuarios:', error);
-        alert('No se pudieron cargar los usuarios.');
     }
 }
 
