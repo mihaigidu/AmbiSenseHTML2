@@ -6,45 +6,47 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-}
-
-/* CONTENEDOR PRINCIPAL */
-main {
+  }
+  
+  /* CONTENEDOR PRINCIPAL */
+  main {
     flex: 1;
-}
-
-table {
+  }
+  
+  /* Estilos de la tabla */
+  table {
     width: 90%;
     margin: 20px auto;
     border-collapse: collapse;
     background-color: var(--background-carrusel);
     border-radius: 10px;
     overflow: hidden;
-}
-
-th,
-td {
+  }
+  
+  th,
+  td {
     border: 1px solid var(--border-table);
     padding: 10px;
     text-align: center;
-}
-
-th {
+  }
+  
+  th {
     background-color: var(--table-color);
     color: var(--text-color);
-}
-
-.gauge-container {
+  }
+  
+  /* Contenedor y gráfico de medidores (si se utilizan) */
+  .gauge-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 10vh;
-    /* 🔹 Reducimos la altura para que sea más compacto */
-    padding: 0px;
-}
-
-.gauge-chart {
+    height: 10vh; /* Altura compacta */
+    padding: 0;
+  }
+  
+  .gauge-chart {
     width: 100%;
     height: 100%;
-}
+  }
+  

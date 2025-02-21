@@ -1,116 +1,106 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Listado de Sensores - AmbiSense</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Listado de Sensores - AmbiSense</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
 
-    <!-- Bootstrap y FontAwesome -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Bootstrap y FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- Estilos Globales -->
-    <link rel="stylesheet" href="css/header.css">
+  <!-- Estilos Globales -->
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <link rel="stylesheet" href="css/tablaSensores.css">
+  <link rel="stylesheet" href="css/modoOscuroClaro.css">
 
-    <!-- Scripts de librerías -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Scripts de librerías -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js" defer></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
 
-    <!-- CSS del Footer -->
-    <link rel="stylesheet" href="css/footer.css">
+  <!-- JS del Footer y Tabla de Sensores -->
+  <script src="js/footer.js" defer></script>
+  <script src="js/tablaSensores.js" defer></script>
 
-    <link rel="stylesheet" href="css/tablaSensores.css">
-
-    <link rel="stylesheet" href="css/modoOscuroClaro.css">
-
-    <!-- JS del Footer -->
-    <script src="js/footer.js" defer></script>
-
-    <script defer src="js/tablaSensores.js"></script>
-
-    <script src="js/modoOscuro.js"></script>
-
+  <!-- Modo Oscuro (se recomienda usar defer para evitar bloqueos) -->
+  <script src="js/modoOscuro.js" defer></script>
 </head>
-
 <body>
+  <!-- HEADER DINÁMICO -->
+  <div id="header"></div>
 
-    <!-- HEADER DINÁMICO -->
-    <div id="header"></div>
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="container my-5">
+    <h2 class="text-center mb-4">Listado de Sensores</h2>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="container my-5">
-        <h2 class="text-center mb-4">Listado de Sensores</h2>
+    <!-- Botones de acción con atributos aria para mejorar la accesibilidad -->
+    <div class="text-end mb-3">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSensorModal" aria-label="Añadir Sensor">
+        <i class="fa fa-plus"></i> Añadir Sensor
+      </button>
+      <button class="btn btn-primary" onclick="compararSensores()" aria-label="Comparar Sensores">
+        <i class="fa fa-chart-bar"></i> Comparar
+      </button>
+    </div>
 
-        <!-- Botones de acción -->
-        <div class="text-end mb-3">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSensorModal">
-                <i class="fa fa-plus"></i> Añadir Sensor
-            </button>
-            <button class="btn btn-primary" onclick="compararSensores()">
-                <i class="fa fa-chart-bar"></i> Comparar
-            </button>
+    <!-- MODAL PARA AÑADIR SENSOR -->
+    <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addSensorModalLabel">Añadir Sensor</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addSensorForm">
+              <div class="mb-3">
+                <label for="sensorName" class="form-label">Nombre del Sensor</label>
+                <input type="text" class="form-control" id="sensorName" required>
+              </div>
+              <div class="mb-3">
+                <label for="sensorLocation" class="form-label">Ubicación</label>
+                <input type="text" class="form-control" id="sensorLocation" required>
+              </div>
+              <div class="mb-3">
+                <label for="sensorType" class="form-label">Tipo de Sensor</label>
+                <input type="text" class="form-control" id="sensorType" required>
+              </div>
+              <div class="mb-3">
+                <label for="creationDate" class="form-label">Fecha de Creación</label>
+                <input type="datetime-local" class="form-control" id="creationDate" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Crear Sensor</button>
+            </form>
+            <div id="addSensorMessage" class="mt-3"></div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <!-- MODAL PARA AÑADIR SENSOR -->
-        <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addSensorModalLabel">Añadir Sensor</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="addSensorForm">
-                            <div class="mb-3">
-                                <label for="sensorName" class="form-label">Nombre del Sensor</label>
-                                <input type="text" class="form-control" id="sensorName" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="sensorLocation" class="form-label">Ubicación</label>
-                                <input type="text" class="form-control" id="sensorLocation" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="sensorType" class="form-label">Tipo de Sensor</label>
-                                <input type="text" class="form-control" id="sensorType" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="creationDate" class="form-label">Fecha de Creación</label>
-                                <input type="datetime-local" class="form-control" id="creationDate" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Crear Sensor</button>
-                        </form>
-                        <div id="addSensorMessage" class="mt-3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- TABLA DE SENSORES -->
+    <table class="table table-bordered text-center align-middle">
+      <caption class="visually-hidden">Tabla de sensores con información de ID, nombre, ubicación, AQI y acciones disponibles</caption>
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Ubicación</th>
+          <th>AQI</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Aquí se insertarán los sensores dinámicamente -->
+      </tbody>
+    </table>
+  </main>
 
-        <!-- TABLA DE SENSORES -->
-        <table class="table table-bordered text-center align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Ubicación</th>
-                    <th>AQI</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Aquí se insertarán los sensores dinámicamente -->
-            </tbody>
-        </table>
-    </main>
+  <!-- Bootstrap Bundle JS (Incluye Popper.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 
-    <!-- Bootstrap Bundle JS (Incluye Popper.js necesario para dropdowns) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Cargar el Header JS después de que el DOM esté listo -->
-    <script src="js/header.js"></script>
-    
+  <!-- Cargar el Header JS después de que el DOM esté listo -->
+  <script src="js/header.js" defer></script>
 </body>
-
 </html>
