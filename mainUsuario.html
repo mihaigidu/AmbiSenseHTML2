@@ -40,7 +40,7 @@
     <section class="section" id="section2">
         <h2>Nuestros Sensores</h2>
         <div class="sensor-container">
-            <button class="carousel-control-prev" type="button" data-bs-target="#sensorCarousel" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#sensorCarousel" data-bs-slide="prev" aria-label="Anterior">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             </button>
             <div id="sensorCarousel" class="carousel slide">
@@ -54,7 +54,7 @@
                     
                 </div>
             </div>
-            <button class="carousel-control-next" type="button" data-bs-target="#sensorCarousel" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#sensorCarousel" data-bs-slide="next" aria-label="Siguiente">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </button>
         </div>
@@ -75,56 +75,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="js/funcionChart.js"></script>
 
-    <script>
-        async function verificarSesion() {
-        const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/validate", {
-            method: "GET",
-            credentials: "include"  // Permite enviar cookies
-        });
-    
-        if (response.ok) {
-            const data = await response.text();
-            console.log("Sesión activa:", data);
-        } else {
-            console.log("No hay sesión activa.");
-        }
-    }
-    
-    window.onload = verificarSesion;
-    
-    </script>
-
-<script>
-    async function obtenerDatosProtegidos() {
-    try {
-        const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/datos", {
-            method: "GET",
-            credentials: "include",  // Permite enviar cookies en la solicitud
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (response.ok) {
-            const data = await response.text();  // O response.json() si devuelve JSON
-            console.log("✅ Datos protegidos recibidos:", data);
-            document.getElementById("resultado").innerText = data;
-        } else {
-            console.error("❌ Error al obtener datos: ", response.status);
-            document.getElementById("resultado").innerText = "Acceso no autorizado.";
-        }
-    } catch (error) {
-        console.error("⚠️ Error en la solicitud:", error);
-        document.getElementById("resultado").innerText = "Error en la solicitud.";
-    }
-}
-
-// Llamada automática al cargar la página
-window.onload = () => {
-    document.getElementById("btnDatos").addEventListener("click", obtenerDatosProtegidos);
-};
-
-</script>
 
 </body>
 
