@@ -1,17 +1,52 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>AmbiSense - Inicio de Sesión</title>
-</head>
-<body>
-    <h1>Bienvenido a AmbiSense</h1>
-    <button onclick="githubLogin()">Iniciar sesión con GitHub</button>
-
+    <title>Login y Registro</title>
     <script>
-        function githubLogin() {
-            window.location.href = 'http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/github';
+        async function register() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+
+            const response = await fetch('http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const result = await response.text();
+            alert(result);
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const response = await fetch('http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const result = await response.text();
+            alert(result);
         }
     </script>
+</head>
+<body>
+    <h1>Registro</h1>
+    <form onsubmit="event.preventDefault(); register();">
+        <input type="text" id="regName" placeholder="Nombre" required><br>
+        <input type="email" id="regEmail" placeholder="Email" required><br>
+        <input type="password" id="regPassword" placeholder="Contraseña" required><br>
+        <button type="submit">Registrar</button>
+    </form>
+
+    <h1>Login</h1>
+    <form onsubmit="event.preventDefault(); login();">
+        <input type="email" id="loginEmail" placeholder="Email" required><br>
+        <input type="password" id="loginPassword" placeholder="Contraseña" required><br>
+        <button type="submit">Iniciar Sesión</button>
+    </form>
 </body>
 </html>
