@@ -147,17 +147,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  const BASE_URL = "52.200.144.251:8080";
   // Botones de Login con Google y GitHub
   document.getElementById("googleLogin").addEventListener("click", function () {
-    window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/google";
+    window.location.href = BASE_URL +"/oauth2/authorization/google";
   });
   document.getElementById("githubLogin").addEventListener("click", function () {
-    window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/github";
+    window.location.href = BASE_URL + "/oauth2/authorization/github";
   });
 
   async function checkLoginStatus() {
     try {
-        const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/user", {
+        const response = await fetch(BASE_URL + "/auth/user", {
             method: "GET",
             credentials: "include"  // Incluye la cookie en la solicitud
         });
