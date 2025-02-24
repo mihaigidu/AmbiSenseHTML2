@@ -4,7 +4,7 @@ const { jsPDF } = window.jspdf;
 async function generarReporte(sensorId) {
     try {
         // Obtener los datos del sensor desde la API
-        const response = await fetch(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores/${sensorId}`);
+        const response = await fetch(`api/public/sensores/${sensorId}`);
         const sensorData = await response.json();
 
         // Encontrar el último día con datos

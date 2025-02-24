@@ -7,7 +7,7 @@ const dropzone = document.getElementById('dropzone');
 
         // Obtener sensores y llenar el select
         function fetchSensores() {
-            fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/public/sensores")
+            fetch("api/public/sensores")
                 .then(response => response.json())
                 .then(data => {
                     sensorSelect.innerHTML = "<option value=''>Selecciona un sensor</option>";
@@ -126,7 +126,7 @@ const dropzone = document.getElementById('dropzone');
                 return;
             }
 
-            fetch(`http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/private/lecturas/upload/${sensorId}`, {
+            fetch(`api/private/lecturas/upload/${sensorId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

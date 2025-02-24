@@ -128,12 +128,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Botones de Login con Google y GitHub
   document.getElementById("googleLogin").addEventListener("click", function () {
-    window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/google";
+    window.location.href = "log/google";
   });
   document.getElementById("githubLogin").addEventListener("click", function () {
-    window.location.href = "http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/oauth2/authorization/github";
+    window.location.href = "log/github";
   });
-
+/*
   async function checkLoginStatus() {
     try {
       const response = await fetch("http://ambisensepruebaapi.us-east-1.elasticbeanstalk.com/auth/user", {
@@ -152,5 +152,5 @@ document.addEventListener("DOMContentLoaded", function () {
       console.error("Error al verificar la sesión:", error);
     }
   }
-  window.onload = checkLoginStatus;
+  window.onload = checkLoginStatus;*/
 });
