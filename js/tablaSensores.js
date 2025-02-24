@@ -114,7 +114,7 @@ function fetchSensorsAQI() {
         success: function (data) {
             if (!Array.isArray(data)) {
                 console.error("Respuesta inesperada:", data);
-                tableBody.html(`<tr><td colspan="5" class="text-center text-danger">Error A1: De Ambisense, lo sentimos, reporte el bug en contactanos con capturas</td></tr>`);
+                tableBody.html(`<tr><td colspan="5" class="text-center text-danger">Error A1: Ambisense, lo sentimos, reporte el bug en contactanos con capturas</td></tr>`);
                 return;
             }
 
@@ -165,7 +165,7 @@ function fetchSensorsAQI() {
             console.error("Error en la API:", xhr.responseText);
             tableBody.html(`
                 <tr>
-                    <td colspan="5" class="text-center text-danger">Error al cargar los sensores. Inténtelo de nuevo.</td>
+                    <td colspan="5" class="text-center text-danger">Error A2: Ambisense, lo sentimos, reporte el bug en contactanos con capturas</td>
                 </tr>
             `);
         }

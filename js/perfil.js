@@ -6,7 +6,9 @@ document.getElementById("logoutButton").addEventListener("click", async () => {
         });
 
         if (response.ok) {
+            alert(response);
             alert("Sesión cerrada con éxito.");
+            
             window.location.href = "/login";
         }
     } catch (error) {
