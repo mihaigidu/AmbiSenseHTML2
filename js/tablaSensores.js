@@ -114,7 +114,7 @@ function fetchSensorsAQI() {
         success: function (data) {
             if (!Array.isArray(data)) {
                 console.error("Respuesta inesperada:", data);
-                tableBody.html(`<tr><td colspan="5" class="text-center text-danger">Error: Respuesta no válida</td></tr>`);
+                tableBody.html(`<tr><td colspan="5" class="text-center text-danger">Error A1: De Ambisense, lo sentimos, reporte el bug en contactanos con capturas</td></tr>`);
                 return;
             }
 
