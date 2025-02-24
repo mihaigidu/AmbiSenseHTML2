@@ -6,25 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, 500);
 });
-window.onload = () => {
-    fetch('/api/usuario', {
-        method: 'GET',
-        credentials: 'include'  // Asegura el envío de la cookie JSESSIONID
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('No autenticado');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Usuario autenticado:', data);
-    })
-    .catch(error => {
-        console.warn('No autenticado, redirigiendo al login...');
-        window.location.href = '/login';
-    });
-};
+
 function deleteSensor(sensorId) {
     if (!confirm(`¿Estás seguro de que deseas eliminar el sensor con ID ${sensorId}?`)) {
         return;
