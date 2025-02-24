@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 500);
 });
 
+//funcion para eliminar un sensor
 function deleteSensor(sensorId) {
     if (!confirm(`¿Estás seguro de que deseas eliminar el sensor con ID ${sensorId}?`)) {
         return;
