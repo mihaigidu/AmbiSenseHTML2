@@ -147,15 +147,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  const BASE_URL = "52.200.144.251:8080";
+  
   // Botones de Login con Google y GitHub
   document.getElementById("googleLogin").addEventListener("click", function () {
-    window.location.href = BASE_URL +"/oauth2/authorization/google";
+    window.location.href = "log/google";
   });
   document.getElementById("githubLogin").addEventListener("click", function () {
-    window.location.href = BASE_URL + "/oauth2/authorization/github";
+    window.location.href = "log/github";
   });
-
+/*
   async function checkLoginStatus() {
     try {
         const response = await fetch(BASE_URL + "/auth/user", {
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 
 
-window.onload = checkLoginStatus;
+window.onload = checkLoginStatus;*/
 
 });
 
