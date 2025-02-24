@@ -32,6 +32,7 @@ function fetchDates(sensorNumber) {
 
 
 
+
 let allData = { sensor1: {}, sensor2: {} };
 let timeLabels = { sensor1: [], sensor2: [] };
 
