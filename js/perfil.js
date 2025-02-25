@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function cargarPerfilUsuario() {
     try {
-        const response = await fetch("/public/user", {
+        const response = await fetch("/api/public/user", {
             method: "GET",
             credentials: "include"
         });
