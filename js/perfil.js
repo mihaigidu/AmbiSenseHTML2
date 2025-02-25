@@ -37,7 +37,7 @@ async function cargarPerfilUsuario() {
             document.querySelector("h2").textContent = usuario.name || "Error A2";
             document.querySelector(".text-muted").textContent = `Usuario desde ${usuario.createdAt?.substring(0, 4) || "N/A"}`;
             document.querySelector("p strong:nth-of-type(1)").nextSibling.textContent = ` ${usuario.email}`;
-            document.querySelector("p strong:nth-of-type(2)").nextSibling.textContent = ` ${usuario.rol || "error"}`;
+            document.getElementById("rol").textContent = usuario.rol || "error";
 
         } else {
             console.error("No se pudo cargar la información del usuario.");
