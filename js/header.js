@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             warningDiv.role = 'alert';
             warningDiv.innerText = 'No se pudo cargar el header. Por favor, revisa tu conexión o inténtalo más tarde.';
 
-            // Insertar el alert al principio del body (o donde prefieras)
+            // Insertar el alert al principio del body
             document.body.prepend(warningDiv);
         });
 });

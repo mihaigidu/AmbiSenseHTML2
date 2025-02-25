@@ -29,6 +29,8 @@ async function cargarPerfilUsuario() {
 
         if (response.ok) {
             const usuario = await response.json();
+            console.log("Información del usuario:", usuario);
+            comsole.log(response);
 
             // Actualizar la interfaz con la información del usuario
             document.querySelector(".profile-pic").src = usuario.profilePicture || "imagenes/FotonUsuario.jpg";
