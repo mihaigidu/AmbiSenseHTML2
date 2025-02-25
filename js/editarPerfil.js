@@ -52,7 +52,6 @@ async function actualizarPerfilUsuario() {
     const usuarioData = {
         name: nombre,
         email: email,
-        
     };
 
     // Crear FormData para enviar el JSON y la imagen (si se sube)
@@ -73,7 +72,7 @@ async function actualizarPerfilUsuario() {
 
         if (response.ok) {
             alert("Perfil actualizado con éxito.");
-            window.location.href = "perfil";  // Redirige de nuevo a la página de perfil
+            window.location.href = "/perfil";  // Redirige de nuevo a la página de perfil
         } else {
             alert("Error al actualizar el perfil.");
         }
