@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    // Cargar datos del usuario al cargar la página
     await cargarDatosUsuario();
 
-    // Manejar el envío del formulario
     document.querySelector("form").addEventListener("submit", async (e) => {
         e.preventDefault();
         await actualizarPerfilUsuario();
@@ -23,7 +21,6 @@ async function cargarDatosUsuario() {
             // Llenar el formulario con los datos actuales del usuario
             document.getElementById("name").value = usuario.name || "";
             document.getElementById("email").value = usuario.email || "";
-            
 
             // Cargar imagen si tiene una, o mostrar imagen por defecto
             const profilePic = document.querySelector(".profile-pic");
@@ -36,11 +33,10 @@ async function cargarDatosUsuario() {
     }
 }
 
-// Actualizar el perfil del usuario
+// Actualizar el perfil del usuario y mostrar los datos actualizados
 async function actualizarPerfilUsuario() {
     const nombre = document.getElementById("name").value;
     const email = document.getElementById("email").value;
-    
     const fileInput = document.getElementById("profile-pic");
 
     if (!nombre || !email) {
@@ -51,7 +47,7 @@ async function actualizarPerfilUsuario() {
     // Crear objeto de usuario para enviar como JSON
     const usuarioData = {
         name: nombre,
-        email: email,
+        email: email
     };
 
     // Crear FormData para enviar el JSON y la imagen (si se sube)
@@ -71,8 +67,18 @@ async function actualizarPerfilUsuario() {
         });
 
         if (response.ok) {
-            alert("Perfil actualizado con éxito.");
-            window.location.href = "/perfil";  // Redirige de nuevo a la página de perfil
+            const usuarioActualizado = await response.json();
+
+            // Actualizar la interfaz con los datos devueltos
+            document.getElementById("name").value = usuarioActualizado.name;
+            document.getElementById("email").value = usuarioActualizado.email;
+
+            // Actualizar la foto de perfil si fue cambiada
+            const profilePic = document.querySelector(".profile-pic");
+            profilePic.src = usuarioActualizado.profilePicture || "imagenes/FotonUsuario.jpg";
+
+            alert("Perfil actualizado con éxito." + "json" + usuarioActualizado);
+            
         } else {
             alert("Error al actualizar el perfil.");
         }
