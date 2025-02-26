@@ -54,10 +54,10 @@ async function actualizarPerfilUsuario() {
         });
 
         if (response.ok) {
-            const usuario = await response.json();
+            let usuario = await response.json();
 
             // Crear objeto de usuario para enviar como JSON
-            const usuarioData = {
+            let usuarioData = {
                 id: usuario.id,
                 name: nombre,
                 email: email,
@@ -70,13 +70,13 @@ async function actualizarPerfilUsuario() {
             };
 
             // Crear FormData para enviar el JSON y la imagen (si se sube)
-            const formData = new FormData();
+           /* const formData = new FormData();
             formData.append("usuario", new Blob([JSON.stringify(usuarioData)], { type: "application/json" }));
 
             // Adjuntar la imagen si el usuario subió una
             if (fileInput.files.length > 0) {
                 formData.append("file", fileInput.files[0]);
-            }
+            }*/
             
 
             try {
@@ -84,9 +84,9 @@ async function actualizarPerfilUsuario() {
                     method: "POST",
                     credentials: "include",
                     headers: {
-                        "Content-Type": "multipart/form-data"
+                        "Content-Type": "application/json"
                     },
-                    body: formData
+                    body: JSON.stringify(usuarioData)
                 });
         
                 if (response.ok) {
