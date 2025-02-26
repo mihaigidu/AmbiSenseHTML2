@@ -15,6 +15,7 @@ function deleteSensor(sensorId) {
 
     fetch(`api/private/sensores/delete/${sensorId}`, {
         method: "DELETE",
+        credentials: "include",
         headers: {
             "Content-Type": "application/json"
         }
