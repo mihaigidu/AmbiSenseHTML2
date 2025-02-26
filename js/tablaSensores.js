@@ -1,19 +1,29 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { PerfilUsuario } from "./usuarioService.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // Inicializar dropdowns de Bootstrap
     setTimeout(() => {
         const dropdowns = document.querySelectorAll('.dropdown-toggle');
         dropdowns.forEach(dropdown => {
             new bootstrap.Dropdown(dropdown);
         });
     }, 500);
-});
-import { PerfilUsuario } from "./usuarioService.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+    // Obtener información del usuario
     const usuario = await PerfilUsuario();
-    if (usuario.rol == "ALUMNO") {
+    if (usuario && usuario.rol === "ALUMNO") {
         document.getElementById("crearsensor").style.display = "none";  
     }
+
+    // Establecer fecha en campo creation_date
+    let now = new Date();
+    let formattedDate = now.toISOString().slice(0, 16);
+    let creationDateField = document.getElementById("creationDate");
+    if (creationDateField) {
+        creationDateField.value = formattedDate;
+    }
 });
+
 
 
 //funcion para eliminar un sensor
