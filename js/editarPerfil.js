@@ -69,20 +69,13 @@ async function actualizarPerfilUsuario() {
                 sensores: usuario.sensores,
             };
 
-            // Crear FormData para enviar el JSON y la imagen (si se sube)
-            const formData = new FormData();
-            formData.append("usuario", new Blob([JSON.stringify(usuarioData)], { type: "application/json" }));
-
-            // Adjuntar la imagen si el usuario subió una
-            if (fileInput.files.length > 0) {
-                formData.append("file", fileInput.files[0]);
-            }
+            
 
             try {
                 const response = await fetch("api/public/user/update", {
                     method: "POST",
                     credentials: "include",
-                    body: formData
+                    body: JSON.stringify(usuarioData)
                 });
         
                 if (response.ok) {
