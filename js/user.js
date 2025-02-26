@@ -8,8 +8,8 @@ async function verificarRolUsuario() {
         if (response.ok) {
             const usuario = await response.json();
 
-            if (usuario.rol === "ADMIN") {
-                const crearSensorBtn = document.getElementById("crearsensor");
+            if (usuario.rol === "ALUMNO") {
+                const crearSensorBtn = document.getElementById("addSensorModalLabel");
                 if (crearSensorBtn) {
                     crearSensorBtn.style.display = "none";
                 }
