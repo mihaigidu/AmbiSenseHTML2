@@ -77,7 +77,7 @@ async function actualizarPerfilUsuario() {
             if (fileInput.files.length > 0) {
                 formData.append("file", fileInput.files[0]);
             }
-            
+
             try {
                 const response = await fetch("api/public/user/update", {
                     method: "POST",
@@ -90,7 +90,6 @@ async function actualizarPerfilUsuario() {
         
                     // Actualizar la interfaz con los datos devueltos
                     document.getElementById("name").value = usuarioActualizado.name;
-                    document.getElementById("email").value = usuarioActualizado.email;
         
                     // Actualizar la foto de perfil si fue cambiada
                     const profilePic = document.querySelector(".profile-pic");
