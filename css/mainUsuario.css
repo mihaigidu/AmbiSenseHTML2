@@ -1,7 +1,7 @@
 /* Estilos generales */
 body,
 html {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -202,4 +202,32 @@ html {
 
 .carousel-btn:hover {
     background: var(--header-color);
+}
+
+@media (max-width: 576px) {
+    /* Permitir que las secciones se ajusten al contenido */
+    .section {
+        min-height: auto;
+        padding: 20px 10px;
+    }
+    
+    /* Hacer que el carrusel ocupe el ancho completo y se posicione de forma normal */
+    .news-carousel {
+        width: 100%;
+        margin: 20px 0;
+        position: static; /* Asegura que no tenga posicionamiento que lo saque del flujo */
+    }
+    
+    /* Si tienes controles absolutamente posicionados, verifica que sigan dentro del contenedor */
+    .carousel-control-prev,
+    .carousel-control-next {
+        position: absolute;
+        /* Puedes ajustar top, left/right según sea necesario para móviles */
+    }
+    
+    /* Asegurarse de que el footer se muestre por encima en caso de superposición */
+    footer {
+        position: relative;
+        z-index: 10;
+    }
 }
