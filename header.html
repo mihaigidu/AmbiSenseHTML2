@@ -25,32 +25,34 @@
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/perfil">Mi Perfil</a></li>
                 <li><a class="dropdown-item" href="/configuracion">Configuración</a></li>
-                <li><a class="dropdown-item" id="logoutMenu" onclick="deslogear()">Cerrar Sesión</a></li>
+                <li><a class="dropdown-item" id="logoutMenu">Cerrar Sesión</a></li>
             </ul>
         </div>
     </div>
     <script>
-        async function deslogear() {
-            document.getElementById("logoutMenu").addEventListener("click", async () => {
-                try {
-                    const response = await fetch("api/auth/logout", {
-                        method: "POST",
-                        credentials: "include"
-                    });
+         document.addEventListener("DOMContentLoaded", () => {
+            const logoutButton = document.getElementById("logoutMenu");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", logout);
+            }
+        });
 
-                    if (response.ok) {
-                        alert("Sesión cerrada con éxito.");
-                        window.location.href = "/login";
-                    } else {
-                        alert("Error al cerrar la sesión.");
-                    }
-                } catch (error) {
-                    console.error("Error al cerrar la sesión:", error);
+        async function logout() {
+            try {
+                const response = await fetch("api/auth/logout", {
+                    method: "POST",
+                    credentials: "include"
+                });
+
+                if (response.ok) {
+                    alert("Sesión cerrada con éxito.");
+                    window.location.href = "/login"; // Redirige al usuario al login
+                } else {
+                    alert("Error al cerrar la sesión.");
                 }
-            });
+            } catch (error) {
+                console.error("Error al cerrar la sesión:", error);
+            }
         }
-
-            
-        
     </script>
 </header>
