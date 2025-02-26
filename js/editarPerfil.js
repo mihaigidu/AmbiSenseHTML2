@@ -71,9 +71,12 @@ async function actualizarPerfilUsuario() {
 
             // Crear FormData para enviar el JSON y la imagen (si se sube)
             const formData = new FormData();
-            formData.append("usuario", new Blob([JSON.stringify(usuarioData)], { type: "application/json" }));
+            formData.append("usuario", JSON.stringify(usuarioData));
 
-            
+            // Adjuntar la imagen si el usuario subió una
+            if (fileInput.files.length > 0) {
+                formData.append("file", fileInput.files[0]);
+            }
             
 
             try {
