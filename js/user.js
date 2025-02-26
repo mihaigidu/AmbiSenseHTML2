@@ -1,4 +1,4 @@
-async function PerfilUsuario() {
+async function verificarRolUsuario() {
     try {
         const response = await fetch("api/public/user", {
             method: "GET",
@@ -7,13 +7,20 @@ async function PerfilUsuario() {
 
         if (response.ok) {
             const usuario = await response.json();
-            return usuario;
+
+            if (usuario.rol === "ADMIN") {
+                const crearSensorBtn = document.getElementById("crearsensor");
+                if (crearSensorBtn) {
+                    crearSensorBtn.style.display = "none";
+                }
+            }
         } else {
             console.error("No se pudo cargar la información del usuario.");
-            return null;
         }
     } catch (error) {
         console.error("Error al obtener la información del usuario:", error);
-        return null;
     }
 }
+
+// Ejecutar cuando la página haya cargado
+document.addEventListener("DOMContentLoaded", verificarRolUsuario);

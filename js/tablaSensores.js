@@ -1,8 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const usuario =  PerfilUsuario();
-    if (usuario.rol == "ADMIN") {
-         document.getElementById("crearsensor").style.display = "none";  
-    }
+    
     setTimeout(() => {
         const dropdowns = document.querySelectorAll('.dropdown-toggle');
         dropdowns.forEach(dropdown => {
