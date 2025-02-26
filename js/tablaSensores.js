@@ -155,7 +155,7 @@ function fetchSensorsAQI() {
                                     Ver Detalles 
                                 </button>
                                 
-                                <button class="btn btn-danger btn-sm" onclick="deleteSensor(${sensor.id})">Eliminar</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteSensor(${sensor.id})" ">Eliminar</button>
                             </div>
                         </td>
                     </tr>

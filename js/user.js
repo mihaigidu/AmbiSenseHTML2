@@ -13,6 +13,10 @@ async function verificarRolUsuario() {
                 if (crearSensorBtn) {
                     crearSensorBtn.style.display = "none";
                 }
+                const botonesEliminar = document.querySelectorAll(".btn.btn-danger.btn-sm");
+                botonesEliminar.forEach(boton => {
+                    boton.style.display = "none";
+                });
             }
         } else {
             console.error("No se pudo cargar la información del usuario.");
