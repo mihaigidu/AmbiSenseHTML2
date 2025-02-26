@@ -33,6 +33,9 @@ async function cargarDatosUsuario() {
     }
 }
 
+
+
+
 // Actualizar el perfil del usuario y mostrar los datos actualizados
 async function actualizarPerfilUsuario() {
     const nombre = document.getElementById("name").value;
@@ -44,20 +47,44 @@ async function actualizarPerfilUsuario() {
         return;
     }
 
-    // Crear objeto de usuario para enviar como JSON
-    const usuarioData = {
-        name: nombre,
-        email: email
-    };
+    try {
+        const response = await fetch("api/public/user", {
+            method: "GET",
+            credentials: "include"
+        });
 
-    // Crear FormData para enviar el JSON y la imagen (si se sube)
-    const formData = new FormData();
-    formData.append("usuario", new Blob([JSON.stringify(usuarioData)], { type: "application/json" }));
+        if (response.ok) {
+            const usuario = await response.json();
 
-    // Adjuntar la imagen si el usuario subió una
-    if (fileInput.files.length > 0) {
-        formData.append("file", fileInput.files[0]);
+            // Crear objeto de usuario para enviar como JSON
+            const usuarioData = {
+                id: usuario.id,
+                name: nombre,
+                email: email,
+                password: usuario.password,
+                rol: usuario.rol,
+                loggedIn: usuario.loggedIn,
+                createdAt: usuario.createdAt,
+                profilePicture: usuario.profilePicture,
+                sensores: usuario.sensores,
+            };
+
+            // Crear FormData para enviar el JSON y la imagen (si se sube)
+            const formData = new FormData();
+            formData.append("usuario", new Blob([JSON.stringify(usuarioData)], { type: "application/json" }));
+
+            // Adjuntar la imagen si el usuario subió una
+            if (fileInput.files.length > 0) {
+                formData.append("file", fileInput.files[0]);
+            }
+
+        } else {
+            alert("No se pudo cargar la información del usuario.");
+        }
+    } catch (error) {
+        console.error("Error al cargar la información del usuario:", error);
     }
+
 
     try {
         const response = await fetch("api/public/user/update", {
@@ -78,7 +105,7 @@ async function actualizarPerfilUsuario() {
             profilePic.src = usuarioActualizado.profilePicture || "imagenes/FotonUsuario.jpg";
 
             alert("Perfil actualizado con éxito." + "json" + usuarioActualizado);
-            
+
         } else {
             alert("Error al actualizar el perfil.");
         }
