@@ -77,6 +77,33 @@ async function actualizarPerfilUsuario() {
             if (fileInput.files.length > 0) {
                 formData.append("file", fileInput.files[0]);
             }
+            
+            try {
+                const response = await fetch("api/public/user/update", {
+                    method: "POST",
+                    credentials: "include",
+                    body: formData
+                });
+        
+                if (response.ok) {
+                    const usuarioActualizado = await response.json();
+        
+                    // Actualizar la interfaz con los datos devueltos
+                    document.getElementById("name").value = usuarioActualizado.name;
+                    document.getElementById("email").value = usuarioActualizado.email;
+        
+                    // Actualizar la foto de perfil si fue cambiada
+                    const profilePic = document.querySelector(".profile-pic");
+                    profilePic.src = usuarioActualizado.profilePicture || "imagenes/FotonUsuario.jpg";
+        
+                    alert("Perfil actualizado con éxito." + "json" + usuarioActualizado);
+        
+                } else {
+                    alert("Error al actualizar el perfil.");
+                }
+            } catch (error) {
+                console.error("Error al enviar la actualización del perfil:", error);
+            }
 
         } else {
             alert("No se pudo cargar la información del usuario.");
@@ -86,30 +113,5 @@ async function actualizarPerfilUsuario() {
     }
 
 
-    try {
-        const response = await fetch("api/public/user/update", {
-            method: "POST",
-            credentials: "include",
-            body: formData
-        });
-
-        if (response.ok) {
-            const usuarioActualizado = await response.json();
-
-            // Actualizar la interfaz con los datos devueltos
-            document.getElementById("name").value = usuarioActualizado.name;
-            document.getElementById("email").value = usuarioActualizado.email;
-
-            // Actualizar la foto de perfil si fue cambiada
-            const profilePic = document.querySelector(".profile-pic");
-            profilePic.src = usuarioActualizado.profilePicture || "imagenes/FotonUsuario.jpg";
-
-            alert("Perfil actualizado con éxito." + "json" + usuarioActualizado);
-
-        } else {
-            alert("Error al actualizar el perfil.");
-        }
-    } catch (error) {
-        console.error("Error al enviar la actualización del perfil:", error);
-    }
+   
 }
