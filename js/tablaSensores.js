@@ -124,6 +124,30 @@ function fetchSensorsAQI() {
             <td colspan="5" class="text-center">Cargando sensores...</td>
         </tr>
     `);
+        const rol=""
+        try {
+            const response =  fetch("api/public/user", {
+                method: "GET",
+                credentials: "include"
+            });
+    
+            if (response.ok) {
+                const usuario =  response.json();
+    
+                if (usuario.rol === "ALUMNO") {
+                    rol = "ALUMNO";
+                }else{
+                    rol = "ADMIN";
+                }
+            } else {
+                console.error("No se pudo cargar la información del usuario.");
+            }
+        } catch (error) {
+            console.error("Error al obtener la información del usuario:", error);
+        }
+    
+    
+    
 
     $.ajax({
         url: "api/public/sensores",
@@ -155,9 +179,31 @@ function fetchSensorsAQI() {
                     let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
                     lastAQI = aqiVariable ? aqiVariable.valor : 0;
                 }
-      
-                
-                let row = `
+                let row="<div>ERROR ODIOSO</div>";
+                if(rol=="ALUMNO"){
+                    row = `
+                    <tr>
+                        <td class="align-middle">${sensor.id}</td>
+                        <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
+                        <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
+                        <td>
+                            <div class="gauge-container">
+                                <div id="gauge-${index + 1}" class="gauge-chart"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-container">
+                                <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
+                                    Ver Detalles 
+                                </button>
+                                
+                                
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                }else{
+                    row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
                         <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
@@ -178,6 +224,8 @@ function fetchSensorsAQI() {
                         </td>
                     </tr>
                 `;
+                }
+                 
                 
                 
                 tableBody.append(row);
