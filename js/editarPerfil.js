@@ -77,12 +77,15 @@ async function actualizarPerfilUsuario() {
             if (fileInput.files.length > 0) {
                 formData.append("file", fileInput.files[0]);
             }
-            console.log(formData);
+            
 
             try {
                 const response = await fetch("api/public/user/update", {
                     method: "POST",
                     credentials: "include",
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    },
                     body: formData
                 });
         
