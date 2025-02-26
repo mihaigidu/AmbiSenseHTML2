@@ -20,35 +20,37 @@
         </nav>
 
         <div class="perfil dropdown">
-            <img src="imagenes/perfil.webp" alt="Perfil" class="imagen-perfil dropdown-toggle" data-bs-toggle="dropdown">
+            <img src="imagenes/perfil.webp" alt="Perfil" class="imagen-perfil dropdown-toggle"
+                data-bs-toggle="dropdown">
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="/perfil">Mi Perfil</a></li>
                 <li><a class="dropdown-item" href="/configuracion">Configuración</a></li>
-                <li><a class="dropdown-item" id="logoutMenu">Cerrar Sesión</a></li>
+                <li><a class="dropdown-item" id="logoutMenu" onclick="deslogear()">Cerrar Sesión</a></li>
             </ul>
         </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", async () => {
-    
+        async function deslogear() {
+            document.getElementById("logoutMenu").addEventListener("click", async () => {
+                try {
+                    const response = await fetch("/api/auth/logout", {
+                        method: "POST",
+                        credentials: "include"
+                    });
 
-    document.getElementById("logoutMenu").addEventListener("click", async () => {
-        try {
-            const response = await fetch("/api/auth/logout", {
-                method: "POST",
-                credentials: "include"
+                    if (response.ok) {
+                        alert("Sesión cerrada con éxito.");
+                        window.location.href = "/login";
+                    } else {
+                        alert("Error al cerrar la sesión.");
+                    }
+                } catch (error) {
+                    console.error("Error al cerrar la sesión:", error);
+                }
             });
-
-            if (response.ok) {
-                alert("Sesión cerrada con éxito.");
-                window.location.href = "/login";
-            } else {
-                alert("Error al cerrar la sesión.");
-            }
-        } catch (error) {
-            console.error("Error al cerrar la sesión:", error);
         }
-    });
-});
+
+            
+        
     </script>
 </header>
