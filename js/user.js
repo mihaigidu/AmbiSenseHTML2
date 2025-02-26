@@ -9,7 +9,7 @@ async function verificarRolUsuario() {
             const usuario = await response.json();
 
             if (usuario.rol === "ALUMNO") {
-                const crearSensorBtn = document.getElementById("addSensorModal");
+                const crearSensorBtn = document.getElementById("addSensor");
                 if (crearSensorBtn) {
                     crearSensorBtn.style.display = "none";
                 }

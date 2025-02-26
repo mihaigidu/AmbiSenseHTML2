@@ -38,7 +38,7 @@
 
     <!-- Botones de acción con atributos aria para mejorar la accesibilidad -->
     <div class="text-end mb-3">
-      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSensorModal" aria-label="Añadir Sensor">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSensorModal" aria-label="Añadir Sensor" id="addSensor">
         <i class="fa fa-plus"></i> Añadir Sensor
       </button>
       <button class="btn btn-primary" onclick="compararSensores()" aria-label="Comparar Sensores">
@@ -52,7 +52,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="addSensorModalLabel">Añadir Sensor</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="addSensorModal"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" ></button>
           </div>
           <div class="modal-body">
             <form id="addSensorForm">
