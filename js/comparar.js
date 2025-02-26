@@ -6,12 +6,15 @@ function fetchSensors() {
                 return;
             }
 
-            let sensors = [...new Set(data.map(item => item.id))];
+            // Obtener sensores únicos basados en su ID
+            let sensors = [...new Map(data.map(item => [item.id, item])).values()];
 
+            // Limpiar y agregar opción por defecto en los select
             $("#sensor1, #sensor2").empty().append('<option value="" disabled selected>Selecciona un sensor</option>');
 
-            sensors.forEach(sensorId => {
-                $("#sensor1, #sensor2").append(`<option value="${sensorId}">Sensor ${sensorId}</option>`);
+            // Agregar opciones con ID como value y nombre como texto
+            sensors.forEach(sensor => {
+                $("#sensor1, #sensor2").append(`<option value="${sensor.id}">${sensor.name}</option>`);
             });
         })
         .fail(function () {
