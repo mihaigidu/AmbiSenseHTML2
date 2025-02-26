@@ -10,8 +10,8 @@ import { PerfilUsuario } from "./usuarioService.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
     const usuario = await PerfilUsuario();
-    if (usuario.rol == "ADMIN") {
-        
+    if (usuario.rol == "ALUMNO") {
+        document.getElementById("crearsensor").style.display = "none";  
     }
 });
 
