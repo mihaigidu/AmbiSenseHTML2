@@ -269,22 +269,21 @@ function createGauge(chartId, value) {
     console.log(`✅ Gauge creado exitosamente para ${chartId}`);
 }
 
-
-
-
-$(document).ready(function () {
-    let rol="";
+async function verificarRol(){
+    
     try {
-        const response =  fetch("api/public/user", {
+        const response = await fetch("api/public/user", {
             method: "GET",
             credentials: "include"
         });
     
         if (response.ok) {
-            const usuario =  response.json();
+            const usuario = await response.json();
     
             if (usuario.rol == "ALUMNO") {
-                rol="ALUMNO";
+                return "ALUMNO";
+            }else{
+                return "ADMIN";
             }
         } else {
             console.error("No se pudo cargar la información del usuario.");
@@ -292,5 +291,10 @@ $(document).ready(function () {
     } catch (error) {
         console.error("Error al obtener la información del usuario:", error);
     }
+}
+
+
+$(document).ready(function () {
+    let rol= verificarRol();
     fetchSensorsAQI(rol);
 });
