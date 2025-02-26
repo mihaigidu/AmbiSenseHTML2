@@ -126,10 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
     digitEl.style.display = /\d/.test(password) ? "none" : "block";
   }
 
-  // Botones de Login con Google y GitHub
-  document.getElementById("googleLogin").addEventListener("click", function () {
-    window.location.href = "log/google";
-  });
+ 
   document.getElementById("githubLogin").addEventListener("click", function () {
     window.location.href = "log/github";
   });
