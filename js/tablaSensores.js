@@ -115,7 +115,7 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
         });
 });
 
-function fetchSensorsAQI() {
+async function fetchSensorsAQI() {
     let tableBody = $("tbody");
 
     // 🔄 Mensaje de carga
@@ -124,38 +124,33 @@ function fetchSensorsAQI() {
             <td colspan="5" class="text-center">Cargando sensores...</td>
         </tr>
     `);
-        const rol=""
-        try {
-            const response =  fetch("api/public/user", {
-                method: "GET",
-                credentials: "include"
-            });
-    
-            if (response.ok) {
-                const usuario =  response.json();
-    
-                if (usuario.rol === "ALUMNO") {
-                    rol = "ALUMNO";
-                }else{
-                    rol = "ADMIN";
-                }
-            } else {
-                console.error("No se pudo cargar la información del usuario.");
-            }
-        } catch (error) {
-            console.error("Error al obtener la información del usuario:", error);
-        }
-    
-    
-    
 
+    let rol = "";
+
+    try {
+        const response = await fetch("api/public/user", {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (response.ok) {
+            const usuario = await response.json();
+            rol = usuario.rol === "ALUMNO" ? "ALUMNO" : "ADMIN";
+        } else {
+            console.error("No se pudo cargar la información del usuario.");
+        }
+    } catch (error) {
+        console.error("Error al obtener la información del usuario:", error);
+    }
+
+    // Ahora que tenemos el rol, hacemos la petición de sensores
     $.ajax({
         url: "api/public/sensores",
         method: "GET",
         xhrFields: {
             withCredentials: true // Envía cookies entre dominios
         },
-        crossDomain: true,      // Habilita solicitudes CORS
+        crossDomain: true, // Habilita solicitudes CORS
         success: function (data) {
             if (!Array.isArray(data)) {
                 console.error("Respuesta inesperada:", data);
@@ -164,7 +159,8 @@ function fetchSensorsAQI() {
             }
 
             tableBody.empty();
-            console.log(data);
+            console.log("Datos de sensores:", data);
+            console.log("Rol del usuario:", rol);
 
             data.forEach((sensor, index) => {
                 if (!sensor.lecturas || sensor.lecturas.length === 0) return;
@@ -179,57 +175,36 @@ function fetchSensorsAQI() {
                     let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
                     lastAQI = aqiVariable ? aqiVariable.valor : 0;
                 }
-                let row="<div>ERROR ODIOSO</div>";
-                if(rol=="ALUMNO"){
-                    row = `
-                    <tr>
-                        <td class="align-middle">${sensor.id}</td>
-                        <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
-                        <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
-                        <td>
-                            <div class="gauge-container">
-                                <div id="gauge-${index + 1}" class="gauge-chart"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="btn-container">
-                                <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
-                                    Ver Detalles 
-                                </button>
-                                
-                                
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                }else{
-                    row = `
-                    <tr>
-                        <td class="align-middle">${sensor.id}</td>
-                        <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
-                        <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
-                        <td>
-                            <div class="gauge-container">
-                                <div id="gauge-${index + 1}" class="gauge-chart"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="btn-container">
-                                <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
-                                    Ver Detalles 
-                                </button>
-                                
-                                <button class="btn btn-danger btn-sm" onclick="deleteSensor(${sensor.id})" ">Eliminar</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                }
-                 
-                
-                
-                tableBody.append(row);
 
+                let row = `
+                    <tr>
+                        <td class="align-middle">${sensor.id}</td>
+                        <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
+                        <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
+                        <td>
+                            <div class="gauge-container">
+                                <div id="gauge-${index + 1}" class="gauge-chart"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-container">
+                                <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
+                                    Ver Detalles 
+                                </button>`;
+
+                // Solo los ADMIN pueden ver el botón de eliminar
+                if (rol === "ADMIN") {
+                    row += `
+                                <button class="btn btn-danger btn-sm" onclick="deleteSensor(${sensor.id})">Eliminar</button>`;
+                }
+
+                row += `
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                tableBody.append(row);
                 createGauge(`gauge-${index + 1}`, lastAQI);
             });
         },
