@@ -1,9 +1,7 @@
-import { PerfilUsuario } from "./usuarioService.js";
-
 document.addEventListener("DOMContentLoaded", () => {
-    const usuario = PerfilUsuario();
-    if (usuario.rol == "ALUMNO") {
-        document.getElementById("crearsensor").style.display = "none";  
+    const usuario =  PerfilUsuario();
+    if (usuario.rol == "ADMIN") {
+         document.getElementById("crearsensor").style.display = "none";  
     }
     setTimeout(() => {
         const dropdowns = document.querySelectorAll('.dropdown-toggle');
@@ -14,8 +12,25 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+async function PerfilUsuario() {
+    try {
+        const response = await fetch("api/public/user", {
+            method: "GET",
+            credentials: "include"
+        });
 
-
+        if (response.ok) {
+            const usuario = await response.json();
+            return usuario;
+        } else {
+            console.error("No se pudo cargar la información del usuario.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error al obtener la información del usuario:", error);
+        return null;
+    }
+}
 //funcion para eliminar un sensor
 function deleteSensor(sensorId) {
     if (!confirm(`¿Estás seguro de que deseas eliminar el sensor con ID ${sensorId}?`)) {

@@ -1,4 +1,4 @@
-export async function PerfilUsuario() {
+async function PerfilUsuario() {
     try {
         const response = await fetch("api/public/user", {
             method: "GET",
