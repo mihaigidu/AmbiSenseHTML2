@@ -9,33 +9,50 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //funcion para eliminar un sensor
-function deleteSensor(sensorId) {
+async function deleteSensor(sensorId) {
+    // Confirmación antes de eliminar
     if (!confirm(`¿Estás seguro de que deseas eliminar el sensor con ID ${sensorId}?`)) {
         return;
     }
 
-    fetch(`api/private/sensores/delete/${sensorId}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Error en la eliminación del sensor");
+    // Verificación de sensorId válido
+    if (!sensorId) {
+        console.error("Error: El ID del sensor es inválido.");
+        alert("ID de sensor inválido.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`api/private/sensores/delete/${sensorId}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
             }
-            return response.json();
-        })
-        .then(data => {
-            alert("Sensor eliminado correctamente");
-            fetchSensorsAQI(); // Refrescar la lista de sensores
-        })
-        .catch(error => {
-            console.error("Error al eliminar el sensor:", error);
-            alert("No se pudo eliminar el sensor.");
         });
+
+        if (!response.ok) {
+            throw new Error("Error en la eliminación del sensor");
+        }
+
+        // ✅ Sensor eliminado correctamente
+        alert("Sensor eliminado correctamente");
+
+        // 🔄 Actualizar la lista sin recargar la página
+        fetchSensorsAQI(); 
+
+        // 🛑 Ocultar el botón de eliminar sin recargar
+        const botonEliminar = document.querySelector(`button[data-sensor-id="${sensorId}"]`);
+        if (botonEliminar) {
+            botonEliminar.closest("tr").remove(); // Elimina la fila de la tabla
+        }
+
+    } catch (error) {
+        console.error("Error al eliminar el sensor:", error);
+        alert("No se pudo eliminar el sensor.");
+    }
 }
+
 function compararSensores() {
     window.location.href = "/comparacion"; // Redirige a la página de comparación de sensores
 }
@@ -98,7 +115,7 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
         });
 });
 
-function fetchSensorsAQI(rol) {
+function fetchSensorsAQI() {
     let tableBody = $("tbody");
 
     // 🔄 Mensaje de carga
@@ -139,31 +156,8 @@ function fetchSensorsAQI(rol) {
                     lastAQI = aqiVariable ? aqiVariable.valor : 0;
                 }
       
-                let row ="<div>Error BBBB</div>";
-                if(rol=="ALUMNO"){
-                    row = `
-                    <tr>
-                        <td class="align-middle">${sensor.id}</td>
-                        <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
-                        <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
-                        <td>
-                            <div class="gauge-container">
-                                <div id="gauge-${index + 1}" class="gauge-chart"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="btn-container">
-                                <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
-                                    Ver Detalles 
-                                </button>
-                                
-                                
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                }else{
-                     row = `
+                
+                let row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
                         <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
@@ -184,7 +178,7 @@ function fetchSensorsAQI(rol) {
                         </td>
                     </tr>
                 `;
-                }
+                
                 
                 tableBody.append(row);
 
@@ -269,32 +263,10 @@ function createGauge(chartId, value) {
     console.log(`✅ Gauge creado exitosamente para ${chartId}`);
 }
 
-async function verificarRol(){
-    
-    try {
-        const response = await fetch("api/public/user", {
-            method: "GET",
-            credentials: "include"
-        });
-    
-        if (response.ok) {
-            const usuario = await response.json();
-    
-            if (usuario.rol == "ALUMNO") {
-                return "ALUMNO";
-            }else{
-                return "ADMIN";
-            }
-        } else {
-            console.error("No se pudo cargar la información del usuario.");
-        }
-    } catch (error) {
-        console.error("Error al obtener la información del usuario:", error);
-    }
-}
+
 
 
 $(document).ready(function () {
-    let rol= verificarRol();
-    fetchSensorsAQI(rol);
+    
+    fetchSensorsAQI();
 });
