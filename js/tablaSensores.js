@@ -283,7 +283,7 @@ $(document).ready(function () {
         if (response.ok) {
             const usuario =  response.json();
     
-            if (usuario.rol === "ALUMNO") {
+            if (usuario.rol == "ALUMNO") {
                 rol="ALUMNO";
             }
         } else {
