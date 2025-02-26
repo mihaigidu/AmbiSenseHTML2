@@ -15,7 +15,7 @@ async function verificarRolUsuario() {
                 }
                 const botonesEliminar = document.querySelectorAll(".btn.btn-danger.btn-sm");
                 botonesEliminar.forEach(boton => {
-                    boton.style.display = "none";
+                    boton.classList.add("d-none"); // Oculta el botón con Bootstrap
                 });
             }
         } else {
