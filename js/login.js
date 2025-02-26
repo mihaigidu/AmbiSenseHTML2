@@ -148,35 +148,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   
-  // Botones de Login con Google y GitHub
-  document.getElementById("googleLogin").addEventListener("click", function () {
-    window.location.href = "log/google";
-  });
+
   document.getElementById("githubLogin").addEventListener("click", function () {
     window.location.href = "log/github";
   });
-/*
-  async function checkLoginStatus() {
-    try {
-        const response = await fetch(BASE_URL + "/auth/user", {
-            method: "GET",
-            credentials: "include"  // Incluye la cookie en la solicitud
-        });
 
-        if (response.ok) {
-            const user = await response.json();
-            console.log("Usuario autenticado:", user);
-        } else {
-            console.warn("Usuario no autenticado.");
-            window.location.href = "/login";
-        }
-    } catch (error) {
-        console.error("Error al verificar la sesión:", error);
-    }
-}
-
-
-window.onload = checkLoginStatus;*/
 
 });
 
