@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    
+
     setTimeout(() => {
         const dropdowns = document.querySelectorAll('.dropdown-toggle');
         dropdowns.forEach(dropdown => {
@@ -76,7 +76,7 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
     // Enviar la información a la API
     fetch("api/private/sensores/upload", {
         method: "POST",
-        credentials:"include",
+        credentials: "include",
         headers: {
             "Content-Type": "application/json"
         },
@@ -138,8 +138,40 @@ function fetchSensorsAQI() {
                     let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
                     lastAQI = aqiVariable ? aqiVariable.valor : 0;
                 }
+                try {
+                    const response = fetch("api/public/user", {
+                        method: "GET",
+                        credentials: "include"
+                    });
 
-                let row = `
+                    if (response.ok) {
+                        const usuario = response.json();
+
+                        if (usuario.rol === "ALUMNO") {
+                            let row = `
+                    <tr>
+                        <td class="align-middle">${sensor.id}</td>
+                        <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
+                        <td class="align-middle">${sensor.ubication || "Ubicación desconocida"}</td>
+                        <td>
+                            <div class="gauge-container">
+                                <div id="gauge-${index + 1}" class="gauge-chart"></div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-container">
+                                <button class="btn btn-info btn-sm" onclick="window.location.href = '/sensorInfo?sensorId=${sensor.id}'">
+                                    Ver Detalles 
+                                </button>
+                                
+                                
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                        } else {
+                            let row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
                         <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
@@ -160,6 +192,15 @@ function fetchSensorsAQI() {
                         </td>
                     </tr>
                 `;
+                        }
+                    } else {
+                        console.error("No se pudo cargar la información del usuario.");
+                    }
+                } catch (error) {
+                    console.error("Error al obtener la información del usuario:", error);
+                }
+
+
                 tableBody.append(row);
 
                 createGauge(`gauge-${index + 1}`, lastAQI);

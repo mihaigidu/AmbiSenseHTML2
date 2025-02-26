@@ -13,10 +13,7 @@ async function verificarRolUsuario() {
                 if (crearSensorBtn) {
                     crearSensorBtn.style.display = "none";
                 }
-                const botonesEliminar = document.querySelectorAll(".btn.btn-danger.btn-sm");
-                botonesEliminar.forEach(boton => {
-                    boton.classList.add("d-none"); // Oculta el botón con Bootstrap
-                });
+                
             }
         } else {
             console.error("No se pudo cargar la información del usuario.");
