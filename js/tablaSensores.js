@@ -1,28 +1,18 @@
 import { PerfilUsuario } from "./usuarioService.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-    // Inicializar dropdowns de Bootstrap
+document.addEventListener("DOMContentLoaded", () => {
+    const usuario = PerfilUsuario();
+    if (usuario.rol == "ALUMNO") {
+        document.getElementById("crearsensor").style.display = "none";  
+    }
     setTimeout(() => {
         const dropdowns = document.querySelectorAll('.dropdown-toggle');
         dropdowns.forEach(dropdown => {
             new bootstrap.Dropdown(dropdown);
         });
     }, 500);
-
-    // Obtener información del usuario
-    const usuario = await PerfilUsuario();
-    if (usuario && usuario.rol === "ALUMNO") {
-        document.getElementById("crearsensor").style.display = "none";  
-    }
-
-    // Establecer fecha en campo creation_date
-    let now = new Date();
-    let formattedDate = now.toISOString().slice(0, 16);
-    let creationDateField = document.getElementById("creationDate");
-    if (creationDateField) {
-        creationDateField.value = formattedDate;
-    }
 });
+
 
 
 
