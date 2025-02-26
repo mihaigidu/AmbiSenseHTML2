@@ -97,26 +97,8 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
             document.getElementById("addSensorMessage").innerHTML = `<div class="alert alert-danger">Error al crear el sensor.</div>`;
         });
 });
-const rol="";
-try {
-    const response = await fetch("api/public/user", {
-        method: "GET",
-        credentials: "include"
-    });
 
-    if (response.ok) {
-        const usuario = await response.json();
-
-        if (usuario.rol === "ALUMNO") {
-            rol="ALUMNO"
-        }
-    } else {
-        console.error("No se pudo cargar la información del usuario.");
-    }
-} catch (error) {
-    console.error("Error al obtener la información del usuario:", error);
-}
-function fetchSensorsAQI() {
+function fetchSensorsAQI(rol) {
     let tableBody = $("tbody");
 
     // 🔄 Mensaje de carga
@@ -291,5 +273,24 @@ function createGauge(chartId, value) {
 
 
 $(document).ready(function () {
-    fetchSensorsAQI();
+    let rol="";
+    try {
+        const response =  fetch("api/public/user", {
+            method: "GET",
+            credentials: "include"
+        });
+    
+        if (response.ok) {
+            const usuario =  response.json();
+    
+            if (usuario.rol === "ALUMNO") {
+                rol="ALUMNO";
+            }
+        } else {
+            console.error("No se pudo cargar la información del usuario.");
+        }
+    } catch (error) {
+        console.error("Error al obtener la información del usuario:", error);
+    }
+    fetchSensorsAQI(rol);
 });
