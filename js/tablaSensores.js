@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-
+    
     setTimeout(() => {
         const dropdowns = document.querySelectorAll('.dropdown-toggle');
         dropdowns.forEach(dropdown => {
@@ -76,7 +76,7 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
     // Enviar la información a la API
     fetch("api/private/sensores/upload", {
         method: "POST",
-        credentials: "include",
+        credentials:"include",
         headers: {
             "Content-Type": "application/json"
         },
@@ -97,7 +97,25 @@ document.getElementById("addSensorForm").addEventListener("submit", function (ev
             document.getElementById("addSensorMessage").innerHTML = `<div class="alert alert-danger">Error al crear el sensor.</div>`;
         });
 });
+const rol="";
+try {
+    const response = await fetch("api/public/user", {
+        method: "GET",
+        credentials: "include"
+    });
 
+    if (response.ok) {
+        const usuario = await response.json();
+
+        if (usuario.rol === "ALUMNO") {
+            rol="ALUMNO"
+        }
+    } else {
+        console.error("No se pudo cargar la información del usuario.");
+    }
+} catch (error) {
+    console.error("Error al obtener la información del usuario:", error);
+}
 function fetchSensorsAQI() {
     let tableBody = $("tbody");
 
@@ -138,18 +156,10 @@ function fetchSensorsAQI() {
                     let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
                     lastAQI = aqiVariable ? aqiVariable.valor : 0;
                 }
-                let row = "<div> ERROR BBBB1</div>";
-                try {
-                    const response = fetch("api/public/user", {
-                        method: "GET",
-                        credentials: "include"
-                    });
-
-                    if (response.ok) {
-                        const usuario = response.json();
-                        
-                        if (usuario.rol === "ALUMNO") {
-                            row = `
+      
+                let row ="<div>Error BBBB</div>";
+                if(rol=="ALUMNO"){
+                    row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
                         <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
@@ -170,9 +180,8 @@ function fetchSensorsAQI() {
                         </td>
                     </tr>
                 `;
-
-                        } else {
-                            row = `
+                }else{
+                     row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
                         <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
@@ -193,15 +202,8 @@ function fetchSensorsAQI() {
                         </td>
                     </tr>
                 `;
-                        }
-                    } else {
-                        console.error("No se pudo cargar la información del usuario.");
-                    }
-                } catch (error) {
-                    console.error("Error al obtener la información del usuario:", error);
                 }
-
-
+                
                 tableBody.append(row);
 
                 createGauge(`gauge-${index + 1}`, lastAQI);
