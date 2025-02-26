@@ -18,13 +18,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // 🔥 Obtener rol del usuario y ocultar el botón de configuración si es alumno
         await ocultarConfiguracionParaAlumnos();
-        
+        const logoutButton = document.getElementById("logoutMenu");
+        if (logoutButton) {
+            logoutButton.addEventListener("click", logout);
+        }
+
     } catch (error) {
         console.error("Error cargando el header:", error);
 
         // Mostrar alerta si el header no carga
         const warningDiv = document.createElement('div');
-        warningDiv.className = 'alert alert-warning m-2'; 
+        warningDiv.className = 'alert alert-warning m-2';
         warningDiv.role = 'alert';
         warningDiv.innerText = 'No se pudo cargar el header. Por favor, revisa tu conexión o inténtalo más tarde.';
         document.body.prepend(warningDiv);
@@ -52,5 +56,23 @@ async function ocultarConfiguracionParaAlumnos() {
         }
     } catch (error) {
         console.error("Error al obtener la información del usuario:", error);
+    }
+}
+
+async function logout() {
+    try {
+        const response = await fetch("api/auth/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+
+        if (response.ok) {
+            alert("Sesión cerrada con éxito.");
+            window.location.href = "/login"; // Redirige al usuario al login
+        } else {
+            alert("Error al cerrar la sesión.");
+        }
+    } catch (error) {
+        console.error("Error al cerrar la sesión:", error);
     }
 }
