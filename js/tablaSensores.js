@@ -138,6 +138,7 @@ function fetchSensorsAQI() {
                     let aqiVariable = latestReading.variables.find(v => v.nombre === "AQI");
                     lastAQI = aqiVariable ? aqiVariable.valor : 0;
                 }
+                let row = "<div> ERROR BBBB1</div>";
                 try {
                     const response = fetch("api/public/user", {
                         method: "GET",
@@ -146,9 +147,9 @@ function fetchSensorsAQI() {
 
                     if (response.ok) {
                         const usuario = response.json();
-
+                        
                         if (usuario.rol === "ALUMNO") {
-                            let row = `
+                            row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
                         <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
@@ -171,7 +172,7 @@ function fetchSensorsAQI() {
                 `;
 
                         } else {
-                            let row = `
+                            row = `
                     <tr>
                         <td class="align-middle">${sensor.id}</td>
                         <td class="align-middle">${sensor.name || `Sensor ${sensor.id}`}</td>
