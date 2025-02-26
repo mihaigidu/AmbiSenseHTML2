@@ -6,6 +6,15 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, 500);
 });
+import { PerfilUsuario } from "./usuarioService.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const usuario = await PerfilUsuario();
+    if (usuario.rol == "ADMIN") {
+        
+    }
+});
+
 
 //funcion para eliminar un sensor
 function deleteSensor(sensorId) {
