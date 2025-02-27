@@ -3,6 +3,8 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 /* Estilo general para tablas */
@@ -23,65 +25,113 @@ table td {
     text-align: left;
 }
 
-/* CONTENEDORES DE GRÁFICOS Y SENSORES */
+/* CONTENEDOR PRINCIPAL */
 .content-wrapper {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     gap: 20px;
     padding: 20px;
 }
 
+/* Si tienes un gráfico principal fuera de charts-wrapper2 */
 .chart-container {
-    width: 48%;
+    width: 90%;
+    max-width: 800px;
     height: 400px;
     background: var(--background-carrusel);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
 }
 
+/* INFO DEL SENSOR */
 .info-container {
-    width: 35%;
+    width: 80%;
+    max-width: 500px;
+    background: var(--background-carrusel);
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Quitar bullet points de la lista */
+.info-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Etiquetas y Select (fecha) */
+.info-container label[for="date-select"] {
+    display: block;
+    margin: 10px auto 5px;
+}
+
+.info-container #date-select {
+    display: block;
+    width: 150px;         
+    margin: 0 auto 15px;
+}
+
+/* Etiquetas y Botón (Generar Reporte) */
+.info-container label[for="btnGenerarReporte"] {
+    display: block;
+    margin: 10px auto 5px; 
+}
+
+.info-container #btnGenerarReporte {
+    display: block;
+    margin: 0 auto; 
+}
+
+
+.charts-wrapper2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; 
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1400px;  /* Ajusta si quieres permitir más ancho global */
+    margin: 0 auto;
+}
+
+
+.charts-wrapper2 .chart-container {
+    flex: 1 1 calc(50% - 20px);
+    max-width: 700px;    /* Ajusta para ampliar/reducir aún más el tamaño */
+    min-width: 400px;    /* Evita que se hagan muy pequeñas en pantallas medianas */
+    height: 450px;       /* Ajusta la altura de los gráficos */
     background: var(--background-carrusel);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.charts-wrapper2 {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-}
-
 /* MEDIA QUERIES */
 
-/* Para pantallas medianas */
+/* Pantallas medianas */
 @media (max-width: 992px) {
-    .chart-container {
-        width: 90%;
-        margin: auto;
-    }
-    
-    .info-container {
-        width: 90%;
-        margin: auto;
+    /* Podrías relajar un poco el min-width si ves que no se ajustan bien */
+    .charts-wrapper2 .chart-container {
+        min-width: 300px;
     }
 }
 
-/* Para tablets y dispositivos pequeños */
+/* Para tablets y pantallas menores */
 @media (max-width: 768px) {
-    .chart-container,
-    .info-container {
+    /* 
+       Pasan a 1 columna
+       Cada .chart-container ocupa todo el ancho
+    */
+    .charts-wrapper2 .chart-container {
         width: 100%;
-    }
-    
-    .charts-wrapper2 {
-        flex-direction: column;
-        align-items: center;
+        max-width: 100%;
+        min-width: auto;
     }
 }
 
@@ -91,7 +141,6 @@ table td {
         padding: 10px;
         gap: 10px;
     }
-    
     table th,
     table td {
         padding: 5px;
