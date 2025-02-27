@@ -1,52 +1,95 @@
 /* GENERAL */
 body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden; /* 🔹 Evita el scroll horizontal en toda la página */
+}
+
+/* CONTENEDOR PRINCIPAL */
+main {
+  flex: 1;
+  width: 100%; /* 🔹 Asegura que el contenido no se desborde */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+/* TABLA - Ajuste para dispositivos móviles */
+.table-responsive {
+  overflow-x: auto; /* 🔹 Agrega desplazamiento horizontal si es necesario */
+  -webkit-overflow-scrolling: touch; /* 🔹 Mejora la experiencia en móviles */
+}
+
+table {
+  width: 100%; /* 🔹 La tabla ocupará todo el ancho disponible */
+  margin: 10px auto;
+  border-collapse: collapse;
+  background-color: var(--background-carrusel);
+  border-radius: 10px;
+  overflow: hidden;
+  display: block;
+  white-space: nowrap; /* 🔹 Evita que el contenido se rompa */
+}
+
+/* Encabezados y celdas */
+th,
+td {
+  border: 1px solid var(--border-table);
+  padding: 8px;
+  text-align: center;
+  font-size: 14px; /* 🔹 Reduce el tamaño de fuente en pantallas pequeñas */
+}
+
+/* Contenedor y gráfico de medidores */
+.gauge-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 8vh; /* 🔹 Ajuste para móviles */
+  padding: 0;
+}
+
+.gauge-chart {
+  width: 60px; /* 🔹 Reduce el tamaño en móviles */
+  height: 60px;
+}
+
+/* Botones responsivos */
+button {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+/* Media Queries - Ajustes específicos para móviles */
+@media (max-width: 768px) {
+  th, td {
+      font-size: 12px; /* 🔹 Reduce aún más el texto en móviles */
+      padding: 6px;
   }
-  
-  /* CONTENEDOR PRINCIPAL */
-  main {
-    flex: 1;
-  }
-  
-  /* Estilos de la tabla */
-  table {
-    width: 90%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background-color: var(--background-carrusel);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  th,
-  td {
-    border: 1px solid var(--border-table);
-    padding: 10px;
-    text-align: center;
-  }
-  
-  th {
-    background-color: var(--table-color);
-    color: var(--text-color);
-  }
-  
-  /* Contenedor y gráfico de medidores (si se utilizan) */
+
   .gauge-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 10vh; /* Altura compacta */
-    padding: 0;
+      height: 6vh; /* 🔹 Reduce aún más el espacio */
   }
-  
+
   .gauge-chart {
-    width: 100%;
-    height: 100%;
+      width: 50px;
+      height: 50px;
   }
-  
+
+  button {
+      font-size: 12px;
+      padding: 6px 8px;
+  }
+
+  /* Para evitar desbordamiento horizontal */
+  .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+  }
+}
