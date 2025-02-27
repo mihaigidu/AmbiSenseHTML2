@@ -62,8 +62,8 @@ h3 {
 
 /* Scroll vertical en el cuerpo */
 #dataTable tbody {
-    width: 70vw;
-    max-height: 30vh;      /* Ajusta la altura máxima que desees */
+    width: 90vw;
+    max-height: 20vh;      /* Ajusta la altura máxima que desees */
     overflow-y: auto;      /* Aparece scroll vertical si excede 50vh */
     overflow-x: hidden;    /* Evita scroll horizontal extra */
 }
