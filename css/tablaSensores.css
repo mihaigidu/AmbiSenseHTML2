@@ -24,16 +24,19 @@ main {
   -webkit-overflow-scrolling: touch; /* 🔹 Mejora la experiencia en móviles */
 }
 
+/* Ajuste de la tabla para responsividad */
 table {
-  width: 100%; /* 🔹 La tabla ocupará todo el ancho disponible */
+  width: 100%;          /* La tabla ocupa el 100% del contenedor */
+  min-width: 100%;      /* Evita que la tabla se reduzca más allá del 100% */
   margin: 10px auto;
   border-collapse: collapse;
   background-color: var(--background-carrusel);
   border-radius: 10px;
   overflow: hidden;
-  display: block;
-  white-space: nowrap; /* 🔹 Evita que el contenido se rompa */
+  white-space: nowrap;  /* Esto evita el salto de línea en celdas largas, lo cual genera scroll horizontal si es necesario */
+  /* Se ha eliminado 'display: block;' para que la tabla se comporte como una tabla nativa */
 }
+
 
 /* Encabezados y celdas */
 th,
